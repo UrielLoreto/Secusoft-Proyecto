@@ -17,6 +17,6 @@ class Incidencia(models.Model):
     id_incidencia = models.AutoField(max_length= 20, primary_key=True)
     fecha_incidencia = models.DateTimeField()
     asunto = models.CharField(max_length=200)
-    id_estatus = models.ForeignKey(EstatusIncidencia, on_delete=models.CASCADE)
+    estatus = models.ForeignKey(EstatusIncidencia, on_delete=models.CASCADE)
     observaciones = models.CharField(max_length=500)
-    id_tipo = models.ForeignKey(TipoIndicencia, on_delete=models.CASCADE)
+    tipo = models.ForeignKey(TipoIndicencia, on_delete=models.CASCADE)

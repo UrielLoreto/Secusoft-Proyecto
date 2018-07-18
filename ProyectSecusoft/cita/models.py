@@ -12,4 +12,4 @@ class Cita(models.Model):
     fecha_cita = models.DateTimeField()
     asunto = models.CharField(max_length=200)
     observaciones = models.CharField(max_length=500)
-    id_estatus = models.ForeignKey(CitaEstatus, on_delete=models.CASCADE)
+    estatus = models.ForeignKey(CitaEstatus, on_delete=models.CASCADE)
