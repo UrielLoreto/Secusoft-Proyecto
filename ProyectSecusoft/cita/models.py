@@ -11,6 +11,6 @@ class Cita(models.Model):
     id_cita = models.AutoField(max_length=20, primary_key=True)
     fecha_cita = models.DateTimeField()
     asunto = models.CharField(max_length=200)
-    observaciones = models.CharField(max_length=500)
+    observaciones = models.TextField()
     estatus = models.CharField(max_length=2, choices=estatus_tipo, default='1')
-    descripcion = models.CharField(max_length=50)
+    descripcion = models.TextField()

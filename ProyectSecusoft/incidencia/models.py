@@ -5,10 +5,10 @@ from cita.models import Cita
 # Create your models here.
 
 class TipoIndicencia(models.Model):
-    id_tipo = models.AutoField(max_length= 10, primary_key=True)
+    id_tipo = models.AutoField(max_length=10, primary_key=True)
     tipo = models.CharField(max_length=20)
-    descripcion = models.CharField(max_length=50)
-    impacto = models.CharField(max_length= 10)
+    descripcion = models.TextField()
+    impacto = models.CharField(max_length=10)
 
 
 class Incidencia(models.Model):
@@ -22,28 +22,27 @@ class Incidencia(models.Model):
     fecha_incidencia = models.DateTimeField()
     asunto = models.CharField(max_length=200)
     estatus = models.CharField(max_length=2, choices=estatus_tipo, default='1')
-    observaciones = models.CharField(max_length=500)
+    observaciones = models.TextField()
     tipo = models.ForeignKey(TipoIndicencia, null=True, blank=True, on_delete=models.CASCADE)
 
 
 class Incidencia_docente(models.Model):
-    incidencia = models.ManyToManyField(Incidencia)
-    docente = models.ManyToManyField(Docente)
+    incidencia = models.ManyToManyField(Incidencia, blank=True)
+    docente = models.ManyToManyField(Docente, blank=True)
 
 
 class Incidencia_padre(models.Model):
-    incidencia = models.ManyToManyField(Incidencia)
-    padre = models.ManyToManyField(Padre_Familia)
+    incidencia = models.ManyToManyField(Incidencia, blank=True)
+    padre = models.ManyToManyField(Padre_Familia, blank=True)
 
 
 class Incidencia_alumno(models.Model):
-    incidencia = models.ManyToManyField(Incidencia)
-    alumno = models.ManyToManyField(Alumno)
-
+    incidencia = models.ManyToManyField(Incidencia, blank=True)
+    alumno = models.ManyToManyField(Alumno, blank=True)
 
 class Incidencia_cita(models.Model):
-    incidencia = models.ManyToManyField(Incidencia)
-    cita = models.ManyToManyField(Cita)
+    incidencia = models.ManyToManyField(Incidencia, blank=True)
+    cita = models.ManyToManyField(Cita, blank=True)
 
 
 class Comentario(models.Model):
@@ -52,6 +51,6 @@ class Comentario(models.Model):
     fecha_creacion = models.DateTimeField(auto_now_add=True)
 
 class Comentario_rel(models.Model):
-    comentario = models.ManyToManyField(Comentario)
-    rel = models.ManyToManyField(Cita)
-    persona = models.ManyToManyField(Docente)
+    comentario = models.ManyToManyField(Comentario, blank=True)
+    rel = models.ManyToManyField(Cita, blank=True)
+    persona = models.ManyToManyField(Docente, blank=True)
