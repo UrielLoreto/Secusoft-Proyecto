@@ -7,8 +7,14 @@ class PersonaForm(forms.ModelForm):
         fields = (
             'nombre',
             'apellido',
+            'fecha_nacimiento',
             'correo',
             'telefono',
             'tipo_persona',
             'sexo'
         )
+
+class RawPersona(forms.Form):
+    nombre = forms.CharField()
+    apellido = forms.CharField()
+    fecha_nacimiento = forms.DateField()

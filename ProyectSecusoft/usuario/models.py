@@ -28,8 +28,6 @@ class Persona(models.Model):
     token = models.CharField(max_length=80, null=True, blank=True)
     token = models.CharField(max_length=80, null=True, blank=True)
 
-    def __str__(self):
-        return self.nombre
 
 class Usuario(models.Model):
     usuario = models.ForeignKey(Persona, null=True, blank=True, on_delete=models.CASCADE)
@@ -37,14 +35,11 @@ class Usuario(models.Model):
     contra = models.CharField(max_length= 30)
     nivel = models.CharField(max_length=2)
 
-    def __str__(self):
-        return self.nombre
+
 
 class Padre_Familia(models.Model):
     padre = models.ForeignKey(Persona, null=True, blank=True, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.nombre
 
 class Alumno(models.Model):
     alumno = models.ForeignKey(Persona, null=True, blank=True, on_delete=models.CASCADE)
@@ -52,8 +47,7 @@ class Alumno(models.Model):
     grado = models.CharField(max_length=5)
     grupo = models.CharField(max_length=5)
 
-    def __str__(self):
-        return self.nombre
+
 
 class Padre_Alumno(models.Model):
     padre = models.ManyToManyField(Padre_Familia)

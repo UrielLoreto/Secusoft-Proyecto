@@ -1,34 +1,40 @@
 from django.shortcuts import render
 from .models import Persona
-from .forms import PersonaForm
+from .forms import PersonaForm, RawPersona
 # Create your views here.
 
 def index(request):
     return render(request, "usuario/index.html")
 
 def usuario_crear_vista(request):
-    form = PersonaForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        form = PersonaForm(request.POST or None)
+    my_form = RawPersona()
+    if request.method == "POST":
+        my_form = RawPersona(request.POST)
+        if my_form.is_valid():
+            print(my_form.cleaned_data)
+        else:
+            print(my_form.errors)
     context = {
-        'form': form
+        "form": my_form
     }
     return render(request, "usuario/nuevo.html", context)
 
 
+# def usuario_crear_vista(request):
+#     form = PersonaForm(request.POST or None)
+#     if form.is_valid():
+#         form.save()
+#         form = PersonaForm()
+#     context = {
+#         'form': form
+#     }
+#     return render(request, "usuario/nuevo.html", context)
+
+#
 def usuario_mostrar_vista(request):
-    obj = Persona.objects.get(id_persona='1')
+    obj = Persona.objects.all()
     context = {
-        'nombre': obj.id_persona,
-        'fecha de creacion': obj.fecha_creacion,
-        'fecha de modificacion': obj.fecha_modificacion ,
-        'fecha de nacimiento': obj.fecha_nacimiento,
-        'nombre': obj.nombre,
-        'apellidos': obj.apellido,
-        'email': obj.correo,
-        'telefono': obj.telefono,
-        'tipo de usuario': obj.tipo_persona,
-        'sexo': obj.sexo
+        "lista_objetos": obj
     }
     return render(request, "usuario/usuarios.html", context)
+

@@ -8,6 +8,7 @@ Mostrar usuarios
 {% block content %}
 <h1>Contenido de la aplicación usuario</h1>
 
-<p>{{ nombre }}</p>
-
+{% for persona in lista_objetos%}
+<p>{{ persona.id_persona }} - {{persona.nombre}} - {{persona.tipo_persona}}</p>
+{% endfor %}
 {% endblock%}
