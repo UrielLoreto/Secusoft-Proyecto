@@ -1,0 +1,10 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskName": "tarea-index",
+      "appliesTo": "secuSoft/src/index.html",
+      "type": "launch"
+    }
+  ]
+}
