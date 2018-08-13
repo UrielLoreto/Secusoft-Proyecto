@@ -1,7 +1,13 @@
 from django.urls import path
-from usuario.views import index
+from .views import UsuarioDeleteView, UsuarioUpdateView, UsuarioDetailView, UsuarioAlumnoCreateView, UsuarioListView
 
-
+app_name = 'usuarios'
 urlpatterns = [
-    path('', index),
+    path('', UsuarioListView.as_view(), name='usuario-lista'),
+    path('agregar/alumno', UsuarioAlumnoCreateView.as_view(), name='usuario-nuevo-alumno'),
+    # path('agregar/docente', UsuarioDocenteCreateView.as_view(), name='usuario-nuevo-docente'),
+    # path('agregar/padredefamilia', UsuarioPadreCreateView.as_view(), name='usuario-nuevo-padre'),
+    path('<int:id>/', UsuarioDetailView.as_view(), name='usuario-detalle'),
+    path('<int:id>/modificar/', UsuarioUpdateView.as_view(), name='usuario-actualizar'),
+    path('<int:id>/eliminar/', UsuarioDeleteView.as_view(), name='usuario-eliminar'),
 ]

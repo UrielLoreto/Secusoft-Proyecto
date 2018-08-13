@@ -1,8 +1,10 @@
 from django.db import models
-from usuario.models import Docente, Padre_Familia, Alumno
+from usuario.models import Docente, PadreFamilia, Alumno
 from cita.models import Cita
+from django.urls import reverse
 
 # Create your models here.
+
 
 class TipoIndicencia(models.Model):
     id_tipo = models.AutoField(max_length=10, primary_key=True)
@@ -25,22 +27,26 @@ class Incidencia(models.Model):
     observaciones = models.TextField()
     tipo = models.ForeignKey(TipoIndicencia, null=True, blank=True, on_delete=models.CASCADE)
 
+    def get_absolute_url(self):
+        return reverse("incidencias:incidencia-detalle", kwargs={"id": self.id_incidencia})
 
-class Incidencia_docente(models.Model):
+
+class IncidenciaAlumno(models.Model):
+    incidencia = models.ManyToManyField(Incidencia, blank=True)
+    alumno = models.ManyToManyField(Alumno, blank=True)
+
+
+class IncidenciaDocente(models.Model):
     incidencia = models.ManyToManyField(Incidencia, blank=True)
     docente = models.ManyToManyField(Docente, blank=True)
 
 
-class Incidencia_padre(models.Model):
+class IncidenciaPadre(models.Model):
     incidencia = models.ManyToManyField(Incidencia, blank=True)
-    padre = models.ManyToManyField(Padre_Familia, blank=True)
+    padre = models.ManyToManyField(PadreFamilia, blank=True)
 
 
-class Incidencia_alumno(models.Model):
-    incidencia = models.ManyToManyField(Incidencia, blank=True)
-    alumno = models.ManyToManyField(Alumno, blank=True)
-
-class Incidencia_cita(models.Model):
+class IncidenciaCita(models.Model):
     incidencia = models.ManyToManyField(Incidencia, blank=True)
     cita = models.ManyToManyField(Cita, blank=True)
 
@@ -50,7 +56,8 @@ class Comentario(models.Model):
     comentario = models.CharField(max_length=500, null=True, blank=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
 
-class Comentario_rel(models.Model):
+
+class ComentarioRel(models.Model):
     comentario = models.ManyToManyField(Comentario, blank=True)
     rel = models.ManyToManyField(Cita, blank=True)
     persona = models.ManyToManyField(Docente, blank=True)

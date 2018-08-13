@@ -1,0 +1,14 @@
+{% extends 'base/base.html' %}
+
+{% block title%}
+Mostrar usuarios
+{% endblock %}
+
+
+{% block content %}
+<h1>Lista de usuario</h1>
+
+{% for persona in object_list%}
+<p>{{ persona.id_persona }} - {{persona.nombre}} - {{persona.tipo_persona}}</p>
+{% endfor %}
+{% endblock%}

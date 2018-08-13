@@ -1,8 +1,8 @@
-import uuid
-
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
+
 
 class Persona(models.Model):
     persona_tipo = (
@@ -21,23 +21,23 @@ class Persona(models.Model):
     fecha_nacimiento = models.DateField()
     nombre = models.CharField(max_length=50)
     apellido = models.CharField(max_length=100)
-    correo = models.EmailField(max_length=100)
-    telefono = models.CharField(max_length=10)
+    correo = models.EmailField(max_length=100, null=True, blank=True)
+    telefono = models.CharField(max_length=10, null=True, blank=True)
     tipo_persona = models.CharField(max_length=2, choices=persona_tipo, default='4')
     sexo = models.CharField(max_length=10, choices=sexo_tipo, default='H')
     token = models.CharField(max_length=80, null=True, blank=True)
-    token = models.CharField(max_length=80, null=True, blank=True)
+
+    def get_absolute_url(self):
+        return reverse("usuarios:usuario-detalle", kwargs={"id": self.id_persona})
 
 
 class Usuario(models.Model):
     usuario = models.ForeignKey(Persona, null=True, blank=True, on_delete=models.CASCADE)
-    nombre = models.CharField(max_length= 20, unique=True)
-    contra = models.CharField(max_length= 30)
-    nivel = models.CharField(max_length=2)
+    nombre = models.CharField(max_length=20, unique=True)
+    contra = models.CharField(max_length=30)
 
 
-
-class Padre_Familia(models.Model):
+class PadreFamilia(models.Model):
     padre = models.ForeignKey(Persona, null=True, blank=True, on_delete=models.CASCADE)
 
 
@@ -48,10 +48,10 @@ class Alumno(models.Model):
     grupo = models.CharField(max_length=5)
 
 
-
-class Padre_Alumno(models.Model):
-    padre = models.ManyToManyField(Padre_Familia)
+class PadreAlumno(models.Model):
+    padre = models.ManyToManyField(PadreFamilia)
     alumno = models.ManyToManyField(Alumno)
+
 
 class Docente(models.Model):
     tutor_tipo = (

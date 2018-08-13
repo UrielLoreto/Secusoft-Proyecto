@@ -1,0 +1,19 @@
+{% extends 'base/base.html' %}
+
+{% block title%}
+Agregar Nuevo Usuario
+{% endblock %}
+
+
+{% block content %}
+<h1>Nuevo usuario</h1>
+<form method="POST"> {% csrf_token %}
+    {{ form.as_p }}
+    ----------------
+    {{ form2.as_p }}
+    --------------------
+    {{ form3.as_p }}
+    --------------------
+    <input type="submit" value="save"/>
+</form>
+{% endblock%}

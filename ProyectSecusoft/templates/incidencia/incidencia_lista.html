@@ -1,0 +1,22 @@
+{% extends 'base/base.html' %}
+
+{% block title%}
+Mostrar incidencias
+{% endblock %}
+
+{% block content %}
+
+<p>{{ object_list }}gghgh</p>
+
+<h1>Lista de incidencias</h1>
+{% for incidencia in object_list%}
+    <p>{{ incidencia.id_incidencia }}</p>
+    <p>{{incidencia.fecha_incidencia}}</p>
+    <p>{{incidencia.asunto}}</p>
+    <p>{{incidencia.estatus}}</p>
+    <p>{{incidencia.observaciones}}</p>
+    <p>{{incidencia.tipo}}</p>
+{% endfor %}
+
+
+{% endblock%}

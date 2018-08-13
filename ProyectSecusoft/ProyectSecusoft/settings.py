@@ -40,8 +40,6 @@ INSTALLED_APPS = [
     'usuario',
     'cita',
     'incidencia',
-    'reporte'
-
 ]
 
 MIDDLEWARE = [
