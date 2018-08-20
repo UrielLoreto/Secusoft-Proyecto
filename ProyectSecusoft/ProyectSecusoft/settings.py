@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'usuario',
     'cita',
     'incidencia',
+    'dashboard',
 ]
 
 MIDDLEWARE = [

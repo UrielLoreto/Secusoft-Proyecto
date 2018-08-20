@@ -1,4 +1,4 @@
-{% extends 'base/base.html' %}
+{% extends 'base/index.html' %}
 
 {% block title%}
 Modificar usuarios
@@ -7,7 +7,7 @@ Modificar usuarios
 
 {% block content %}
 <h1>Modificar usuario</h1>
-<form action="." method="POST"> {% csrf_token %}
+<form action="" method="POST"> {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Save"/>
 </form>

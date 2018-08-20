@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import transaction
 from django.shortcuts import reverse, get_object_or_404, get_list_or_404, render
 from .models import Persona
@@ -20,7 +21,10 @@ class UsuarioListView(ListView):  # Mostrar todos lo usuarios
         return self.queryset
 
     def get(self, request, *args, **kwargs):
-        context = {'object_list': self.get_queryset()}
+        context = {'object_list': self.get_queryset(),
+                   'title': 'Lista de usuarios',
+                   'year': datetime.now().year,
+                   }
         return render(request, self.template_name, context)
 
 

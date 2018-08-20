@@ -1,19 +1,76 @@
-{% extends 'base/base.html' %}
-
-{% block title%}
-Agregar Nuevo Usuario
-{% endblock %}
-
-
+{% extends 'base/index.html' %}
+{% load static %}
 {% block content %}
-<h1>Nuevo usuario</h1>
-<form method="POST"> {% csrf_token %}
-    {{ form.as_p }}
-    ----------------
-    {{ form2.as_p }}
-    --------------------
-    {{ form3.as_p }}
-    --------------------
-    <input type="submit" value="save"/>
-</form>
+          <div class="clearfix"></div>
+                  <!-- Smart Wizard -->
+                  <div id="wizard" class="form_wizard wizard_horizontal">
+                    <ul class="wizard_steps">
+                      <li>
+                        <a href="#step-1">
+                          <span class="step_no">1</span>
+                          <span class="step_descr">
+                                            Step 1<br />
+                                            <small>Step 1</small>
+                                        </span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#step-2">
+                          <span class="step_no">2</span>
+                          <span class="step_descr">
+                                            Step 2<br />
+                                            <small>Step 2</small>
+                                        </span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#step-3">
+                          <span class="step_no">3</span>
+                          <span class="step_descr">
+                                            Step 3<br />
+                                            <small>Step 3</small>
+                                        </span>
+                        </a>
+                      </li>
+                    </ul>
+                    <div id="step-1">
+                        {{ form.as_p }}
+
+                    </div>
+                    <div id="step-2">
+                        {{ form2.as_p }}
+
+                    </div>
+                    <div id="step-3">
+                        {{ form3.as_p }}
+
+                    </div>
+                  </div>
+                  <!-- End SmartWizard Content -->
+
+
 {% endblock%}
+{% block js %}
+  <!-- bootstrap progress js -->
+  <script src="{% static 'base/js/progressbar/bootstrap-progressbar.min.js' %}"></script>
+  <script src="{% static 'base/js/nicescroll/jquery.nicescroll.min.js' %}"></script>
+  <!-- icheck -->
+  <script src="{% static 'base/js/icheck/icheck.min.js' %}"></script>
+
+  <script src="{% static 'base/js/custom.js' %}"></script>
+  <!-- form wizard -->
+  <script type="text/javascript" src="{% static 'base/js/wizard/jquery.smartWizard.js' %}"></script>
+  <!-- pace -->
+  <script src="{% static 'base/js/pace/pace.min.js' %}"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      // Smart Wizard
+      $('#wizard').smartWizard();
+
+      function onFinishCallback() {
+        $('#wizard').smartWizard('showMessage', 'Finish Clicked');
+        alert('Finish Clicked');
+      }
+    });
+  </script>
+{% endblock %}

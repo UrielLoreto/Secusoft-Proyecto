@@ -1,14 +1,95 @@
-{% extends 'base/base.html' %}
-
-{% block title%}
-Mostrar usuarios
-{% endblock %}
-
+{% extends 'base/index.html' %}
+{% load static %}
 
 {% block content %}
-<h1>Lista de usuario</h1>
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+          <div class="x_content">
 
-{% for persona in object_list%}
-<p>{{ persona.id_persona }} - {{persona.nombre}} - {{persona.tipo_persona}}</p>
-{% endfor %}
-{% endblock%}
+              <table class="table table-striped responsive-utilities jambo_table bulk_action">
+                  <thead>
+                        <tr>
+                          <th scope="col">Id</th>
+                          <th scope="col">Nombre</th>
+                          <th scope="col">Apellidos</th>
+                          <th scope="col">Tipo de persona</th>
+                          <th scope="col">Correo electronico</th>
+                          <th scope="col">Sexo</th>
+                          <th scope="col">Fecha de registro</th>
+                          <th scope="col">Editar</th>
+                          <th scope="col">Eliminar</th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                        {% for persona in object_list %}
+                        <tr>
+                          <td scope="row">{{ persona.id_persona }}</td>
+                          <td>{{ persona.nombre }}</td>
+                          <td>{{ persona.apellido }}</td>
+                          <td>{{ persona.get_tipo_persona_display }}</td>
+                          <td>{{ persona.correo }}</td>
+                          <td>{{ persona.get_sexo_display }}</td>
+                          <td>{{ persona.fecha_creacion }}</td>
+                        <td><a href="" class="btn btn-primary" role="button">Editar<i class="fas fa-pencil-alt"></i></a></td>
+                          <td><form action="" method="post" style="display: inline">{% csrf_token %}
+                                <button class="btn btn-danger" type="submit">Eliminar<i class="fas fa-trash-alt"></i></button>
+                          </form>
+                          </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                          <td scope="row" colspan="6">No personas yet.</td>
+                        </tr>
+                        {% endfor %}
+                  </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block js %}
+        <!-- Datatables -->
+        <!-- <script src="{% static 'base/js/datatables/js/jquery.dataTables.js' %}"></script>
+        <script src="{% static 'base/js/datatables/tools/js/dataTables.tableTools.js' %}"></script> -->
+
+        <!-- Datatables-->
+        <script src="{% static 'base/js/datatables/jquery.dataTables.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/dataTables.bootstrap.js' %}"></script>
+        <script src="{% static 'base/js/datatables/dataTables.buttons.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/buttons.bootstrap.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/jszip.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/pdfmake.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/vfs_fonts.js' %}"></script>
+        <script src="{% static 'base/js/datatables/buttons.html5.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/buttons.print.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/dataTables.fixedHeader.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/dataTables.keyTable.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/dataTables.responsive.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/responsive.bootstrap.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/dataTables.scroller.min.js' %}"></script>
+
+
+        <!-- pace -->
+        <script src="{% static 'base/js/custom.min.js' %}"></script>
+        <script type="text/javascript">
+          $(document).ready(function() {
+            $('#datatable').dataTable();
+            $('#datatable-keytable').DataTable({
+              keys: true
+            });
+            $('#datatable-responsive').DataTable();
+            $('#datatable-scroller').DataTable({
+              ajax: "{% static 'base/js/datatables/json/scroller-demo.json' %}",
+              deferRender: true,
+              scrollY: 380,
+              scrollCollapse: true,
+              scroller: true
+            });
+            var table = $('#datatable-fixed-header').DataTable({
+              fixedHeader: true
+            });
+          });
+          TableManageButtons.init();
+        </script>
+{% endblock %}

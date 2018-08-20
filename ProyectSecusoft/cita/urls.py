@@ -10,7 +10,7 @@ from .views import (
 app_name = 'citas'
 urlpatterns = [
     path('', cita_lista_vista, name='cita-lista'),
-    path('agregar', cita_crear_vista, name="cita-nuevo"),
+    path('agregar', cita_crear_vista, name="cita-nueva"),
     path('<int:id>/', cita_detalle_vista, name="cita-detalle"),
     path('<int:id>/modificar', cita_actualizar_vista, name="cita-actualizar"),
     path('<int:id>/eliminar', cita_eliminar_vista, name="cita-eliminar"),

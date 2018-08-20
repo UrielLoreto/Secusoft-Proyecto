@@ -1,22 +1,93 @@
-{% extends 'base/base.html' %}
+{% extends 'base/index.html' %}
+{% load static %}
 
-{% block title%}
-Mostrar incidencias
+{% block css %}
+{% endblock %}
+{% block content %}
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+          <div class="x_content">
+
+              <table class="table table-striped responsive-utilities jambo_table bulk_action">
+                  <thead>
+                        <tr>
+                          <th scope="col">Id</th>
+                          <th scope="col">Fecha de incidencia</th>
+                          <th scope="col">Asunto</th>
+                          <th scope="col">Estatus</th>
+                          <th scope="col">Observaciones</th>
+                          <th scope="col">Tipo de incidencia</th>
+                          <th scope="col">Editar</th>
+                          <th scope="col">Eliminar</th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                        {% for incidencia in object_list%}
+                        <tr>
+                            <td scope="row">{{ incidencia.id_incidencia }}</td>
+                            <td>{{incidencia.fecha_incidencia}}</td>
+                            <td>{{incidencia.asunto}}</td>
+                            <td>{{incidencia.estatus}}</td>
+                            <td>{{incidencia.observaciones}}</td>
+                            <td>{{incidencia.tipo}}</td>
+                        <td><a href="" class="btn btn-primary" role="button">Editar<i class="fas fa-pencil-alt"></i></a></td>
+                          <td><form action="" method="post" style="display: inline">{% csrf_token %}
+                                <button class="btn btn-danger" type="submit">Eliminar<i class="fas fa-trash-alt"></i></button>
+                          </form>
+                          </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                          <td scope="row" colspan="6">No personas yet.</td>
+                        </tr>
+                        {% endfor %}
+                  </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+        <!-- Datatables -->
+        <!-- <script src="{% static 'base/js/datatables/js/jquery.dataTables.js' %}"></script>
+        <script src="{% static 'base/js/datatables/tools/js/dataTables.tableTools.js' %}"></script> -->
+
+        <!-- Datatables-->
+        <script src="{% static 'base/js/datatables/jquery.dataTables.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/dataTables.bootstrap.js' %}"></script>
+        <script src="{% static 'base/js/datatables/dataTables.buttons.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/buttons.bootstrap.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/jszip.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/pdfmake.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/vfs_fonts.js' %}"></script>
+        <script src="{% static 'base/js/datatables/buttons.html5.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/buttons.print.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/dataTables.fixedHeader.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/dataTables.keyTable.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/dataTables.responsive.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/responsive.bootstrap.min.js' %}"></script>
+        <script src="{% static 'base/js/datatables/dataTables.scroller.min.js' %}"></script>
+
+
+        <!-- pace -->
+        <script src="{% static 'base/js/custom.min.js' %}"></script>
+        <script type="text/javascript">
+          $(document).ready(function() {
+            $('#datatable').dataTable();
+            $('#datatable-keytable').DataTable({
+              keys: true
+            });
+            $('#datatable-responsive').DataTable();
+            $('#datatable-scroller').DataTable({
+              ajax: "{% static 'base/js/datatables/json/scroller-demo.json' %}",
+              deferRender: true,
+              scrollY: 380,
+              scrollCollapse: true,
+              scroller: true
+            });
+            var table = $('#datatable-fixed-header').DataTable({
+              fixedHeader: true
+            });
+          });
+          TableManageButtons.init();
+        </script>
 {% endblock %}
 
-{% block content %}
-
-<p>{{ object_list }}gghgh</p>
-
-<h1>Lista de incidencias</h1>
-{% for incidencia in object_list%}
-    <p>{{ incidencia.id_incidencia }}</p>
-    <p>{{incidencia.fecha_incidencia}}</p>
-    <p>{{incidencia.asunto}}</p>
-    <p>{{incidencia.estatus}}</p>
-    <p>{{incidencia.observaciones}}</p>
-    <p>{{incidencia.tipo}}</p>
-{% endfor %}
-
-
-{% endblock%}

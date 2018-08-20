@@ -12,6 +12,9 @@ class TipoIndicencia(models.Model):
     descripcion = models.TextField()
     impacto = models.CharField(max_length=10)
 
+    def __str__(self):
+        return self.tipo
+
 
 class Incidencia(models.Model):
     estatus_tipo = (
