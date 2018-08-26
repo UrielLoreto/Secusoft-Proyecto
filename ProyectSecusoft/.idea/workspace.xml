@@ -13,7 +13,7 @@
       <usages-collector id="statistics.lifecycle.project">
         <counts>
           <entry key="project.closed" value="13" />
-          <entry key="project.open.time.0" value="1" />
+          <entry key="project.open.time.0" value="2" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.11" value="3" />
@@ -23,18 +23,18 @@
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="1" />
           <entry key="project.open.time.9" value="3" />
-          <entry key="project.opened" value="17" />
+          <entry key="project.opened" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="html" value="3148" />
+          <entry key="html" value="3154" />
           <entry key="py" value="4853" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="HTML" value="3148" />
+          <entry key="HTML" value="3154" />
           <entry key="Python" value="4853" />
         </counts>
       </usages-collector>
@@ -65,11 +65,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/base/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="196" column="23" lean-forward="true" selection-start-line="196" selection-start-column="23" selection-end-line="196" selection-end-column="23" />
+            <state relative-caret-position="399">
+              <caret line="175" column="6" lean-forward="true" selection-start-line="175" selection-start-column="6" selection-end-line="175" selection-end-column="6" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
@@ -77,11 +77,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/incidencia/incidencia_lista.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="977">
-              <caret line="92" selection-start-line="92" selection-end-line="92" />
+            <state relative-caret-position="212">
+              <caret line="51" lean-forward="true" selection-start-line="51" selection-end-line="51" />
             </state>
           </provider>
         </entry>
@@ -182,11 +182,11 @@
         <option value="$PROJECT_DIR$/dashboard/templates/dashboard/login.html" />
         <option value="$PROJECT_DIR$/cita/urls.py" />
         <option value="$PROJECT_DIR$/incidencia/urls.py" />
-        <option value="$PROJECT_DIR$/templates/incidencia/incidencia_lista.html" />
         <option value="$PROJECT_DIR$/incidencia/models.py" />
-        <option value="$PROJECT_DIR$/templates/base/index.html" />
         <option value="$PROJECT_DIR$/usuario/templates/usuario/usuario_lista.html" />
         <option value="$PROJECT_DIR$/usuario/templates/usuario/usuario_agregar.html" />
+        <option value="$PROJECT_DIR$/templates/base/index.html" />
+        <option value="$PROJECT_DIR$/templates/incidencia/incidencia_lista.html" />
       </list>
     </option>
   </component>
@@ -196,7 +196,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="953" />
     <option name="width" value="974" />
     <option name="height" value="1047" />
@@ -224,7 +224,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -256,6 +255,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -346,7 +346,7 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13486141" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1359275" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -390,13 +390,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/usuario/templates/usuario/usuario_actualizar.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="9" selection-start-line="3" selection-start-column="9" selection-end-line="3" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/usuario/templates/usuario/usuario_actualizar.html" />
     <entry file="file://$PROJECT_DIR$/incidencia/apps.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -429,9 +423,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/static/svgs/solid/air-freshener.svg" />
     <entry file="file://$PROJECT_DIR$/static/js/custom.js" />
-    <entry file="file://$PROJECT_DIR$/usuario/static/usuario/css/custom.css">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/usuario/static/usuario/css/custom.css" />
     <entry file="file://$USER_HOME$/venv/Lib/site-packages/django/views/generic/base.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="217">
@@ -467,13 +459,7 @@
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/static/base/js/autocomplete/countries.js" />
-    <entry file="file://$PROJECT_DIR$/usuario/templates/usuario/2.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/usuario/templates/usuario/2.html" />
     <entry file="file://$PROJECT_DIR$/templates/base/base.html" />
     <entry file="file://$PROJECT_DIR$/ProyectSecusoft/wsgi.py">
       <provider selected="true" editor-type-id="text-editor" />
@@ -485,13 +471,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/usuario/templates/usuario/usuario_eliminar.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="16" selection-start-column="12" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/usuario/templates/usuario/usuario_eliminar.html" />
     <entry file="file://$PROJECT_DIR$/ProyectSecusoft/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
@@ -534,9 +514,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/usuario/templates/usuario/usuario_detalle.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/usuario/templates/usuario/usuario_detalle.html" />
     <entry file="file://$PROJECT_DIR$/templates/incidencia/incidencia_eliminar.html">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -581,6 +559,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/usuario/templates/usuario/usuario_lista.html" />
+    <entry file="file://$PROJECT_DIR$/usuario/templates/usuario/usuario_agregar.html" />
+    <entry file="file://$PROJECT_DIR$/templates/base/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="175" column="6" lean-forward="true" selection-start-line="175" selection-start-column="6" selection-end-line="175" selection-end-column="6" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/incidencia/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="782">
@@ -590,32 +580,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/incidencia/incidencia_lista.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="977">
-          <caret line="92" selection-start-line="92" selection-end-line="92" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/usuario/templates/usuario/usuario_lista.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="53" column="3" selection-start-line="53" selection-start-column="3" selection-end-line="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/usuario/templates/usuario/usuario_agregar.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="53" selection-start-line="53" selection-end-line="55" selection-end-column="84" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/base/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="196" column="23" lean-forward="true" selection-start-line="196" selection-start-column="23" selection-end-line="196" selection-end-column="23" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+        <state relative-caret-position="212">
+          <caret line="51" lean-forward="true" selection-start-line="51" selection-end-line="51" />
         </state>
       </provider>
     </entry>

@@ -46,9 +46,10 @@
         </div>
     </div>
 </div>
+    {% block js %}
         <!-- Datatables -->
-        <!-- <script src="{% static 'base/js/datatables/js/jquery.dataTables.js' %}"></script>
-        <script src="{% static 'base/js/datatables/tools/js/dataTables.tableTools.js' %}"></script> -->
+        <script src="{% static 'base/js/datatables/js/jquery.dataTables.js' %}"></script>
+        <script src="{% static 'base/js/datatables/tools/js/dataTables.tableTools.js' %}"></script>
 
         <!-- Datatables-->
         <script src="{% static 'base/js/datatables/jquery.dataTables.min.js' %}"></script>
@@ -89,5 +90,6 @@
           });
           TableManageButtons.init();
         </script>
+    {% endblock %}
 {% endblock %}
 

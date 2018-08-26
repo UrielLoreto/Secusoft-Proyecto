@@ -1,7 +1,7 @@
 {% extends 'base/index.html' %}
 {% load static %}
 {% block content %}
-          <div class="clearfix"></div>
+          <div class="x_panel"></div>
                   <!-- Smart Wizard -->
                   <div id="wizard" class="form_wizard wizard_horizontal">
                     <ul class="wizard_steps">
@@ -47,30 +47,29 @@
                     </div>
                   </div>
                   <!-- End SmartWizard Content -->
+    {% block js %}
+      <!-- bootstrap progress js -->
+      <script src="{% static 'base/js/progressbar/bootstrap-progressbar.min.js' %}"></script>
+      <script src="{% static 'base/js/nicescroll/jquery.nicescroll.min.js' %}"></script>
+      <!-- icheck -->
+      <script src="{% static 'base/js/icheck/icheck.min.js' %}"></script>
 
+      <script src="{% static 'base/js/custom.js' %}"></script>
+      <!-- form wizard -->
+      <script type="text/javascript" src="{% static 'base/js/wizard/jquery.smartWizard.js' %}"></script>
+      <!-- pace -->
+      <script src="{% static 'base/js/pace/pace.min.js' %}"></script>
+      <script type="text/javascript">
+        $(document).ready(function() {
+          // Smart Wizard
+          $('#wizard').smartWizard();
+
+          function onFinishCallback() {
+            $('#wizard').smartWizard('showMessage', 'Finish Clicked');
+            alert('Finish Clicked');
+          }
+        });
+      </script>
+    {% endblock %}
 
 {% endblock%}
-{% block js %}
-  <!-- bootstrap progress js -->
-  <script src="{% static 'base/js/progressbar/bootstrap-progressbar.min.js' %}"></script>
-  <script src="{% static 'base/js/nicescroll/jquery.nicescroll.min.js' %}"></script>
-  <!-- icheck -->
-  <script src="{% static 'base/js/icheck/icheck.min.js' %}"></script>
-
-  <script src="{% static 'base/js/custom.js' %}"></script>
-  <!-- form wizard -->
-  <script type="text/javascript" src="{% static 'base/js/wizard/jquery.smartWizard.js' %}"></script>
-  <!-- pace -->
-  <script src="{% static 'base/js/pace/pace.min.js' %}"></script>
-  <script type="text/javascript">
-    $(document).ready(function() {
-      // Smart Wizard
-      $('#wizard').smartWizard();
-
-      function onFinishCallback() {
-        $('#wizard').smartWizard('showMessage', 'Finish Clicked');
-        alert('Finish Clicked');
-      }
-    });
-  </script>
-{% endblock %}
