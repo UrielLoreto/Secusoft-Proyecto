@@ -1,4 +1,14 @@
-{% extends "base/index.html" %}
+{% extends 'base/index.html' %}
+{% load static %}
 
-{% block content %}
+{% block css %}
 {% endblock %}
+{% block content %}
+    {% block js %}
+
+        <!-- pace -->
+        <script src="{% static 'base/js/custom.min.js' %}"></script>
+
+    {% endblock %}
+{% endblock %}
+

@@ -1,14 +1,18 @@
 {% extends 'base/index.html' %}
+{% load static %}
 
-{% block title%}
-Mostrar usuarios
+{% block css %}
+{% endblock %}
+{% block content %}
+    <form action="." method="POST"> {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Save"/>
+    </form>
+    {% block js %}
+
+        <!-- pace -->
+        <script src="{% static 'base/js/custom.min.js' %}"></script>
+
+    {% endblock %}
 {% endblock %}
 
-
-{% block content %}
-<h1>Nueva cita</h1>
-<form action="." method="POST"> {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Save"/>
-</form>
-{% endblock%}
