@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/ico" />
+	<link rel="icon" href="{% static 'base/images/favicon.ico' %}" type="image/ico" />
     <title>{{ title }} SecuSoft</title>
 
     <!-- Bootstrap -->
@@ -31,8 +31,8 @@
     <link href="{% static 'base/css/custom.min.css' %}" rel="stylesheet">
 
 
-    {% block css %}
-    {% endblock %}
+{% block css %}
+{% endblock %}
   </head>
 
   <body class="nav-md">
@@ -49,7 +49,7 @@
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_pic">
-                <img src="{% static 'images/img.jpg' %}" alt="..." class="img-circle profile_img">
+                <img src="{% static 'base/images/img.jpg' %}" alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
                 <span>Bienvenido,</span>
@@ -66,6 +66,12 @@
                 <h3>General</h3>
                 <ul class="nav side-menu">
                   <li><a href="{% url 'dashboard:index' %}" class="active"><i class="fa fa-home"></i>Inicio</a></li>
+                  <li><a><i class="fa fa-edit"></i> Alumnos <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{% url 'usuarios:usuario-nuevo-alumno' %}">Agregar</a></li>
+                      <li><a href="{% url 'usuarios:usuario-lista' %}">Listado</a></li>
+                    </ul>
+                  </li>
                   <li><a><i class="fa fa-edit"></i> Usuarios <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{% url 'usuarios:usuario-nuevo-alumno' %}">Agregar</a></li>

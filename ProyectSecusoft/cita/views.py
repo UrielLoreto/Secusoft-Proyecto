@@ -5,7 +5,7 @@ from .forms import RawCita
 
 
 def cita_lista_vista(request):  # Mostrar todos lo citas
-    obj = get_list_or_404(Cita)
+    obj = Cita.objects.all()
     context = {
         "lista_objetos": obj
     }

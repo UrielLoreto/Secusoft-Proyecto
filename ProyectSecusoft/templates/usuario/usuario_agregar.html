@@ -1,75 +1,132 @@
 {% extends 'base/index.html' %}
 {% load static %}
+{% block css %}
+  <!-- Bootstrap core CSS -->
+
+  <link href="{% static 'base/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <link href="{% static 'base/fonts/css/font-awesome.min.css' %}" rel="stylesheet">
+  <link href="{% static 'base/css/animate.min.css' %}" rel="stylesheet">
+
+  <!-- Custom styling plus plugins -->
+  <link href="{% static 'base/css/custom.css' %}"rel="stylesheet">
+  <link href="{% static 'base/css/icheck/flat/green.css' %}"rel="stylesheet">
+
+{% endblock %}
 {% block content %}
-          <div class="x_panel"></div>
-                  <!-- Smart Wizard -->
-                  <div id="wizard" class="form_wizard wizard_horizontal">
-                    <ul class="wizard_steps">
-                      <li>
-                        <a href="#step-1">
-                          <span class="step_no">1</span>
-                          <span class="step_descr">
-                                            Step 1<br />
-                                            <small>Step 1</small>
-                                        </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#step-2">
-                          <span class="step_no">2</span>
-                          <span class="step_descr">
-                                            Step 2<br />
-                                            <small>Step 2</small>
-                                        </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#step-3">
-                          <span class="step_no">3</span>
-                          <span class="step_descr">
-                                            Step 3<br />
-                                            <small>Step 3</small>
-                                        </span>
-                        </a>
-                      </li>
-                    </ul>
-                    <div id="step-1">
-                        {{ form.as_p }}
+  <div class="center" role="main">
+    <div class="">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                  <div class="x_content">
+                      <table id="datatable-responsive" class="dt-responsive" cellspacing="10" width="100%">
+                          <tbody>
+                          <tr>
+                          <td>
+                              {{form.nombre.label}}
+                          </td>
+                          <td>
+                              <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                {{form.nombre}}
+                                <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
+                              </div>
+                          </td>
+                          </tr>
+                          <tr>
+                              <td>
+                                  {{form.apellido.label}}
+                              </td>
+                              <td>
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                  {{form.apellido}}
+                                  <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
+                                </div>
+                              </td>
+                          </tr>
+                          <tr>
+                          <td>
+                              {{form.correo.label}}
+                          </td>
+                          <td>
+                              <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                {{form.correo}}
+                                <span class="fa fa-envelope form-control-feedback right" aria-hidden="true"></span>
+                              </div>
+                          </td>
+                          </tr>
+                          <tr>
+                              <td>
+                                  {{form.telefono.label}}
+                              </td>
+                              <td>
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                  {{form.telefono}}
+                                  <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span>
+                                </div>
+                              </td>
+                          </tr>
+                          <tr>
+                          <td>
+                              {{form.tipo_persona.label}}
+                          </td>
+                              <td>
+                                <div class="form-group">
+                                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    <select name="tipo_persona" id="id_tipo_persona" class="form-control" readonly="readonly">
+                                        <option value="4" selected="">Alumno</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>
+                                  {{form.sexo.label}}
+                              </td>
+                              <td>
+                              <div class="form-group">
+                                  <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    <select name="sexo" id="id_sexo" class="form-control">
+                                      <option value="H" selected="">Hombre</option>
+                                      <option value="M">Mujer</option>
+                                    </select>
+                                    </div>
+                                </div>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>
+                                  {{form.fecha_nacimiento.label}}
+                              </td>
+                              <td>
+                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input id="birthday" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text">
+                                  </div>
+                              </td>
+                          </tr>
+                          </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
 
-                    </div>
-                    <div id="step-2">
-                        {{ form2.as_p }}
-
-                    </div>
-                    <div id="step-3">
-                        {{ form3.as_p }}
-
-                    </div>
-                  </div>
-                  <!-- End SmartWizard Content -->
-    {% block js %}
-      <!-- bootstrap progress js -->
-      <script src="{% static 'base/js/progressbar/bootstrap-progressbar.min.js' %}"></script>
-      <script src="{% static 'base/js/nicescroll/jquery.nicescroll.min.js' %}"></script>
-      <!-- icheck -->
-      <script src="{% static 'base/js/icheck/icheck.min.js' %}"></script>
-
-      <script src="{% static 'base/js/custom.js' %}"></script>
-      <!-- form wizard -->
-      <script type="text/javascript" src="{% static 'base/js/wizard/jquery.smartWizard.js' %}"></script>
+{% endblock %}
+{% block js %}
       <!-- pace -->
-      <script src="{% static 'base/js/pace/pace.min.js' %}"></script>
-      <script type="text/javascript">
-        $(document).ready(function() {
-          // Smart Wizard
-          $('#wizard').smartWizard();
-
-          function onFinishCallback() {
-            $('#wizard').smartWizard('showMessage', 'Finish Clicked');
-            alert('Finish Clicked');
-          }
-        });
-      </script>
-    {% endblock %}
-
-{% endblock%}
+      <script src="{% static 'base/js/custom.min.js' %}"></script>
+      <!-- daterangepicker -->
+      <script type="text/javascript" src="{% static 'base/js/moment/moment.min.js' %}"></script>
+      <script type="text/javascript" src="{% static 'base/js/datepicker/daterangepicker.js' %}"></script>
+          <script type="text/javascript">
+            $(document).ready(function() {
+              $('#birthday').daterangepicker({
+                singleDatePicker: true,
+                calender_style: "picker_4"
+              }, function(start, end, label) {
+                console.log(start.toISOString(), end.toISOString(), label);
+              });
+            });
+          </script>
+{% endblock %}
