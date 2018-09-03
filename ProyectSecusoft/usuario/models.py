@@ -24,8 +24,11 @@ class Persona(models.Model):
     correo = models.EmailField(max_length=100, null=True, blank=True)
     telefono = models.CharField(max_length=10, null=True, blank=True)
     tipo_persona = models.CharField(max_length=2, choices=persona_tipo, default='4')
-    sexo = models.CharField(max_length=10, choices=sexo_tipo, default='H')
+    sexo = models.CharField(max_length=1, choices=sexo_tipo, default='H')
     token = models.CharField(max_length=80, null=True, blank=True)
+
+    def __str__(self):
+        return self.nombre
 
     def get_absolute_url(self):
         return reverse("usuarios:usuario-detalle", kwargs={"id": self.id_persona})
@@ -42,10 +45,18 @@ class PadreFamilia(models.Model):
 
 
 class Alumno(models.Model):
+    grado_tipo = (
+        ('1', 'Primero'),
+        ('2', 'Segundo'),
+        ('3', 'Tercero'),)
+    grupo_tipo = (
+        ('A', 'A'),
+        ('B', 'B'),
+        ('C', 'C'),)
     alumno = models.ForeignKey(Persona, null=True, blank=True, on_delete=models.CASCADE)
     matricula = models.AutoField(primary_key=True)
-    grado = models.CharField(max_length=5)
-    grupo = models.CharField(max_length=5)
+    grado = models.CharField(max_length=10, choices=grado_tipo, default='1')
+    grupo = models.CharField(max_length=10, choices=grupo_tipo, default='A')
 
 
 class PadreAlumno(models.Model):

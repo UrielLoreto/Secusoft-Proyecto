@@ -15,7 +15,7 @@ from django.views.generic import (
 
 class UsuarioListView(ListView):  # Mostrar todos lo usuarios
     template_name = 'usuario/usuario_lista.html'
-    queryset = get_list_or_404(Persona)
+    queryset = Persona.objects.all()
 
     def get_queryset(self):
         return self.queryset
@@ -28,14 +28,47 @@ class UsuarioListView(ListView):  # Mostrar todos lo usuarios
         return render(request, self.template_name, context)
 
 
-class UsuarioAlumnoCreateView(CreateView):  # Agregar nuevo usuario
+class PersonaAlumnoCreateView(CreateView):  # Agregar nuevo alumno
+    model = Persona
+    template_name = 'usuario/usuario_agregar.html'
+    form_class = PersonaForm
+    segundo_form_class = AlumnoForm
+
+    def get_context_data(self, **kwargs):
+        context = super(PersonaAlumnoCreateView, self).get_context_data(**kwargs)
+        if 'form' not in context:
+            context['form'] = self.form_class(self.request.GET)
+        if 'form2' not in context:
+            context['form2'] = self.segundo_form_class(self.request.GET)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object
+        form = self.form_class(request.POST)
+        form2 = self.segundo_form_class(request.POST)
+        if form.is_valid() and form2.is_valid():
+            print("Valido")
+            persona = form.save(commit=False)
+            persona.alumno = form2.save()
+            persona.save()
+            return HttpResponseRedirect('..')
+        else:
+            print("MAL")
+            return self.render_to_response(self.get_context_data(form=form, form2=form2))
+
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return super().form_valid(form)
+
+
+class UsuarioPadreCreateView(CreateView):  # Agregar nuevo padre
     template_name = 'usuario/usuario_agregar.html'
     form_class = PersonaForm
     segundo_form_class = UsuarioForm
     tercer_form_class = AlumnoForm
 
     def get_context_data(self, **kwargs):
-        context = super(UsuarioAlumnoCreateView, self).get_context_data(**kwargs)
+        context = super(UsuarioPadreCreateView, self).get_context_data(**kwargs)
         if 'form' not in context:
             context['form'] = self.form_class(self.request.GET)
         if 'form2' not in context:

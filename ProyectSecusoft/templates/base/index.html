@@ -9,7 +9,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="icon" href="{% static 'base/images/favicon.ico' %}" type="image/ico" />
-    <title>{{ title }} SecuSoft</title>
+    {% block titulo %}
+    <title>{{ title }} - SecuSoft</title>
+    {% endblock %}
 
     <!-- Bootstrap -->
     <link href="{% static 'base/css/bootstrap.min.css' %}" rel="stylesheet">
