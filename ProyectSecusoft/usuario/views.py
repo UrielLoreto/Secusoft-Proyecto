@@ -1,9 +1,9 @@
 from datetime import datetime
 from django.db import transaction
 from django.shortcuts import reverse, get_object_or_404, get_list_or_404, render
-from .models import Persona
+from .models import *
 from django.http import HttpResponseRedirect
-from .forms import PersonaForm, UsuarioForm, AlumnoForm, DocenteForm
+from .forms import *
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -23,6 +23,36 @@ class UsuarioListView(ListView):  # Mostrar todos lo usuarios
     def get(self, request, *args, **kwargs):
         context = {'object_list': self.get_queryset(),
                    'title': 'Lista de usuarios',
+                   'year': datetime.now().year,
+                   }
+        return render(request, self.template_name, context)
+
+
+class AlumnoListView(ListView):  # Mostrar todos lo usuarios
+    template_name = 'usuario/usuario_lista.html'
+    queryset = Persona.objects.filter(tipo_persona='4')
+
+    def get_queryset(self):
+        return self.queryset
+
+    def get(self, request, *args, **kwargs):
+        context = {'object_list': self.get_queryset(),
+                   'title': 'Lista de alumnos',
+                   'year': datetime.now().year,
+                   }
+        return render(request, self.template_name, context)
+
+
+class DocenteListView(ListView):  # Mostrar todos lo usuarios
+    template_name = 'usuario/usuario_lista.html'
+    queryset = Persona.objects.filter(tipo_persona='2')
+
+    def get_queryset(self):
+        return self.queryset
+
+    def get(self, request, *args, **kwargs):
+        context = {'object_list': self.get_queryset(),
+                   'title': 'Lista de docentes',
                    'year': datetime.now().year,
                    }
         return render(request, self.template_name, context)
@@ -93,6 +123,38 @@ class UsuarioPadreCreateView(CreateView):  # Agregar nuevo padre
             return HttpResponseRedirect('..')
         else:
             return self.render_to_response(self.get_context_data(form=form, form2=form2, form3=form3))
+
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return super().form_valid(form)
+
+
+class UsuarioDocenteCreateView(CreateView):  # Agregar nuevo padre
+    template_name = 'usuario/usuario_agregar.html'
+    form_class = PersonaForm
+    segundo_form_class = UsuarioForm
+    def get_context_data(self, **kwargs):
+        context = super(UsuarioDocenteCreateView, self).get_context_data(**kwargs)
+        if 'form' not in context:
+            context['form'] = self.form_class(self.request.GET)
+        if 'form2' not in context:
+            context['form2'] = self.segundo_form_class(self.request.GET)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object
+        form = self.form_class(request.POST)
+        form2 = self.segundo_form_class(request.POST)
+        if form.is_valid() and form2.is_valid():
+            print("Valido")
+            persona = form.save()
+            persona.save()
+            usuario = form2.save(persona)
+            usuario.save()
+            alumno.save()
+            return HttpResponseRedirect('..')
+        else:
+            return self.render_to_response(self.get_context_data(form=form, form2=form2))
 
     def form_valid(self, form):
         print(form.cleaned_data)

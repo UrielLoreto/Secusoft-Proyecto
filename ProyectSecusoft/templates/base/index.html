@@ -1,6 +1,6 @@
+<!DOCTYPE html>
 {% load static %}
 {% if user.is_authenticated %}
-<!DOCTYPE html>
 <html lang="es">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -36,14 +36,13 @@
 {% block css %}
 {% endblock %}
   </head>
-
   <body class="nav-md">
     <div class="container body">
       <div class="main_container">
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="{% url 'dashboard:index' %}" class="site_title"><i class="fa fa-paw"></i> <span>SecuSoft</span></a>
+              <a href="{% url 'dashboard:index' %}" class="site_title"><i class="fa fa-university"></i> <span>SecuSoft</span></a>
             </div>
 
             <div class="clearfix"></div>
@@ -65,25 +64,31 @@
                 <h3>General</h3>
                 <ul class="nav side-menu">
                   <li><a href="{% url 'dashboard:index' %}" class="active"><i class="fa fa-home"></i>Inicio</a></li>
-                  <li><a><i class="fa fa-edit"></i> Alumnos <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-user"></i> Alumnos <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{% url 'usuarios:usuario-nuevo-alumno' %}">Agregar</a></li>
+                      <li><a href="{% url 'usuarios:usuario-lista-alumnos' %}">Listado</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-group"></i> Padres de familia <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{% url 'usuarios:usuario-nuevo-padre' %}">Agregar</a></li>
                       <li><a href="{% url 'usuarios:usuario-lista' %}">Listado</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-edit"></i> Usuarios <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-users"></i> Docentes <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{% url 'usuarios:usuario-nuevo-alumno' %}">Agregar</a></li>
-                      <li><a href="{% url 'usuarios:usuario-lista' %}">Listado</a></li>
+                      <li><a href="{% url 'usuarios:usuario-nuevo-docente' %}">Agregar</a></li>
+                      <li><a href="{% url 'usuarios:usuario-lista-docentes' %}">Listado</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-desktop"></i> Incidencias <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-book"></i> Incidencias <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{% url 'incidencias:incidencia-nueva' %}">Agregar</a></li>
                       <li><a href="{% url 'incidencias:incidencia-lista' %}">Listado</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-table"></i> Citas <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-calendar"></i> Citas <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{% url 'citas:cita-nueva' %}">Agregar</a></li>
                       <li><a href="{% url 'citas:cita-lista' %}">Listado</a></li>
@@ -152,22 +157,25 @@
         <!-- /top navigation -->
 
         <!-- page content -->
-          <div class="right_col">
-            <div class="content">
-                {% block content %}
-                {% endblock %}
+          <div class="right_col" role="main">
+            <div class="">
+              <div class="clearfix"></div>
+                  <div class="row">
+                      {% block content %}
+                      {% endblock %}
+                  </div>
              </div>
-          </div>
-        <!-- /page content -->
-
-        <!-- footer content -->
-        {% block footer %}
+         <!-- footer content -->
         <footer>
-          <div class="pull-right">&copy; {{ year }} - Red Potatoe Soft</div>
-          <div class="clearfix"></div>
-        </footer>
-        {% endblock %}
+            <div class="copyright-info">
+              <p class="pull-right">&copy; {{ year }} - Red Potatoe Soft
+              </p>
+            </div>
+            <div class="clearfix"></div>
+          </footer>
         <!-- /footer content -->
+      </div>
+        <!-- /page content -->
       </div>
     </div>
 
@@ -192,7 +200,7 @@
 {#    <script src="../vendors/skycons/skycons.js"></script>#}
 
 {% block js %} {% endblock %}
-  </body>
+ </body>
 </html>
 {% else %}
 <meta http-equiv="REFRESH" content="0;url={% url 'dashboard:login' %}">
