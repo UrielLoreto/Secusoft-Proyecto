@@ -1,7 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="51490ada-5573-4c8d-9710-e1a0c49105b1" name="Default Changelist" comment="" />
+    <list default="true" id="51490ada-5573-4c8d-9710-e1a0c49105b1" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cita/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/cita/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cita/migrations/0002_auto_20180717_1842.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cita/migrations/0003_auto_20180726_1854.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cita/migrations/0004_auto_20180726_2257.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cita/migrations/0005_auto_20180728_2233.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/incidencia/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/incidencia/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/incidencia/migrations/0002_auto_20180717_1842.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incidencia/migrations/0003_auto_20180726_1854.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incidencia/migrations/0004_auto_20180726_2321.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incidencia/migrations/0005_auto_20180728_1906.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incidencia/migrations/0006_auto_20180728_2233.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incidencia/migrations/0007_auto_20180810_2339.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/usuario/usuario_agregar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/usuario/usuario_agregar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/usuario/usuario_lista.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/usuario/usuario_lista.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/usuario/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/usuario/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/usuario/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario/migrations/0002_auto_20180717_1842.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario/migrations/0003_auto_20180726_1854.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario/migrations/0004_auto_20180726_1900.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario/migrations/0005_auto_20180726_2321.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario/migrations/0006_auto_20180729_1856.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario/migrations/0007_auto_20180801_2017.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario/migrations/0008_auto_20180810_2339.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario/migrations/0009_auto_20180810_2352.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario/migrations/0010_auto_20180902_1904.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/usuario/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/usuario/views.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,74 +85,28 @@
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts" />
     </session>
+    <session id="-1233290951">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.0" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="py" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="Python" value="1" />
+        </counts>
+      </usages-collector>
+    </session>
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/usuario/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="527">
-              <caret line="34" column="18" selection-start-line="34" selection-start-column="18" selection-end-line="34" selection-end-column="18" />
-              <folding>
-                <element signature="e#0#28#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/usuario/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="144" lean-forward="true" selection-start-line="144" selection-end-line="144" />
-              <folding>
-                <element signature="e#0#16#0" expanded="true" />
-                <marker date="1536542155659" expanded="true" signature="1288:1323" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/usuario/forms.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="100">
-              <caret line="8" column="66" selection-start-line="8" selection-start-column="66" selection-end-line="8" selection-end-column="66" />
-              <folding>
-                <element signature="e#0#24#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/templates/usuario/usuario_agregar.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1105">
-              <caret line="128" column="46" selection-start-line="128" selection-start-column="46" selection-end-line="128" selection-end-column="46" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/usuario/usuario_lista.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="901">
-              <caret line="69" column="65" selection-start-line="69" selection-start-column="41" selection-end-line="69" selection-end-column="65" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/base/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="11" lean-forward="true" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="22" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -148,6 +133,9 @@
     <replaceStrings>
       <replace>persona</replace>
     </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -177,59 +165,39 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="953" />
-    <option name="width" value="974" />
-    <option name="height" value="1047" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1382" />
+    <option name="height" value="744" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
-              <item name="Secusoft_Django" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Secusoft_Django" type="462c0819:PsiDirectoryNode" />
+              <item name="ProyectSecusoft" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ProyectSecusoft" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="Secusoft_Django" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Secusoft_Django" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Secusoft_Django" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Secusoft_Django" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Secusoft_Django" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Secusoft_Django" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="base" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Secusoft_Django" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Secusoft_Django" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="usuario" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Secusoft_Django" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Secusoft_Django" type="462c0819:PsiDirectoryNode" />
-              <item name="usuario" type="462c0819:PsiDirectoryNode" />
+              <item name="ProyectSecusoft" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ProyectSecusoft" type="462c0819:PsiDirectoryNode" />
+              <item name="ProyectSecusoft" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="C:/Secusoft-Proyecto/ProyectSecusoft" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -285,13 +253,13 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.12153518" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.17397882" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Database Changes" order="0" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="1" sideWeight="0.49946696" visible="true" weight="0.329718" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="1" sideWeight="0.49946696" visible="true" weight="0.49836066" />
       <window_info anchor="bottom" id="Event Log" order="2" sideWeight="0.50053304" side_tool="true" weight="0.329718" />
       <window_info anchor="bottom" id="Version Control" order="3" show_stripe_button="false" />
       <window_info anchor="bottom" id="Python Console" order="4" weight="0.329718" />
@@ -321,41 +289,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Secusoft_Django/wsgi.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#231#240#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Secusoft_Django/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Secusoft_Django/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="40" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
-          <folding>
-            <element signature="e#639#671#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Secusoft_Django/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="61" column="25" lean-forward="true" selection-start-line="61" selection-start-column="25" selection-end-line="61" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Secusoft_Django/wsgi.py" />
+    <entry file="file://$PROJECT_DIR$/Secusoft_Django/__init__.py" />
+    <entry file="file://$PROJECT_DIR$/Secusoft_Django/urls.py" />
+    <entry file="file://$PROJECT_DIR$/Secusoft_Django/settings.py" />
     <entry file="file://$USER_HOME$/venv/Lib/site-packages/django/shortcuts.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="190">
@@ -367,9 +307,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="156">
           <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
-          <folding>
-            <element signature="e#0#80#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -377,9 +314,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
           <caret line="25" column="29" selection-start-line="25" selection-end-line="26" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -394,9 +328,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
           <caret line="11" selection-start-line="11" selection-end-line="11" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -413,14 +344,8 @@
         <state relative-caret-position="-31" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/base/css/editor/index.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-31" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/base/css/editor/external/google-code-prettify/prettify.css">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/static/base/css/editor/index.css" />
+    <entry file="file://$PROJECT_DIR$/static/base/css/editor/external/google-code-prettify/prettify.css" />
     <entry file="file://$PROJECT_DIR$/static/base/css/custom.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="179">
@@ -443,13 +368,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/static/base/js/moment/moment.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/static/base/js/echart/echarts-all.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -473,44 +392,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/base/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="11" lean-forward="true" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/usuario/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="527">
-          <caret line="34" column="18" selection-start-line="34" selection-start-column="18" selection-end-line="34" selection-end-column="18" />
+          <caret line="32" column="18" selection-start-line="32" selection-start-column="18" selection-end-line="32" selection-end-column="18" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/usuario/usuario_lista.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="901">
-          <caret line="69" column="65" selection-start-line="69" selection-start-column="41" selection-end-line="69" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/usuario/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="144" lean-forward="true" selection-start-line="144" selection-end-line="144" />
+        <state relative-caret-position="2533">
+          <caret line="162" selection-start-line="162" selection-end-line="162" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
-            <marker date="1536542155659" expanded="true" signature="1288:1323" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/usuario/forms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
+        <state relative-caret-position="119">
           <caret line="8" column="66" selection-start-line="8" selection-start-column="66" selection-end-line="8" selection-end-column="66" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
@@ -518,10 +422,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/templates/usuario/usuario_lista.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1173">
+          <caret line="97" column="14" selection-start-line="97" selection-start-column="14" selection-end-line="97" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/base/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="11" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/templates/usuario/usuario_agregar.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1105">
-          <caret line="128" column="46" selection-start-line="128" selection-start-column="46" selection-end-line="128" selection-end-column="46" />
+        <state relative-caret-position="2270">
+          <caret line="230" column="41" selection-start-line="230" selection-start-column="41" selection-end-line="230" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/manage.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="5" column="68" selection-start-line="5" selection-start-column="53" selection-end-line="5" selection-end-column="68" />
         </state>
       </provider>
     </entry>
