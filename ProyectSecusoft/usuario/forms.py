@@ -1,11 +1,12 @@
 from django import forms
-from .models import Persona, Usuario, Alumno, Docente, PadreFamilia
+from .models import *
+
 
 class PersonaForm(forms.ModelForm):
     class Meta:
         model = Persona
         fields = '__all__'
-        exclude = ['token', 'fecha_creacion', 'fecha_modificacion', 'correo', 'telefono']
+        exclude = ['token', 'fecha_creacion', 'fecha_modificacion']
     nombre = forms.CharField(
         widget=forms.TextInput(attrs={
             'class': 'form-control',
@@ -18,11 +19,6 @@ class PersonaForm(forms.ModelForm):
             'placeholder': 'Gutierrez Martinez',
             'require': 'true'}),
         label='Apellidos(s):')
-    tipo_persona = forms.CharField(
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'readonly': 'true',
-            'value': '4'}))
     fecha_nacimiento = forms.DateInput(attrs={'class': 'form-control'})
 
 
@@ -43,9 +39,35 @@ class UsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
         fields = '__all__'
+    nombre_usuario = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Nombreusuario',
+            'require': 'true'}),
+        label='Nombre de usuario:')
+    contra = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': '********',
+            'require': 'true',
+            'type': 'password'}),
+        label='Contraseña:')
 
 
 class DocenteForm(forms.ModelForm):
     class Meta:
         model = Docente
         fields = '__all__'
+
+
+class PadreForm(forms.ModelForm):
+    class Meta:
+        model = PadreFamilia
+        fields = '__all__'
+
+
+class PadreAlumnoForm(forms.ModelForm):
+    class Meta:
+        model = PadreAlumno
+        fields = '__all__'
+

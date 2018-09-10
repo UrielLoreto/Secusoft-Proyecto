@@ -15,7 +15,6 @@ class Persona(models.Model):
         ('H', 'Hombre'),
         ('M', 'Mujer'),
     )
-    id_persona = models.AutoField(primary_key=True, editable=False, help_text="ID unico de cada persona")
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_modificacion = models.DateTimeField(auto_now=True)
     fecha_nacimiento = models.DateField()
@@ -30,18 +29,15 @@ class Persona(models.Model):
     def __str__(self):
         return self.nombre
 
-    def get_absolute_url(self):
-        return reverse("usuarios:usuario-detalle", kwargs={"id": self.id_persona})
-
 
 class Usuario(models.Model):
-    usuario = models.ForeignKey(Persona, null=True, blank=True, on_delete=models.CASCADE)
-    nombre = models.CharField(max_length=20, unique=True)
+    usuario = models.ForeignKey(Persona, on_delete=models.CASCADE, null=True, blank=True)
+    nombre_usuario = models.CharField(max_length=20, unique=True)
     contra = models.CharField(max_length=30)
 
 
 class PadreFamilia(models.Model):
-    padre = models.ForeignKey(Persona, null=True, blank=True, on_delete=models.CASCADE)
+    padre = models.ForeignKey(Persona, on_delete=models.CASCADE, null=True, blank=True)
 
 
 class Alumno(models.Model):
@@ -53,10 +49,13 @@ class Alumno(models.Model):
         ('A', 'A'),
         ('B', 'B'),
         ('C', 'C'),)
-    alumno = models.ForeignKey(Persona, null=True, blank=True, on_delete=models.CASCADE)
-    matricula = models.AutoField(primary_key=True)
+    alumno = models.ForeignKey(Persona, on_delete=models.CASCADE, null=True, blank=True)
+    matricula = models.CharField(help_text="Matricula del alumno", max_length=8, primary_key=True)
     grado = models.CharField(max_length=10, choices=grado_tipo, default='1')
     grupo = models.CharField(max_length=10, choices=grupo_tipo, default='A')
+
+    def __str__(self):
+        return self.matricula
 
 
 class PadreAlumno(models.Model):
@@ -70,5 +69,5 @@ class Docente(models.Model):
         ('2', 'No'),
         ('3', 'Temporal'),
     )
-    docente = models.ForeignKey(Persona, null=True, blank=True, on_delete=models.CASCADE)
+    docente = models.ForeignKey(Persona, on_delete=models.CASCADE)
     tutor = models.CharField(max_length=5, choices=tutor_tipo, default='1')

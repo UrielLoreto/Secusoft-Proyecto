@@ -10,17 +10,17 @@ from django.views.generic import (
     UpdateView
 )
 
-
-class IncidenciaListView(ListView):  # Mostrar todos lo incidencias
-    template_name = 'incidencia/incidencia_lista.html'
-    queryset = get_list_or_404(Incidencia)
-
-    def get_queryset(self):
-        return self.queryset
-
-    def get(self, request, *args, **kwargs):
-        context = {'object_list': self.get_queryset()}
-        return render(request, self.template_name, context)
+#
+# # class IncidenciaListView(ListView):  # Mostrar todos lo incidencias
+#     template_name = 'incidencia/incidencia_lista.html'
+#     # queryset = get_list_or_404(Incidencia)
+#
+#     def get_queryset(self):
+#         return self.queryset
+#
+#     def get(self, request, *args, **kwargs):
+#         context = {'object_list': self.get_queryset()}
+#         return render(request, self.template_name, context)
 
 
 class IncidenciaCreateView(CreateView):  # Agregar nuevo incidencia
