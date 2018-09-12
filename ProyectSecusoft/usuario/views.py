@@ -66,7 +66,7 @@ class DocenteListView(ListView):  # Mostrar todos lo usuarios
 class PersonaAlumnoCreateView(CreateView):  # Agregar nuevo alumno
     model = Persona
     template_name = 'usuario/usuario_agregar.html'
-    form_class = PersonaForm
+    form_class = PersonaAlForm
     segundo_form_class = AlumnoForm
 
     def get_context_data(self, **kwargs):
@@ -88,7 +88,7 @@ class PersonaAlumnoCreateView(CreateView):  # Agregar nuevo alumno
         if form.is_valid() and form2.is_valid():
             print("Valido")
             persona = form.save(commit=False)
-            form2.matricula = persona.pk
+            persona.alumno = form2.save()
             persona.save()
             return HttpResponseRedirect('..')
         else:
@@ -167,12 +167,10 @@ class UsuarioDocenteCreateView(CreateView):  # Agregar nuevo padre
         form3 = self.tercer_form_class(request.POST)
         if form.is_valid() and form2.is_valid() and form3.is_valid():
             print("Valido")
-            persona = form.save()
+            persona = form.save(commit=False)
+            persona.usuario = form2.save(persona)
+            persona.docente = form3.save(persona)
             persona.save()
-            usuario = form2.save(persona)
-            alumno = form3.save(persona)
-            usuario.save()
-            alumno.save()
             return HttpResponseRedirect('..')
         else:
             return self.render_to_response(self.get_context_data(form=form, form2=form2, form3=form3))
@@ -187,7 +185,15 @@ class UsuarioDetailView(DetailView):  # Detalle de un usuario por su id
 
     def get_object(self, queryset=None):
         _id = self.kwargs.get("id")
-        return get_object_or_404(Persona, id_persona=_id)
+        return get_object_or_404(Persona, id=_id)
+
+
+class AlumnoDetailView(DetailView):  # Detalle de un alumno por su id
+    template_name = 'usuario/usuario_detalle.html'
+
+    def get_object(self, queryset=None):
+        _id = self.kwargs.get("id")
+        return get_object_or_404(Alumno, matricula=_id)
 
 
 class UsuarioUpdateView(UpdateView):  # Mofificar un usuario por su id

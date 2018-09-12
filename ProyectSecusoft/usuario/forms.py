@@ -22,6 +22,26 @@ class PersonaForm(forms.ModelForm):
     fecha_nacimiento = forms.DateInput(attrs={'class': 'form-control'})
 
 
+class PersonaAlForm(forms.ModelForm):
+    class Meta:
+        model = Persona
+        fields = '__all__'
+        exclude = ['token', 'fecha_creacion', 'fecha_modificacion', 'telefono', 'correo']
+    nombre = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Omar',
+            'require': 'true'}),
+        label='Nombre(s):')
+    apellido = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Gutierrez Martinez',
+            'require': 'true'}),
+        label='Apellidos(s):')
+    fecha_nacimiento = forms.DateInput(attrs={'class': 'form-control'})
+
+
 class AlumnoForm(forms.ModelForm):
     class Meta:
         model = Alumno
@@ -42,7 +62,7 @@ class UsuarioForm(forms.ModelForm):
     nombre_usuario = forms.CharField(
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Nombreusuario',
+            'placeholder': 'Nombre de usuario',
             'require': 'true'}),
         label='Nombre de usuario:')
     contra = forms.CharField(

@@ -1,16 +1,223 @@
 {% extends 'base/index.html' %}
 {% load static %}
-
 {% block css %}
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'base/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'base/fonts/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'base/css/animate.min.css' %}" rel="stylesheet">
+    <!-- Custom styling plus plugins -->
+    <link href="{% static 'base/css/custom.css' %}"rel="stylesheet">
+    <link href="{% static 'base/css/icheck/flat/green.css' %}"rel="stylesheet">
+      <!-- editor -->
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+    <link href="{% static 'base/css/editor/external/google-code-prettify/prettify.css' %}" rel="stylesheet">
+    <link href="{% static 'base/css/editor/index.css' %}" rel="stylesheet">
+    <!-- select2 -->
+    <link href="{% static 'base/css/select/select2.min.css' %}" rel="stylesheet">
+    <!-- switchery -->
+    <link rel="stylesheet" href="{% static 'base/css/switchery/switchery.min.css' %}" />
 {% endblock %}
 {% block content %}
-    <form action="." method="POST"> {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Save"/>
-    </form>
-    {% block js %}
-        <!-- pace -->
-        <script src="{% static 'base/js/custom.min.js' %}"></script>
-    {% endblock %}
+{% block titulo %}
+<title>Agregar incidencia - SecuSoft</title>
 {% endblock %}
+<form id="form" method="post"  class="form-horizontal form-label-left" novalidate action="{% url 'incidencias:incidencia-nueva' %}" >
 
+   {% csrf_token %}
+   <div class="center" role="main">
+      <div class="">
+         <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+               <div class="x_title">
+                  <h2>Agregar incidencia</h2>
+                  <div class="clearfix"></div>
+                  <p><small>Datos de la incidencia:</small></p>
+                  <div class="clearfix"></div>
+               </div>
+               <div class="x_content">
+                  <table id="datatable-responsive" class="dt-responsive" cellspacing="10" width="100%">
+                        <tr>
+                           <td>
+                              {{form.asunto.label}}
+                           </td>
+                           <td>
+                              <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback form-group">
+                                  <input autocomplete="off" name="asunto" maxlength="100" id="id_asunto" type="text" class="form-control ">
+                              </div>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>
+                              {{form.observaciones.label}}
+                           </td>
+                           <td>
+                              <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                <textarea name="observaciones" id="id_observaciones" class="textarea form-control" style="width: 100%; overflow: hidden; word-wrap: break-word; resize: horizontal; height: 87px;"></textarea>
+                              </div>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>
+                              {{form2.alumno.label}}
+                           </td>
+                                                      <td>
+                              <div class="form-group">
+                                 <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback form-group">
+{#                                 <select class="select2_single" name="alumno" id="id_alumno" required="" style="width: auto">#}
+{#                                     {% for alumno in form4.alumno %}#}
+{#                                          <option value="{{alumno}}">{{alumno}}</option>#}
+{#                                            {% endfor %}#}
+{#                                        </select>                              #}
+                                     {{ form2.alumno }}
+                                    </div>
+                            </div>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>
+                              {{form.tipo.label}}
+                           </td>
+                           <td>
+                              <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback form-group">
+                              {{form.tipo}}
+                              </div>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>
+                              {{form.estatus.label}}
+                           </td>
+                           <td>
+                              <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    <select class="form-control" name="estatus" id="id_estatus">
+                                      <option value="1" selected="">Reportada</option>
+                                    </select>
+                                </div>
+                              </div>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>
+                              Fecha de la incidencia
+                           </td>
+                           <td>
+                               <fieldset>
+                              <div class="form-group">
+                                 <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback form-group">
+                                    <input type="text" name="fecha_incidencia" required="" id="id_fecha_incidencia" autocomplete="off" class="form-control active" placeholder="20/03/2006" aria-describedby="inputSuccess2Status4">
+                                    <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
+                                    <span id="inputSuccess2Status4" class="sr-only">(success)</span>
+                                 </div>
+                              </div>
+                               </fieldset>
+                           </td>
+
+                        </tr>
+                     </tbody>
+                  </table>
+                  <button class="btn btn-success" type="submit">Agregar</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</form>
+{% endblock %}
+{% block js %}
+<!-- pace -->
+<script src="{% static 'base/js/custom.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'base/js/moment/moment.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'base/js/datepicker/daterangepicker.js' %}"></script>
+<script type="text/javascript" src="{% static 'base/js/autocomplete/countries.js' %}"></script>
+
+  <!-- daterangepicker -->
+  <script type="text/javascript" src="{% static 'base/js/moment/moment.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'base/js/datepicker/daterangepicker.js' %}"></script>
+  <!-- select2 -->
+  <script src="{% static 'base/js/select/select2.full.js' %}"></script>
+  <script src="{% static 'base/js/autocomplete/jquery.autocomplete.js' %}"></script>
+  <script src="{% static 'base/js/validator/validator.js' %}"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('#id_fecha_incidencia').daterangepicker({
+        singleDatePicker: true,
+        calender_style: "picker_4"
+      }, function(start, end, label) {
+        console.log(start.toISOString(), end.toISOString(), label);
+      });
+    });
+  </script>
+ <script type="text/javascript">
+    $(function() {
+      'use strict';
+      var countriesArray = $.map(countries, function(value, key) {
+        return {
+          value: value,
+          data: key
+        };
+      });
+      // Initialize autocomplete with custom appendTo:
+      $('#autocomplete-custom-append').autocomplete({
+        lookup: countriesArray,
+        appendTo: '#autocomplete-container'
+      });
+    });
+  </script>
+
+  <!-- select2 -->
+  <script>
+    $(document).ready(function() {
+      $(".select2_single").select2({
+        placeholder: "Select a state",
+        allowClear: true
+      });
+    });
+  </script>
+  <!-- /select2 -->
+
+      <script>
+    // initialize the validator function
+    validator.message['date'] = 'not a real date';
+
+    // validate a field on "blur" event, a 'select' on 'change' event & a '.reuired' classed multifield on 'keyup':
+    $('form')
+      .on('blur', 'input[required], input.optional, select.required', validator.checkField)
+      .on('change', 'select.required', validator.checkField)
+      .on('keypress', 'input[required][pattern]', validator.keypress);
+
+    $('.multi.required')
+      .on('keyup blur', 'input', function() {
+        validator.checkField.apply($(this).siblings().last()[0]);
+      });
+
+    // bind the validation to the form submit event
+    //$('#send').click('submit');//.prop('disabled', true);
+
+    $('form').submit(function(e) {
+      e.preventDefault();
+      var submit = true;
+      // evaluate the form using generic validaing
+      if (!validator.checkAll($(this))) {
+        submit = false;
+      }
+
+      if (submit)
+        this.submit();
+      return false;
+    });
+
+    /* FOR DEMO ONLY */
+    $('#vfields').change(function() {
+      $('form').toggleClass('mode2');
+    }).prop('checked', false);
+
+    $('#alerts').change(function() {
+      validator.defaults.alerts = (this.checked) ? false : true;
+      if (this.checked)
+        $('form .alert').remove();
+    }).prop('checked', false);
+  </script>
+
+{% endblock %}

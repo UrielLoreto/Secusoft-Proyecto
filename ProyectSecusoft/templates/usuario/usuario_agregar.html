@@ -21,7 +21,8 @@
 {% block titulo %}
 <title>Agregar alumno - SecuSoft</title>
 {% endblock %}
-<form id="form" method="post" action="{% url 'usuarios:usuario-nuevo-alumno' %}" >
+<form id="form" method="post"  class="form-horizontal form-label-left" novalidate action="{% url 'usuarios:usuario-nuevo-alumno' %}" >
+
    {% csrf_token %}
    <div class="center" role="main">
       <div class="">
@@ -126,7 +127,10 @@
                            <td>
                               <div class="form-group">
                                     <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback " >
-                                {{ form2.tutor }}
+                                <select class="form-control" name="tutor" id="id_tutor">
+                                  <option value="1">Si</option>
+                                  <option value="2">No</option>
+                                </select>
                                     </div>
                               </div>
                            </td>
@@ -178,10 +182,25 @@
                               {{form3.contra.label}}
                            </td>
                            <td>
-                              <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback form-group">
-                                 {{form3.contra}}
-                                 <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
-                              </div>
+                                 <div class="item form-group bad">
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input autocomplete="off" id="id_contra" type="password" name="contra" data-validate-length="6,8" class="form-control col-md-7 col-xs-12" required="required">
+                      </div>
+                    <div class="alert">please put something here</div></div>
+
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>
+                              {{form3.contra.label}}
+                           </td>
+                           <td>
+                                 <div class="item form-group bad">
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input autocomplete="off" id="id_contra2" type="password" name="contra2" data-validate-length="6,8" class="form-control col-md-7 col-xs-12" required="required">
+                      </div>
+                    <div class="alert">please put something here</div></div>
+
                            </td>
                         </tr>
                         <tr>
@@ -190,9 +209,10 @@
                            </td>
                            <td>
                               <div class="form-group">
-                                 <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback form-group">
-                                    {{form.telefono}}
-                                 </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                  <input autocomplete="off" maxlength="10" type="text" class="form-control" id="inputSuccess5" placeholder="0123456789" name="telefono" maxlength="10" id="id_telefono">
+                                  <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span>
+                                </div>
                               </div>
                            </td>
                         </tr>
@@ -202,9 +222,10 @@
                            </td>
                            <td>
                               <div class="form-group">
-                                 <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback form-group">
-                                    {{form.correo}}
-                                 </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                  <input autocomplete="off" name="correo" maxlength="100" id="id_correo" type="text" class="form-control " id="inputSuccess4" placeholder="Email">
+                                  <span class="fa fa-envelope form-control-feedback right" aria-hidden="true"></span>
+                                </div>
                               </div>
                            </td>
                         </tr>
@@ -263,6 +284,7 @@
   <!-- select2 -->
   <script src="{% static 'base/js/select/select2.full.js' %}"></script>
   <script src="{% static 'base/js/autocomplete/jquery.autocomplete.js' %}"></script>
+  <script src="{% static 'base/js/validator/validator.js' %}"></script>
 
   <script type="text/javascript">
     $(document).ready(function() {
@@ -301,4 +323,48 @@
     });
   </script>
   <!-- /select2 -->
+
+      <script>
+    // initialize the validator function
+    validator.message['date'] = 'not a real date';
+
+    // validate a field on "blur" event, a 'select' on 'change' event & a '.reuired' classed multifield on 'keyup':
+    $('form')
+      .on('blur', 'input[required], input.optional, select.required', validator.checkField)
+      .on('change', 'select.required', validator.checkField)
+      .on('keypress', 'input[required][pattern]', validator.keypress);
+
+    $('.multi.required')
+      .on('keyup blur', 'input', function() {
+        validator.checkField.apply($(this).siblings().last()[0]);
+      });
+
+    // bind the validation to the form submit event
+    //$('#send').click('submit');//.prop('disabled', true);
+
+    $('form').submit(function(e) {
+      e.preventDefault();
+      var submit = true;
+      // evaluate the form using generic validaing
+      if (!validator.checkAll($(this))) {
+        submit = false;
+      }
+
+      if (submit)
+        this.submit();
+      return false;
+    });
+
+    /* FOR DEMO ONLY */
+    $('#vfields').change(function() {
+      $('form').toggleClass('mode2');
+    }).prop('checked', false);
+
+    $('#alerts').change(function() {
+      validator.defaults.alerts = (this.checked) ? false : true;
+      if (this.checked)
+        $('form .alert').remove();
+    }).prop('checked', false);
+  </script>
+
 {% endblock %}

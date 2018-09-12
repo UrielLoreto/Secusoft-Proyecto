@@ -1,15 +1,20 @@
 from django import forms
-from .models import Incidencia
+from .models import *
 
 
 class IncidenciaForm(forms.ModelForm):
     class Meta:
         model = Incidencia
-        fields = (
-            'id_incidencia',
-            'fecha_incidencia',
-            'asunto',
-            'estatus',
-            'observaciones',
-            'tipo',
-        )
+        fields = '__all__'
+
+
+class IncidenciaAlForm(forms.ModelForm):
+    class Meta:
+        model = IncidenciaAlumno
+        fields = '__all__'
+
+
+class IncidenciaTipoForm(forms.ModelForm):
+    class Meta:
+        model = TipoIndicencia
+        fields = '__all__'
