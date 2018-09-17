@@ -1,5 +1,5 @@
 from django.db import models
-from usuario.models import Docente, PadreFamilia, Alumno
+from usuario.models import Docente, Alumno
 from cita.models import Cita
 from django.urls import reverse
 
@@ -46,7 +46,7 @@ class IncidenciaDocente(models.Model):
 
 class IncidenciaPadre(models.Model):
     incidencia = models.ManyToManyField(Incidencia, blank=True)
-    padre = models.ManyToManyField(PadreFamilia, blank=True)
+    # padre = models.ManyToManyField(P, blank=True)
 
 
 class IncidenciaCita(models.Model):

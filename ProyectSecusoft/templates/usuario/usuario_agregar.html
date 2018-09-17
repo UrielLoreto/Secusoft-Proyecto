@@ -1,5 +1,6 @@
 {% extends 'base/index.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% block css %}
 <!-- Bootstrap core CSS -->
 <link href="{% static 'base/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -19,9 +20,9 @@
 {% endblock %}
 {% block content %}
 {% block titulo %}
-<title>Agregar alumno - SecuSoft</title>
+<title>{{ title }} - SecuSoft</title>
 {% endblock %}
-<form id="form" method="post"  class="form-horizontal form-label-left" novalidate action="{% url 'usuarios:usuario-nuevo-alumno' %}" >
+<form method="POST"  class="form-horizontal form-label-left">
 
    {% csrf_token %}
    <div class="center" role="main">
@@ -29,238 +30,37 @@
          <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                <div class="x_title">
-                  <h2>Agregar alumno</h2>
+                  <h2>{{ title }}</h2>
                   <div class="clearfix"></div>
-                  <p><small>Datos del alumno:</small></p>
+                  <p><small>Datos:</small></p>
                   <div class="clearfix"></div>
                </div>
                <div class="x_content">
                   <table id="datatable-responsive" class="dt-responsive" cellspacing="10" width="100%">
-                        <tr>
-                           <td>
-                              {{form.nombre.label}}
-                           </td>
-                           <td>
-                              <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback form-group">
-                                 {{form.nombre}}
-                                 <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
-                              </div>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td>
-                              {{form.apellido.label}}
-                           </td>
-                           <td>
-                              <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                                 {{form.apellido}}
-                                 <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
-                              </div>
-                           </td>
-                        </tr>
-                    {% if form2.matricula %}
+                    {% if alumno %}
                      <!-- Alumno -->
-                        <tr>
-                           <td>
-                              {{form2.matricula.label}}
-                           </td>
-                           <td>
-                              <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback form-group">
-                                 {{form2.matricula}}
-                                 <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
-                              </div>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td>
-                              {{form2.grupo.label}}
-                           </td>
-                           <td>
-                              <div class="form-group">
-                                 <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                                    <select class="form-control" name="grupo" id="id_grupo">
-                                      <option value="A">A</option>
-                                      <option value="B">B</option>
-                                      <option value="C">C</option>
-                                    </select>
-                                 </div>
-                              </div>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td>
-                              {{form2.grado.label}}
-                           </td>
-                           <td>
-                              <div class="form-group">
-                                 <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback form-group">
-                                    <select class="form-control" name="grado" id="id_grado">
-                                      <option value="1">Primero</option>
-                                      <option value="2">Segundo</option>
-                                      <option value="3">Tercero</option>
-                                    </select>
-                                 </div>
-                              </div>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td>
-                              {{form.tipo_persona.label}}
-                           </td>
-                           <td>
-                              <div class="form-group">
-                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback " >
-                                <select class="form-control"  name="tipo_persona" id="id_tipo_persona">
-                                  <option value="4" selected="">Alumno</option>
-                                </select>
-                                    </div>
-                              </div>
-                           </td>
-                        </tr>
+                     {{ form|crispy }}
+                     {{ form2|crispy }}
                      <!-- Alumno -->
-                     {% elif form2.tutor %}
+                     {% elif docente %}
                      <!-- Docente -->
-                        <tr>
-                           <td>
-                              {{form2.tutor.label}}
-                           </td>
-                           <td>
-                              <div class="form-group">
-                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback " >
-                                <select class="form-control" name="tutor" id="id_tutor">
-                                  <option value="1">Si</option>
-                                  <option value="2">No</option>
-                                </select>
-                                    </div>
-                              </div>
-                           </td>
-                        </tr>
+                     {{ form|crispy }}
+                     {{ form2|crispy }}
+                     {{ form3|crispy }}
                      <!-- Docente -->
-                        {% elif form2.padre %}
+                        {% elif padre %}
                      <!-- Padre de familia -->
-                        <tr>
-                           <td>
-                              {{form4.alumno.label}}
-                           </td>
-                                                      <td>
-                              <div class="form-group">
-                                 <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback form-group">
-{#                                 <select class="select2_single" name="alumno" id="id_alumno" required="" style="width: auto">#}
-{#                                     {% for alumno in form4.alumno %}#}
-{#                                          <option value="{{alumno}}">{{alumno}}</option>#}
-{#                                            {% endfor %}#}
-{#                                        </select>                              #}
-                                     {{ form4.alumno }}
-                                    </div>
-                            </div>
-                           </td>
-                        </tr>
-
+                     {{ form|crispy }}
+                     {{ form2|crispy }}
+                     {{ form3|crispy }}
+                     {{ form4|crispy }}
                      <!-- Padre de familia -->
-                        {% elif form2.admin %}
-                     <!-- Admin -->
-                     <!-- Admin-->
                      {% endif %}
-                        {% if form2.matricula %}
-                     <!-- No usuario -->
-                     <!-- No usuario-->
-                        {% else %}
+                     {% if alumno %}
+
+                     {% else %}
                      <!-- Usuario -->
-                        <tr>
-                           <td>
-                              {{form3.nombre_usuario.label}}
-                           </td>
-                           <td>
-                              <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback form-group">
-                                 {{form3.nombre_usuario}}
-                                 <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
-                              </div>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td>
-                              {{form3.contra.label}}
-                           </td>
-                           <td>
-                                 <div class="item form-group bad">
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input autocomplete="off" id="id_contra" type="password" name="contra" data-validate-length="6,8" class="form-control col-md-7 col-xs-12" required="required">
-                      </div>
-                    <div class="alert">please put something here</div></div>
-
-                           </td>
-                        </tr>
-                        <tr>
-                           <td>
-                              {{form3.contra.label}}
-                           </td>
-                           <td>
-                                 <div class="item form-group bad">
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input autocomplete="off" id="id_contra2" type="password" name="contra2" data-validate-length="6,8" class="form-control col-md-7 col-xs-12" required="required">
-                      </div>
-                    <div class="alert">please put something here</div></div>
-
-                           </td>
-                        </tr>
-                        <tr>
-                           <td>
-                              {{form.telefono.label}}
-                           </td>
-                           <td>
-                              <div class="form-group">
-                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                                  <input autocomplete="off" maxlength="10" type="text" class="form-control" id="inputSuccess5" placeholder="0123456789" name="telefono" maxlength="10" id="id_telefono">
-                                  <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span>
-                                </div>
-                              </div>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td>
-                              {{form.correo.label}}
-                           </td>
-                           <td>
-                              <div class="form-group">
-                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                                  <input autocomplete="off" name="correo" maxlength="100" id="id_correo" type="text" class="form-control " id="inputSuccess4" placeholder="Email">
-                                  <span class="fa fa-envelope form-control-feedback right" aria-hidden="true"></span>
-                                </div>
-                              </div>
-                           </td>
-                        </tr>
                      {% endif %}
-                        <tr>
-                           <td>
-                              {{form.sexo.label}}
-                           </td>
-                           <td>
-                              <div class="form-group">
-                                 <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback form-group">
-                                    <select class="form-control" name="sexo" id="id_sexo">
-                                          <option value="H" selected="">Hombre</option>
-                                          <option value="M">Mujer</option>
-                                     </select>
-                                 </div>
-                              </div>
-                           </td>
-                        </tr>
-                           <td>
-                              {{form.fecha_nacimiento.label}}
-                           </td>
-                           <td>
-                               <fieldset>
-                              <div class="form-group">
-                                 <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback form-group">
-                                    <input type="text" name="fecha_nacimiento" required="" id="id_fecha_nacimiento" autocomplete="off" class="form-control active" placeholder="20/03/2006" aria-describedby="inputSuccess2Status4">
-                                    <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
-                                    <span id="inputSuccess2Status4" class="sr-only">(success)</span>
-                                 </div>
-                              </div>
-                               </fieldset>
-                           </td>
-
-                        </tr>
                      </tbody>
                   </table>
                   <button class="btn btn-success" type="submit">Agregar</button>

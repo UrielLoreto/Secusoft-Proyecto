@@ -37,53 +37,45 @@
                           <th scope="col">Matricula</th>
                           <th scope="col">Nombre</th>
                           <th scope="col">Apellidos</th>
-                          <th scope="col">Tipo de persona</th>
                           <th scope="col">Grado</th>
                           <th scope="col">Grupo</th>
-                          <th scope="col">Sexo</th>
-                          <th scope="col">Fecha de registro</th>
-                          <th scope="col">Detalles</th>
-                          <th scope="col">Editar</th>
-                          <th scope="col">Eliminar</th>
+                          <th scope="col">Id del Padre de familia</th>
                             {% else%}
                           <th scope="col">Id</th>
                           <th scope="col">Nombre</th>
                           <th scope="col">Apellidos</th>
-                          <th scope="col">Tipo de persona</th>
                           <th scope="col">Correo electronico</th>
+                            {% endif %}
                           <th scope="col">Sexo</th>
                           <th scope="col">Fecha de registro</th>
                           <th scope="col">Detalles</th>
                           <th scope="col">Editar</th>
                           <th scope="col">Eliminar</th>
-                            {% endif %}
-
                         </tr>
                   </thead>
                   <tbody>
-                        {% for persona in object_list %}
+                        {% for persona in object_list%}
                         <tr>
-                            {% if persona.matricula %}
-                          <td scope="row">{{ persona.matricula }}</td>
-                          <td>{{ persaona.nombre }}</td>
+                            {% if alumno %}
+                          <td>{{ persona.matricula }}</td>
+                          <td>{{ persona.nombre }}</td>
                           <td>{{ persona.apellido }}</td>
-                          <td>{{ persona.get_tipo_persona_display }}</td>
                           <td>{{ persona.grado }}</td>
                           <td>{{ persona.grupo }}</td>
-                          <td>{{ persona.get_sexo_display }}</td>
+                          <td>{{ persona.padrealumno_id }}</td>
+                          <td>{{ persona.sexo }}</td>
                           <td>{{ persona.fecha_creacion }}</td>
-                          <td scope="row"><a href="#/pencil-square-o"><i class="fa fa-info fa-2x" ></i></a></td>
-                          <td scope="row"><a href="#/pencil-square-o"><i class="fa fa-edit fa-2x" ></i></a></td>
+                          <td><a href='{{ pk.get_absolute_url }}'><i class="fa fa-info fa-2x" ></i></a></td>
+                          <td><a href="#/pencil-square-o"><i class="fa fa-edit fa-2x" ></i></a></td>
                           <td><form action="" method="post" style="display: inline">{% csrf_token %}<a href="#/trash"><i class="fa fa-trash fa-2x"></i></a></form></td>
                             {% else %}
                           <td scope="row">{{ persona.pk }}</td>
                           <td>{{ persona.nombre }}</td>
                           <td>{{ persona.apellido }}</td>
-                          <td>{{ persona.get_tipo_persona_display }}</td>
                           <td>{{ persona.correo }}</td>
-                          <td>{{ persona.get_sexo_display }}</td>
+                          <td>{{ persona.sexo }}</td>
                           <td>{{ persona.fecha_creacion }}</td>
-                          <td scope="row"><a href="#/pencil-square-o"><i class="fa fa-info fa-2x" ></i></a></td>
+                          <td scope="row"><a href='{{ pk.get_absolute_url }}'><i class="fa fa-info fa-2x" ></i></a></td>
                           <td scope="row"><a href="#/pencil-square-o"><i class="fa fa-edit fa-2x" ></i></a></td>
                           <td><form action="" method="post" style="display: inline">{% csrf_token %}<a href="#/trash"><i class="fa fa-trash fa-2x"></i></a></form></td>
                             {% endif %}
