@@ -14,7 +14,7 @@ class IncidenciaAlForm(forms.ModelForm):
         fields = '__all__'
 
 
-class IncidenciaTipoForm(forms.ModelForm):
+class IndicenciaDocenteForm(forms.ModelForm):
     class Meta:
-        model = TipoIndicencia
+        model = IncidenciaDocente
         fields = '__all__'

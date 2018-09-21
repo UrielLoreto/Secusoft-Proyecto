@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 
+
 class Cita(models.Model):
     estatus_tipo = (
         ('1', 'Solicitada'),

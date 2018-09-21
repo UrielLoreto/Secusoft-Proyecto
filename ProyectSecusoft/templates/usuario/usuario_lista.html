@@ -18,6 +18,11 @@
   <link href="{% static 'base/js/datatables/responsive.bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
   <link href="{% static 'base/js/datatables/scroller.bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
 
+    <style>
+        .td-btn {
+            text-align: center;
+        }
+    </style>
 
 {% endblock %}
 {% block content %}
@@ -54,7 +59,7 @@
                         </tr>
                   </thead>
                   <tbody>
-                        {% for persona in object_list%}
+                        {% for persona in object_list %}
                         <tr>
                             {% if alumno %}
                           <td>{{ persona.matricula }}</td>
@@ -65,9 +70,9 @@
                           <td>{{ persona.padrealumno_id }}</td>
                           <td>{{ persona.sexo }}</td>
                           <td>{{ persona.fecha_creacion }}</td>
-                          <td><a href='{{ pk.get_absolute_url }}'><i class="fa fa-info fa-2x" ></i></a></td>
-                          <td><a href="#/pencil-square-o"><i class="fa fa-edit fa-2x" ></i></a></td>
-                          <td><form action="" method="post" style="display: inline">{% csrf_token %}<a href="#/trash"><i class="fa fa-trash fa-2x"></i></a></form></td>
+                          <td class="td-btn"><a href='{% url 'usuarios:usuario-detalle-alumnos' persona.matricula %}'><i class="fa fa-info fa-2x text-info" ></i></a></td>
+                          <td class="td-btn"><a href="#/pencil-square-o"><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+                          <td class="td-btn"><form action="" method="post" style="display: inline">{% csrf_token %}<a href="#/trash"><i class="fa fa-trash fa-2x text-danger"></i></a></form></td>
                             {% else %}
                           <td scope="row">{{ persona.pk }}</td>
                           <td>{{ persona.nombre }}</td>
@@ -75,9 +80,9 @@
                           <td>{{ persona.correo }}</td>
                           <td>{{ persona.sexo }}</td>
                           <td>{{ persona.fecha_creacion }}</td>
-                          <td scope="row"><a href='{{ pk.get_absolute_url }}'><i class="fa fa-info fa-2x" ></i></a></td>
-                          <td scope="row"><a href="#/pencil-square-o"><i class="fa fa-edit fa-2x" ></i></a></td>
-                          <td><form action="" method="post" style="display: inline">{% csrf_token %}<a href="#/trash"><i class="fa fa-trash fa-2x"></i></a></form></td>
+                          <td scope="row"><a href='{% url 'usuarios:usuario-detalle' persona.pk %}'><i class="fa fa-info fa-2x text-info" ></i></a></td>
+                          <td scope="row"><a href="#/pencil-square-o"><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+                          <td><form action="" method="post" style="display: inline">{% csrf_token %}<a href="#/trash"><i class="fa fa-trash fa-2x text-danger"></i></a></form></td>
                             {% endif %}
                         </tr>
                         {% empty %}

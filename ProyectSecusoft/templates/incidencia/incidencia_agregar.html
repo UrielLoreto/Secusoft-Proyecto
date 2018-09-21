@@ -1,5 +1,6 @@
 {% extends 'base/index.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% block css %}
     <!-- Bootstrap core CSS -->
     <link href="{% static 'base/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -36,84 +37,9 @@
                </div>
                <div class="x_content">
                   <table id="datatable-responsive" class="dt-responsive" cellspacing="10" width="100%">
-                        <tr>
-                           <td>
-                              {{form.asunto.label}}
-                           </td>
-                           <td>
-                              <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback form-group">
-                                  <input autocomplete="off" name="asunto" maxlength="100" id="id_asunto" type="text" class="form-control ">
-                              </div>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td>
-                              {{form.observaciones.label}}
-                           </td>
-                           <td>
-                              <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                                <textarea name="observaciones" id="id_observaciones" class="textarea form-control" style="width: 100%; overflow: hidden; word-wrap: break-word; resize: horizontal; height: 87px;"></textarea>
-                              </div>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td>
-                              {{form2.alumno.label}}
-                           </td>
-                                                      <td>
-                              <div class="form-group">
-                                 <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback form-group">
-{#                                 <select class="select2_single" name="alumno" id="id_alumno" required="" style="width: auto">#}
-{#                                     {% for alumno in form4.alumno %}#}
-{#                                          <option value="{{alumno}}">{{alumno}}</option>#}
-{#                                            {% endfor %}#}
-{#                                        </select>                              #}
-                                     {{ form2.alumno }}
-                                    </div>
-                            </div>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td>
-                              {{form.tipo.label}}
-                           </td>
-                           <td>
-                              <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback form-group">
-                              {{form.tipo}}
-                              </div>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td>
-                              {{form.estatus.label}}
-                           </td>
-                           <td>
-                              <div class="form-group">
-                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                                    <select class="form-control" name="estatus" id="id_estatus">
-                                      <option value="1" selected="">Reportada</option>
-                                    </select>
-                                </div>
-                              </div>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td>
-                              Fecha de la incidencia
-                           </td>
-                           <td>
-                               <fieldset>
-                              <div class="form-group">
-                                 <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback form-group">
-                                    <input type="text" name="fecha_incidencia" required="" id="id_fecha_incidencia" autocomplete="off" class="form-control active" placeholder="20/03/2006" aria-describedby="inputSuccess2Status4">
-                                    <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
-                                    <span id="inputSuccess2Status4" class="sr-only">(success)</span>
-                                 </div>
-                              </div>
-                               </fieldset>
-                           </td>
-
-                        </tr>
+                     {{ form|crispy }}
+                     {{ form2|crispy }}
+                     {{ form3|crispy }}
                      </tbody>
                   </table>
                   <button class="btn btn-success" type="submit">Agregar</button>

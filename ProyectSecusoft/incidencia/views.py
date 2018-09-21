@@ -1,7 +1,7 @@
+from datetime import datetime
 from django.shortcuts import reverse, get_object_or_404, get_list_or_404, render
 from django.http import HttpResponseRedirect
 from .forms import *
-from usuario.forms import PersonaForm
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -15,7 +15,7 @@ class IncidenciaCreateView(CreateView):  # Agregar nuevo incidencia
     template_name = 'incidencia/incidencia_agregar.html'
     form_class = IncidenciaForm
     segundo_form_class = IncidenciaAlForm
-    tercer_form_class = IncidenciaTipoForm
+    tercer_form_class = IndicenciaDocenteForm
 
     def get_context_data(self, **kwargs):
         context = super(IncidenciaCreateView, self).get_context_data(**kwargs)
@@ -25,6 +25,8 @@ class IncidenciaCreateView(CreateView):  # Agregar nuevo incidencia
             context['form2'] = self.segundo_form_class(self.request.GET)
         if 'form3' not in context:
             context['form3'] = self.tercer_form_class(self.request.GET)
+        context['year'] = datetime.now().year
+        context['title'] = 'Agregar incidencia'
         return context
 
     def post(self, request, *args, **kwargs):
@@ -35,8 +37,8 @@ class IncidenciaCreateView(CreateView):  # Agregar nuevo incidencia
         if form.is_valid() and form2.is_valid() and form3.is_valid():
             print("Valido")
             incidencia = form.save(commit=False)
-            incidencia.alumno = form2.save(incidencia)
-            incidencia.docente = form3.save(incidencia)
+            alumno = form2.save(commit=False)
+            docente = form3.save(commit=False)
             incidencia.save()
             return HttpResponseRedirect('..')
         else:

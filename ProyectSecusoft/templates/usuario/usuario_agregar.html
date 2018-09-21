@@ -88,9 +88,13 @@
 
   <script type="text/javascript">
     $(document).ready(function() {
+
       $('#id_fecha_nacimiento').daterangepicker({
         singleDatePicker: true,
-        calender_style: "picker_4"
+        calender_style: "picker_4",
+          locale: {
+            format: 'DD/MM/YYYY'
+          }
       }, function(start, end, label) {
         console.log(start.toISOString(), end.toISOString(), label);
       });

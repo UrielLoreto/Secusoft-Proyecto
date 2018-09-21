@@ -22,10 +22,11 @@ class UsuarioListView(ListView):  # Mostrar todos lo usuarios
         return self.queryset
 
     def get(self, request, *args, **kwargs):
-        context = {'object_list': self.get_queryset(),
-                   'title': 'Lista de usuarios',
-                   'year': datetime.now().year,
-                   }
+        context = {
+            'object_list': self.get_queryset(),
+            'title': 'Lista de usuarios',
+            'year': datetime.now().year,
+        }
         return render(request, self.template_name, context)
 
 
@@ -46,10 +47,11 @@ class PadreListView(ListView):  # Mostrar todos lo usuarios
 
 class AlumnoListView(ListView):  # Mostrar todos lo usuarios
     template_name = 'usuario/usuario_lista.html'
-    queryset = Alumno.objects.raw('Select usuario_alumno.*, usuario_persona.*, usuario_padrealumno_alumno.padrealumno_id '
-                                  'FROM usuario_alumno '
-                                  'INNER JOIN usuario_persona ON usuario_alumno.alumno_id=usuario_persona.id '
-                                  'INNER JOIN usuario_padrealumno_alumno ON usuario_alumno.matricula=usuario_padrealumno_alumno.alumno_id')
+    queryset = Alumno.objects.raw(
+        'Select usuario_alumno.*, usuario_persona.*, usuario_padrealumno_alumno.padrealumno_id '
+        'FROM usuario_alumno '
+        'INNER JOIN usuario_persona ON usuario_alumno.alumno_id=usuario_persona.id '
+        'INNER JOIN usuario_padrealumno_alumno ON usuario_alumno.matricula=usuario_padrealumno_alumno.alumno_id')
 
     def get_queryset(self):
         print(self.queryset)
@@ -253,7 +255,7 @@ class AlumnoDetailView(DetailView):  # Detalle de un alumno por su id
         _id = self.kwargs.get("pk")
         queryset = Persona.objects.raw(
             'Select usuario_persona.*, usuario_alumno.* from usuario_persona inner join usuario_alumno on usuario_persona.id=usuario_alumno.alumno_id'
-            'where usuario_persona.id=%s', _id)
+            'where usuario_alumno.matricula=%s', _id)
         context["object"] = queryset
         return context
 
@@ -270,7 +272,6 @@ class DocenteDetailView(DetailView):  # Detalle de un alumno por su id
             'where usuario_persona.id=%s', _id)
         context["object"] = queryset
         return context
-
 
 
 class UsuarioUpdateView(UpdateView):  # Mofificar un usuario por su id
