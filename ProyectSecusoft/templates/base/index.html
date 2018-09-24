@@ -17,22 +17,13 @@
     <link href="{% static 'base/css/bootstrap.min.css' %}" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="{% static 'base/css/font-awesome.min.css' %}" rel="stylesheet">
-    <!-- NProgress -->
-{#    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">#}
-{#    <!-- iCheck -->#}
-{#    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">#}
-{##}
-{#    <!-- bootstrap-progressbar -->#}
-{#    <link href="../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">#}
-{#    <!-- JQVMap -->#}
-{#    <link href="../vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>#}
-{#    <!-- bootstrap-daterangepicker -->#}
-{#    <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">#}
-
     <!-- Custom Theme Style -->
     <link href="{% static 'base/css/custom.min.css' %}" rel="stylesheet">
-
-
+    <style>
+        .td-btn {
+            text-align: center;
+        }
+    </style>
 {% block css %}
 {% endblock %}
   </head>
@@ -194,20 +185,7 @@
     <script src="{% static 'base/js/jquery.min.js' %}"></script>
     <!-- Bootstrap -->
     <script src="{% static 'base/js/bootstrap.min.js' %}"></script>
-    <!-- FastClick -->
-{#    <script src="../vendors/fastclick/lib/fastclick.js"></script>#}
-{#    <!-- NProgress -->#}
-{#    <script src="../vendors/nprogress/nprogress.js"></script>#}
-{#    <!-- Chart.js -->#}
-{#    <script src="../vendors/Chart.js/dist/Chart.min.js"></script>#}
-{#    <!-- gauge.js -->#}
-{#    <script src="../vendors/gauge.js/dist/gauge.min.js"></script>#}
-{#    <!-- bootstrap-progressbar -->#}
-{#    <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>#}
-{#    <!-- iCheck -->#}
-{#    <script src="../vendors/iCheck/icheck.min.js"></script>#}
-{#    <!-- Skycons -->#}
-{#    <script src="../vendors/skycons/skycons.js"></script>#}
+
 
 {% block js %} {% endblock %}
  </body>

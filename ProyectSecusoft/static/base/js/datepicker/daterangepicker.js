@@ -248,7 +248,7 @@
             this.leftCalendar.calendar = this.buildCalendar(this.leftCalendar.month.month(), this.leftCalendar.month.year(), this.leftCalendar.month.hour(), this.leftCalendar.month.minute(), this.leftCalendar.month.second(), "left"), this.rightCalendar.calendar = this.buildCalendar(this.rightCalendar.month.month(), this.rightCalendar.month.year(), this.rightCalendar.month.hour(), this.rightCalendar.month.minute(), this.rightCalendar.month.second(), "right"), this.container.find(".calendar.left").empty().html(this.renderCalendar(this.leftCalendar.calendar, this.startDate, this.minDate, this.maxDate, "left")), this.container.find(".calendar.right").empty().html(this.renderCalendar(this.rightCalendar.calendar, this.endDate, this.singleDatePicker ? this.minDate : this.startDate, this.maxDate, "right")), this.container.find(".ranges li").removeClass("active");
             var t = !0,
                 e = 0;
-            for (var a in this.ranges) this.timePicker ? this.startDate.isSame(this.ranges[a][0]) && this.endDate.isSame(this.ranges[a][1]) && (t = !1, this.chosenLabel = this.container.find(".ranges li:eq(" + e + ")").addClass("active").html()) : this.startDate.format("DD-MM-YYYY") == this.ranges[a][0].format("DD-MM-YYYY") && this.endDate.format("DD-MM-YYYY") == this.ranges[a][1].format("DD-MM-YYYY") && (t = !1, this.chosenLabel = this.container.find(".ranges li:eq(" + e + ")").addClass("active").html()), e++;
+            for (var a in this.ranges) this.timePicker ? this.startDate.isSame(this.ranges[a][0]) && this.endDate.isSame(this.ranges[a][1]) && (t = !1, this.chosenLabel = this.container.find(".ranges li:eq(" + e + ")").addClass("active").html()) : this.startDate.format("YYYY-MM-DD") == this.ranges[a][0].format("YYYY-MM-DD") && this.endDate.format("YYYY-MM-DD") == this.ranges[a][1].format("YYYY-MM-DD") && (t = !1, this.chosenLabel = this.container.find(".ranges li:eq(" + e + ")").addClass("active").html()), e++;
             t && (this.chosenLabel = this.container.find(".ranges li:last").addClass("active").html(), this.showCalendars())
         },
         buildCalendar: function(t, e, i, s, n, r) {
@@ -264,7 +264,7 @@
             var D = m - p + this.locale.firstDay + 1;
             D > m && (D -= 7), p == this.locale.firstDay && (D = m - 6);
             var g, y, k = a([f, d, D, 12, s, n]).zone(this.timeZone);
-            for (o = 0, g = 0, y = 0; 42 > o; o++, g++, k = a(k).add(24, "hour")) o > 0 && g % 7 === 0 && (g = 0, y++), u[y][g] = k.clone().hour(i), k.hour(12), this.minDate && u[y][g].format("DD-MM-YYYY") == this.minDate.format("DD-MM-YYYY") && u[y][g].isBefore(this.minDate) && "left" == r && (u[y][g] = this.minDate.clone()), this.maxDate && u[y][g].format("DD-MM-YYYY") == this.maxDate.format("DD-MM-YYYY") && u[y][g].isAfter(this.maxDate) && "right" == r && (u[y][g] = this.maxDate.clone());
+            for (o = 0, g = 0, y = 0; 42 > o; o++, g++, k = a(k).add(24, "hour")) o > 0 && g % 7 === 0 && (g = 0, y++), u[y][g] = k.clone().hour(i), k.hour(12), this.minDate && u[y][g].format("YYYY-MM-DD") == this.minDate.format("YYYY-MM-DD") && u[y][g].isBefore(this.minDate) && "left" == r && (u[y][g] = this.minDate.clone()), this.maxDate && u[y][g].format("YYYY-MM-DD") == this.maxDate.format("YYYY-MM-DD") && u[y][g].isAfter(this.maxDate) && "right" == r && (u[y][g] = this.maxDate.clone());
             return u
         },
         renderDropdowns: function(t, e, a) {
@@ -284,7 +284,7 @@
                 r += "<tr>", this.showWeekNumbers && (r += '<td class="week">' + t[h][0].week() + "</td>");
                 for (var l = 0; 7 > l; l++) {
                     var c = "available ";
-                    c += t[h][l].month() == t[1][1].month() ? "" : "off", a && t[h][l].isBefore(a, "day") || s && t[h][l].isAfter(s, "day") ? c = " off disabled " : t[h][l].format("DD-MM-YYYY") == e.format("DD-MM-YYYY") ? (c += " active ", t[h][l].format("DD-MM-YYYY") == this.startDate.format("DD-MM-YYYY") && (c += " start-date "), t[h][l].format("DD-MM-YYYY") == this.endDate.format("DD-MM-YYYY") && (c += " end-date ")) : t[h][l] >= this.startDate && t[h][l] <= this.endDate && (c += " in-range ", t[h][l].isSame(this.startDate) && (c += " start-date "), t[h][l].isSame(this.endDate) && (c += " end-date "));
+                    c += t[h][l].month() == t[1][1].month() ? "" : "off", a && t[h][l].isBefore(a, "day") || s && t[h][l].isAfter(s, "day") ? c = " off disabled " : t[h][l].format("YYYY-MM-DD") == e.format("YYYY-MM-DD") ? (c += " active ", t[h][l].format("YYYY-MM-DD") == this.startDate.format("YYYY-MM-DD") && (c += " start-date "), t[h][l].format("YYYY-MM-DD") == this.endDate.format("YYYY-MM-DD") && (c += " end-date ")) : t[h][l] >= this.startDate && t[h][l] <= this.endDate && (c += " in-range ", t[h][l].isSame(this.startDate) && (c += " start-date "), t[h][l].isSame(this.endDate) && (c += " end-date "));
                     var d = "r" + h + "c" + l;
                     r += '<td class="' + c.replace(/\s+/g, " ").replace(/^\s?(.*?)\s?$/, "$1") + '" data-title="' + d + '">' + t[h][l].date() + "</td>"
                 }
@@ -296,7 +296,7 @@
                 r += '<div class="calendar-time">', r += '<select class="hourselect">';
                 var m = 0,
                     p = 23;
-                a && ("left" == n || this.singleDatePicker) && e.format("DD-MM-YYYY") == a.format("DD-MM-YYYY") && (m = a.hour(), e.hour() < m && e.hour(m), this.timePicker12Hour && m >= 12 && e.hour() >= 12 && (m -= 12), this.timePicker12Hour && 12 == m && (m = 1)), s && ("right" == n || this.singleDatePicker) && e.format("DD-MM-YYYY") == s.format("DD-MM-YYYY") && (p = s.hour(), e.hour() > p && e.hour(p), this.timePicker12Hour && p >= 12 && e.hour() >= 12 && (p -= 12));
+                a && ("left" == n || this.singleDatePicker) && e.format("YYYY-MM-DD") == a.format("YYYY-MM-DD") && (m = a.hour(), e.hour() < m && e.hour(m), this.timePicker12Hour && m >= 12 && e.hour() >= 12 && (m -= 12), this.timePicker12Hour && 12 == m && (m = 1)), s && ("right" == n || this.singleDatePicker) && e.format("YYYY-MM-DD") == s.format("YYYY-MM-DD") && (p = s.hour(), e.hour() > p && e.hour(p), this.timePicker12Hour && p >= 12 && e.hour() >= 12 && (p -= 12));
                 var u = 0,
                     D = 23,
                     g = e.hour();
@@ -319,7 +319,7 @@
                     r += '<select class="ampmselect">';
                     var v = "",
                         C = "";
-                    a && ("left" == n || this.singleDatePicker) && e.format("DD-MM-YYYY") == a.format("DD-MM-YYYY") && a.hour() >= 12 && (v = ' disabled="disabled" class="disabled"'), s && ("right" == n || this.singleDatePicker) && e.format("DD-MM-YYYY") == s.format("DD-MM-YYYY") && s.hour() < 12 && (C = ' disabled="disabled" class="disabled"'), r += e.hour() >= 12 ? '<option value="AM"' + v + '>AM</option><option value="PM" selected="selected"' + C + ">PM</option>" : '<option value="AM" selected="selected"' + v + '>AM</option><option value="PM"' + C + ">PM</option>", r += "</select>"
+                    a && ("left" == n || this.singleDatePicker) && e.format("YYYY-MM-DD") == a.format("YYYY-MM-DD") && a.hour() >= 12 && (v = ' disabled="disabled" class="disabled"'), s && ("right" == n || this.singleDatePicker) && e.format("YYYY-MM-DD") == s.format("YYYY-MM-DD") && s.hour() < 12 && (C = ' disabled="disabled" class="disabled"'), r += e.hour() >= 12 ? '<option value="AM"' + v + '>AM</option><option value="PM" selected="selected"' + C + ">PM</option>" : '<option value="AM" selected="selected"' + v + '>AM</option><option value="PM"' + C + ">PM</option>", r += "</select>"
                 }
                 r += "</div>"
             }

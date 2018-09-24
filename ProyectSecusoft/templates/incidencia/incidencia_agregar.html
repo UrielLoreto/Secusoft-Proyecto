@@ -2,6 +2,11 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block css %}
+    <style>
+.asteriskField {
+    display: none;
+}
+    </style>
     <!-- Bootstrap core CSS -->
     <link href="{% static 'base/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'base/fonts/css/font-awesome.min.css' %}" rel="stylesheet">
@@ -37,9 +42,9 @@
                </div>
                <div class="x_content">
                   <table id="datatable-responsive" class="dt-responsive" cellspacing="10" width="100%">
-                     {{ form|crispy }}
-                     {{ form2|crispy }}
-                     {{ form3|crispy }}
+                      {% crispy form %}
+                      {% crispy form2 %}
+                      {% crispy form3 %}
                      </tbody>
                   </table>
                   <button class="btn btn-success" type="submit">Agregar</button>

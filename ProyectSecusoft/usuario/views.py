@@ -47,14 +47,18 @@ class PadreListView(ListView):  # Mostrar todos lo usuarios
 
 class AlumnoListView(ListView):  # Mostrar todos lo usuarios
     template_name = 'usuario/usuario_lista.html'
-    queryset = Alumno.objects.raw(
-        'Select usuario_alumno.*, usuario_persona.*, usuario_padrealumno_alumno.padrealumno_id '
-        'FROM usuario_alumno '
-        'INNER JOIN usuario_persona ON usuario_alumno.alumno_id=usuario_persona.id '
-        'INNER JOIN usuario_padrealumno_alumno ON usuario_alumno.matricula=usuario_padrealumno_alumno.alumno_id')
+    queryset = Alumno.objects.raw('Select usuario_alumno.*, usuario_persona.*, usuario_padrealumno_alumno.padrealumno_id, usuario_padrealumno_padre.padrefam_id, usuario_padrefam.padre_id '
+                                  'FROM usuario_alumno INNER JOIN usuario_persona ON usuario_alumno.alumno_id=usuario_persona.id '
+                                  'INNER JOIN usuario_padrealumno_alumno ON usuario_alumno.matricula=usuario_padrealumno_alumno.alumno_id '
+                                  'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_alumno.padrealumno_id=usuario_padrealumno_padre.padrealumno_id  '
+                                  'INNER JOIN usuario_padrefam ON usuario_padrealumno_padre.padrefam_id=usuario_padrefam.id')
+    # queryset1 = Alumno.objects.all()
+    # queryset2 = Persona.objects.filter(id__in=queryset1.values('alumno_id'))
+    # queryset = PadreAlumno.objects.filter(alumno__in=queryset1.values('matricula'))
+    # for a in queryset:
+    #     print(a)
 
     def get_queryset(self):
-        print(self.queryset)
         return self.queryset
 
     def get(self, request, *args, **kwargs):
@@ -113,7 +117,7 @@ class PersonaAlumnoCreateView(CreateView):  # Agregar nuevo alumno
             persona.save()
             alumno.alumno = persona
             alumno.save()
-            return HttpResponseRedirect('..')
+            return HttpResponseRedirect('../alumnos')
         else:
             print("MAL")
             print(form.data)
@@ -171,6 +175,10 @@ class UsuarioPadreCreateView(CreateView):  # Agregar nuevo padre
             padrefam.save()
             usuario.usuario = persona
             usuario.save()
+            padrealumno = form2.save(commit=False)
+            padrealumno.save()
+            padrealumno.padre.add(padrefam)
+            padrealumno.alumno.add(request.POST['alumno'])
             return HttpResponseRedirect('..')
         else:
             print(form.data)
@@ -239,24 +247,27 @@ class UsuarioDetailView(DetailView):  # Detalle de un usuario por su id
     def get_context_data(self, queryset=None, *args, **kwargs):
         context = super(UsuarioDetailView, self).get_context_data(*args, **kwargs)
         _id = self.kwargs.get("pk")
-        queryset = Persona.objects.raw(
-            'Select usuario_persona.*, usuario_usuario.* from usuario_persona inner join usuario_usuario on usuario_persona.id=usuario_usuario.usuario_id'
-            'where usuario_persona.id=%s', _id)
+        queryset = Persona.objects.filter(id=_id)
         context["object"] = queryset
+        context['year'] = datetime.now().year
+        context['usuario'] = True
+        context['title'] = 'Detalles del usuario'
         return context
 
 
 class AlumnoDetailView(DetailView):  # Detalle de un alumno por su id
     template_name = 'usuario/usuario_detalle.html'
-    model = Persona
+    model = Alumno
 
     def get_context_data(self, queryset=None, *args, **kwargs):
         context = super(AlumnoDetailView, self).get_context_data(*args, **kwargs)
         _id = self.kwargs.get("pk")
-        queryset = Persona.objects.raw(
-            'Select usuario_persona.*, usuario_alumno.* from usuario_persona inner join usuario_alumno on usuario_persona.id=usuario_alumno.alumno_id'
-            'where usuario_alumno.matricula=%s', _id)
+        queryset1 = Alumno.objects.filter(matricula=_id)
+        queryset = Persona.objects.filter(id__in=queryset1.values('alumno_id'))
         context["object"] = queryset
+        context['year'] = datetime.now().year
+        context['Alumno'] = True
+        context['title'] = 'Detalles del alumno'
         return context
 
 
@@ -267,10 +278,11 @@ class DocenteDetailView(DetailView):  # Detalle de un alumno por su id
     def get_context_data(self, queryset=None, *args, **kwargs):
         context = super(DocenteDetailView, self).get_context_data(*args, **kwargs)
         _id = self.kwargs.get("pk")
-        queryset = Persona.objects.raw(
-            'Select usuario_persona.*, usuario_docente.* from usuario_persona inner join usuario_docente on usuario_persona.id=usuario_docente.docente_id'
-            'where usuario_persona.id=%s', _id)
+        queryset = Persona.objects.filter(id=_id)
         context["object"] = queryset
+        context['year'] = datetime.now().year
+        context['usuario'] = True
+        context['title'] = 'Detalles del usuario'
         return context
 
 

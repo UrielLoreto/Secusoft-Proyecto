@@ -3,6 +3,7 @@ from .models import *
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils.safestring import mark_safe
+from django.contrib.admin.widgets import AdminDateWidget
 
 User = get_user_model()
 
@@ -26,7 +27,12 @@ class PersonaForm(forms.ModelForm):
             'placeholder': 'Gutierrez Martinez',
             'require': 'true'}),
         label='Apellidos(s):')
-    fecha_nacimiento = forms.DateInput(attrs={'class': 'form-control'})
+    fecha_nacimiento = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'class': 'form-group',
+            'autocomplete': 'off',
+            'require': 'true'}),
+        label='Fecha de nacimiento:')
 
 
 class AlumnoForm(forms.ModelForm):

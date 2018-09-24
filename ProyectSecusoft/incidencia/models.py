@@ -30,6 +30,9 @@ class Incidencia(models.Model):
     observaciones = models.TextField()
     tipo = models.ForeignKey(TipoIndicencia, null=True, blank=True, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.asunto
+
     def get_absolute_url(self):
         return reverse("incidencias:incidencia-detalle", kwargs={"id": self.id_incidencia})
 
