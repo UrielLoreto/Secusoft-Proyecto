@@ -1,8 +1,6 @@
 import itertools
 from datetime import datetime
-from django.db import transaction
 from django.shortcuts import reverse, get_object_or_404, get_list_or_404, render
-from .models import *
 from django.http import HttpResponseRedirect
 from .forms import *
 from django.views.generic import (
@@ -10,6 +8,7 @@ from django.views.generic import (
     DeleteView,
     DetailView,
     ListView,
+    FormView,
     UpdateView
 )
 
@@ -132,7 +131,7 @@ class UsuarioPadreCreateView(CreateView):  # Agregar nuevo padre
     template_name = 'usuario/usuario_agregar.html'
     form_class = PersonaForm
     segundo_form_class = PadreAlumnoForm
-    tercer_form_class = UsuarioForm
+    tercer_form_class = RegisterForm
     cuarto_form_class = PadreForm
 
     def get_context_data(self, **kwargs):
@@ -193,7 +192,7 @@ class UsuarioDocenteCreateView(CreateView):  # Agregar nuevo padre
     template_name = 'usuario/usuario_agregar.html'
     form_class = PersonaForm
     segundo_form_class = DocenteForm
-    tercer_form_class = UsuarioForm
+    tercer_form_class = RegisterForm
 
     def get_context_data(self, **kwargs):
         context = super(UsuarioDocenteCreateView, self).get_context_data(**kwargs)
@@ -229,6 +228,7 @@ class UsuarioDocenteCreateView(CreateView):  # Agregar nuevo padre
             docente.docente = persona
             docente.save()
             usuario.usuario = persona
+            usuario.active = True
             usuario.save()
             return HttpResponseRedirect('..')
         else:
@@ -300,7 +300,6 @@ class UsuarioUpdateView(UpdateView):  # Mofificar un usuario por su id
 
 
 class UsuarioDeleteView(DeleteView):  # Eliminar un usuario por su id
-
     template_name = 'usuario/usuario_eliminar.html'
 
     def get_object(self, queryset=None):
@@ -309,3 +308,5 @@ class UsuarioDeleteView(DeleteView):  # Eliminar un usuario por su id
 
     def get_success_url(self):
         return reverse('usuarios:usuario-lista')
+
+

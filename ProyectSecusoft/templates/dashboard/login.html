@@ -26,7 +26,7 @@
   <link href="{% static 'base/css/icheck/flat/green.css' %}" rel="stylesheet">
 
 
-  <script src="{% static 'base/js/jquery.min.js"></script>
+  <script src="{% static 'base/js/jquery.min.js'%}"></script>
 
   <!--[if lt IE 9]>
         <script src="../assets/js/ie8-responsive-file-warning.js"></script>
@@ -48,17 +48,13 @@
     <div id="wrapper">
       <div id="login" class="animate form">
         <section class="login_content">
-          <form method="POST">
-                {% csrf_token %}
+            <form method='POST'> {% csrf_token %}
             <h1>{{ title }} </h1>
             <div>
-              <input type="text" class="form-control" placeholder="Usuario" required="" />
-            </div>
-            <div>
-              <input type="password" class="form-control" placeholder="Contraseña" required="" />
-            </div>
-                <p><a class="btn btn-default submit" href="{% url 'dashboard:index' %}" style="alignment: center">Inicia Sesion</a></p>
+                {{ form }}
+                <button type='submit' class='btn btn-primary'>Iniciar Sesion</button>
                 <p><a class="reset_pass" href="#" style="alignment:left">¿Olvidaste tu contraseña?</a></p>
+            </div>
             <div class="clearfix"></div>
           </form>
           <!-- form -->
