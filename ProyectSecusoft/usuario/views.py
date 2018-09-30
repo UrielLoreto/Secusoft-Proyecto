@@ -11,6 +11,7 @@ from django.views.generic import (
     FormView,
     UpdateView
 )
+user = get_user_model()
 
 
 class UsuarioListView(ListView):  # Mostrar todos lo usuarios
@@ -46,11 +47,6 @@ class PadreListView(ListView):  # Mostrar todos lo usuarios
 
 class AlumnoListView(ListView):  # Mostrar todos lo usuarios
     template_name = 'usuario/usuario_lista.html'
-    queryset = Alumno.objects.raw('Select usuario_alumno.*, usuario_persona.*, usuario_padrealumno_alumno.padrealumno_id, usuario_padrealumno_padre.padrefam_id, usuario_padrefam.padre_id '
-                                  'FROM usuario_alumno INNER JOIN usuario_persona ON usuario_alumno.alumno_id=usuario_persona.id '
-                                  'INNER JOIN usuario_padrealumno_alumno ON usuario_alumno.matricula=usuario_padrealumno_alumno.alumno_id '
-                                  'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_alumno.padrealumno_id=usuario_padrealumno_padre.padrealumno_id  '
-                                  'INNER JOIN usuario_padrefam ON usuario_padrealumno_padre.padrefam_id=usuario_padrefam.id')
     # queryset1 = Alumno.objects.all()
     # queryset2 = Persona.objects.filter(id__in=queryset1.values('alumno_id'))
     # queryset = PadreAlumno.objects.filter(alumno__in=queryset1.values('matricula'))
@@ -58,7 +54,25 @@ class AlumnoListView(ListView):  # Mostrar todos lo usuarios
     #     print(a)
 
     def get_queryset(self):
-        return self.queryset
+        if self.request.user.usuario.tipo_persona is '3':
+            print("Padre de femilia")
+            padreid = self.request.user.usuario_id
+            print(padreid)
+            queryset = Alumno.objects.raw(
+                'Select usuario_alumno.*, usuario_persona.*, usuario_padrealumno_alumno.padrealumno_id, usuario_padrealumno_padre.padrefam_id, usuario_padrefam.padre_id '
+                'FROM usuario_alumno INNER JOIN usuario_persona ON usuario_alumno.alumno_id=usuario_persona.id '
+                'INNER JOIN usuario_padrealumno_alumno ON usuario_alumno.matricula=usuario_padrealumno_alumno.alumno_id '
+                'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_alumno.padrealumno_id=usuario_padrealumno_padre.padrealumno_id  '
+                'INNER JOIN usuario_padrefam ON usuario_padrealumno_padre.padrefam_id=usuario_padrefam.id WHERE usuario_padrefam.padre_id=%s', [padreid])
+        else:
+            print("no jalo")
+            queryset = Alumno.objects.raw(
+            'Select usuario_alumno.*, usuario_persona.*, usuario_padrealumno_alumno.padrealumno_id, usuario_padrealumno_padre.padrefam_id, usuario_padrefam.padre_id '
+            'FROM usuario_alumno INNER JOIN usuario_persona ON usuario_alumno.alumno_id=usuario_persona.id '
+            'INNER JOIN usuario_padrealumno_alumno ON usuario_alumno.matricula=usuario_padrealumno_alumno.alumno_id '
+            'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_alumno.padrealumno_id=usuario_padrealumno_padre.padrealumno_id  '
+            'INNER JOIN usuario_padrefam ON usuario_padrealumno_padre.padrefam_id=usuario_padrefam.id')
+        return queryset
 
     def get(self, request, *args, **kwargs):
         context = {'object_list': self.get_queryset(),
@@ -289,10 +303,59 @@ class DocenteDetailView(DetailView):  # Detalle de un alumno por su id
 class UsuarioUpdateView(UpdateView):  # Mofificar un usuario por su id
     template_name = 'usuario/usuario_actualizar.html'
     form_class = PersonaForm
+    segundo_form_class = PadreAlumnoForm
+    tercer_form_class = RegisterForm
+    cuarto_form_class = PadreForm
+    model = Persona
 
-    def get_object(self, queryset=None):
-        _id = self.kwargs.get("id")
-        return get_object_or_404(Persona, id_persona=_id)
+    def get_context_data(self, **kwargs):
+        context = super(UsuarioUpdateView, self).get_context_data(**kwargs)
+        if 'form' not in context:
+            context['form'] = self.form_class(self.request.GET)
+        if 'form2' not in context:
+            context['form2'] = self.segundo_form_class(self.request.GET)
+        if 'form3' not in context:
+            context['form3'] = self.tercer_form_class(self.request.GET)
+        if 'form4' not in context:
+            context['form4'] = self.cuarto_form_class(self.request.GET)
+        context['year'] = datetime.now().year
+        context['padre'] = True
+        context['title'] = 'Agregar Padre de familia'
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object
+        form = self.form_class(request.POST)
+        form2 = self.segundo_form_class(request.POST)
+        form3 = self.tercer_form_class(request.POST)
+        form4 = self.cuarto_form_class(request.POST)
+        if form.is_valid():
+            print("Form valido")
+        if form2.is_valid():
+            print("form2 valido")
+        if form3.is_valid():
+            print("Form3 valido")
+        if form4.is_valid():
+            print("Form4 valido")
+        if form.is_valid() and form3.is_valid() and form4.is_valid():
+            print("Formularios validos ")
+            persona = form.save(commit=False)
+            usuario = form3.save(commit=False)
+            padrefam = form4.save(commit=False)
+            persona.tipo_persona = '3'
+            persona.save()
+            padrefam.padre = persona
+            padrefam.save()
+            usuario.usuario = persona
+            usuario.save()
+            padrealumno = form2.save(commit=False)
+            padrealumno.save()
+            padrealumno.padre.add(padrefam)
+            padrealumno.alumno.add(request.POST['alumno'])
+            return HttpResponseRedirect('..')
+        else:
+            print(form.data)
+            return self.render_to_response(self.get_context_data(form=form, form2=form2, form3=form3))
 
     def form_valid(self, form):
         print(form.cleaned_data)
@@ -310,3 +373,20 @@ class UsuarioDeleteView(DeleteView):  # Eliminar un usuario por su id
         return reverse('usuarios:usuario-lista')
 
 
+class AlumnoUpdateView(UpdateView):  # Mofificar un usuario por su id
+    template_name = 'usuario/usuario_actualizar.html'
+    model = Alumno
+    form_class = AlumnoForm
+
+    def get_context_data(self, **kwargs):
+        context = super(AlumnoUpdateView, self).get_context_data(**kwargs)
+        _id = self.kwargs.get("pk")
+        queryset1 = Alumno.objects.filter(matricula=_id)
+        queryset = Persona.objects.filter(id__in=queryset1.values('alumno_id'))
+        context["object"] = queryset
+        context["object2"] = queryset1
+        context["form2"] = PersonaForm
+        context['year'] = datetime.now().year
+        context['Alumno'] = True
+        context['title'] = 'Detalles del alumno'
+        return context

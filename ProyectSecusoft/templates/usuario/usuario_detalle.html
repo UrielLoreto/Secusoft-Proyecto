@@ -47,7 +47,7 @@
                         <tr><td>Id:</td><td>{{ persona.id }}</td></tr>
                         <tr><td>Nombre(s):</td><td>{{ persona.nombre }}</td></tr>
                         <tr><td>Apellido(s):</td><td>{{ persona.apellido }}</td></tr>
-                        <tr><td>Email:</td><td>{{ persona.email }}</td></tr>
+                        <tr><td>Email:</td><td>{{ persona.usuario }}</td></tr>
                         <tr><td>Sexo:</td><td>{{ persona.get_sexo_display }}</td></tr>
                         <tr><td>Fecha de nacimiento:</td><td>{{ persona.fecha_nacimiento }}</td></tr>
                         <tr><td>Fecha de registro:</td><td>{{ persona.fecha_creacion }}</td></tr>
@@ -60,8 +60,8 @@
             <table id="datatable-responsive" class="table  dt-responsive" cellspacing="0" width="100%">
                 <tbody>
                 <tr>
-                    <td scope="row" class="align-right"><a href='{{ instance.get_absolute_url }}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
-                    <td><form action="" method="post" style="display: inline">{% csrf_token %}<a href="#/trash"><i class="fa fa-trash fa-2x text-danger"></i></a></form></td>
+                    <td scope="row" class="align-right"><a href='{% url 'usuarios:usuario-actualizar' persona.pk %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+                    <td><form action="" method="post" style="display: inline">{% csrf_token %}<a href='{% url 'usuarios:usuario-actualizar' persona.pk %}'><i class="fa fa-trash fa-2x text-danger"></i></a></form></td>
                 </tr>
                 </tbody>
             </table>

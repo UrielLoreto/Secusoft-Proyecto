@@ -3,6 +3,7 @@ from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager
     )
 # Create your models here.
+from django.urls import reverse
 
 
 class Persona(models.Model):
@@ -28,6 +29,9 @@ class Persona(models.Model):
     def __str__(self):
         return self.nombre
 
+    def get_absolute_url(self):
+        return reverse('usuarios:usuario-detalle', kwargs={'pk': self.id})
+
 
 class Alumno(models.Model):
     grado_tipo = (
@@ -37,7 +41,10 @@ class Alumno(models.Model):
     grupo_tipo = (
         ('A', 'A'),
         ('B', 'B'),
-        ('C', 'C'),)
+        ('C', 'C'),
+        ('D', 'D'),
+        ('E', 'E'),
+        ('F', 'F'),)
     alumno = models.ForeignKey(Persona, on_delete=models.CASCADE, null=True, blank=True)
     matricula = models.CharField(help_text="Matricula del alumno", max_length=8, primary_key=True, unique=True)
     grado = models.CharField(max_length=10, choices=grado_tipo, default='1')
@@ -46,9 +53,15 @@ class Alumno(models.Model):
     def __str__(self):
         return self.matricula
 
+    def get_absolute_url(self):
+        return reverse('usuarios:usuario-detalle-alumnos', kwargs={'pk': self.matricula})
+
 
 class PadreFam(models.Model):
     padre = models.ForeignKey(Persona, on_delete=models.CASCADE, null=True, blank=True)
+
+    def get_absolute_url(self):
+        return reverse('usuarios:usuario-detalle', kwargs={'pk': self.padre_id})
 
 
 class PadreAlumno(models.Model):
@@ -66,16 +79,33 @@ class Docente(models.Model):
     tutor = models.CharField(max_length=5, choices=tutor_tipo, default='1')
 
 
+class Materia(models.Model):
+    grado_tipo = (
+        ('1', 'Primero'),
+        ('2', 'Segundo'),
+        ('3', 'Tercero'),)
+    grupo_tipo = (
+        ('A', 'A'),
+        ('B', 'B'),
+        ('C', 'C'),
+        ('D', 'D'),
+        ('E', 'E'),
+        ('F', 'F'),)
+    nombre = models.CharField(max_length=50)
+    grado = models.CharField(max_length=10, choices=grado_tipo, null=True, blank=True)
+    grupo = models.CharField(max_length=10, choices=grupo_tipo, null=True, blank=True)
+
+
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, is_active=True, is_staff=False, is_admin=False):
         if not email:
-            raise ValueError("Users must have an email address")
+            raise ValueError("Email obligatorio")
         if not password:
-            raise ValueError("Users must have a password")
+            raise ValueError("Contraseña obligatoria")
         user_obj = self.model(
             email=self.normalize_email(email)
         )
-        user_obj.set_password(password) # change user password
+        user_obj.set_password(password)  # change user password
         user_obj.active = is_active
         user_obj.staff = is_staff
         user_obj.admin = is_admin
@@ -128,6 +158,9 @@ class Usuario(AbstractBaseUser):
 
     def get_full_name(self):
         return self.usuario.nombre
+
+    def get_type_str(self):
+        return self.usuario.get_tipo_persona_display()
 
     def get_type(self):
         return self.usuario.tipo_persona
