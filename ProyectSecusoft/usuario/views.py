@@ -65,7 +65,7 @@ class AlumnoListView(ListView):  # Mostrar todos lo usuarios
                 'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_alumno.padrealumno_id=usuario_padrealumno_padre.padrealumno_id  '
                 'INNER JOIN usuario_padrefam ON usuario_padrealumno_padre.padrefam_id=usuario_padrefam.id WHERE usuario_padrefam.padre_id=%s', [padreid])
         else:
-            print("no jalo")
+            print("no es padre de familia")
             queryset = Alumno.objects.raw(
             'Select usuario_alumno.*, usuario_persona.*, usuario_padrealumno_alumno.padrealumno_id, usuario_padrealumno_padre.padrefam_id, usuario_padrefam.padre_id '
             'FROM usuario_alumno INNER JOIN usuario_persona ON usuario_alumno.alumno_id=usuario_persona.id '

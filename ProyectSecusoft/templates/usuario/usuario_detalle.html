@@ -60,8 +60,12 @@
             <table id="datatable-responsive" class="table  dt-responsive" cellspacing="0" width="100%">
                 <tbody>
                 <tr>
-                    <td scope="row" class="align-right"><a href='{% url 'usuarios:usuario-actualizar' persona.pk %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
-                    <td><form action="" method="post" style="display: inline">{% csrf_token %}<a href='{% url 'usuarios:usuario-actualizar' persona.pk %}'><i class="fa fa-trash fa-2x text-danger"></i></a></form></td>
+                    {% if Alumno %}
+                    <td scope="row" class="align-right"><a href='{% url 'usuarios:usuario-actualizar-alumnos' alumno.matricula %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+                    <td><form action="" method="post" style="display: inline">{% csrf_token %}<a href="#/trash"><i class="fa fa-trash fa-2x text-danger"></i></a></form></td>
+                    {% elif usuario %}
+                    <td scope="row" class="align-right"><a href='{% url 'usuarios:usuario-actualizar' persona.id %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+                    <td><form action="" method="post" style="display: inline">{% csrf_token %}<a href="#/trash"><i class="fa fa-trash fa-2x text-danger"></i></a></form></td>                    {% endif %}
                 </tr>
                 </tbody>
             </table>

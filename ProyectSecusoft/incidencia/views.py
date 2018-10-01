@@ -82,13 +82,19 @@ class IncidenciaDeleteView(DeleteView):  # Eliminar un incidencia por su id
 
 class IncidenciaListView(ListView):  # Mostrar todos lo usuarios
     template_name = 'incidencia/incidencia_lista.html'
-    queryset = Alumno.objects.raw('Select incidencia_incidencia.*, incidencia_incidenciaalumno_alumno.* '
-                                  'from incidencia_incidencia '
-                                  'INNER JOIN incidencia_incidenciaalumno_alumno ON indicencia_incidencia.id_incidencia=incidencia_incidenciaalumno_alumno.alumno_id')
 
     def get_queryset(self):
-        print(self.queryset)
-        return self.queryset
+        if self.request.user.usuario.tipo_persona is '3':
+            queryset = Incidencia.objects.raw('SELECT incidencia_incidencia.*, incidencia_incidenciaalumno_alumno.*, usuario_alumno.* '
+                                              'FROM incidencia_incidencia '
+                                              'INNER JOIN incidencia_incidenciaalumno_alumno ON incidencia_incidencia.id_incidencia=incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
+                                              'INNER JOIN usuario_alumno ON incidencia_incidenciaalumno_alumno.alumno_id=usuario_alumno.matricula')
+        else:
+            queryset = Incidencia.objects.raw('SELECT incidencia_incidencia.*, incidencia_incidenciaalumno_alumno.*, usuario_alumno.* '
+                                          'FROM incidencia_incidencia '
+                                          'INNER JOIN incidencia_incidenciaalumno_alumno ON incidencia_incidencia.id_incidencia=incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
+                                          'INNER JOIN usuario_alumno ON incidencia_incidenciaalumno_alumno.alumno_id=usuario_alumno.matricula')
+        return queryset
 
     def get(self, request, *args, **kwargs):
         context = {'object_list': self.get_queryset(),

@@ -36,7 +36,9 @@
                               <th scope="col">Apellidos</th>
                               <th scope="col">Grado</th>
                               <th scope="col">Grupo</th>
-                              <th scope="col">Id del Padre de familia</th>
+                                {% if user.get_type == '1' %}
+                                    <th scope="col">Id del Padre de familia</th>
+                                {% endif %}
                             {% else%}
                               <th scope="col">Id</th>
                               <th scope="col">Nombre</th>
@@ -44,10 +46,13 @@
                               <th scope="col">Correo electronico</th>
                             {% endif %}
                               <th scope="col">Sexo</th>
-                              <th scope="col">Fecha de registro</th>
+                              <th scope="col">Fecha de nacimiento</th>
+                            {% if user.get_type == '1' %}
                               <th scope="col">Detalles</th>
                               <th scope="col">Editar</th>
                               <th scope="col">Eliminar</th>
+                            {% endif %}
+
                         </tr>
                   </thead>
                   <tbody>
@@ -57,14 +62,20 @@
                                   <td>{{ persona.matricula }}</td>
                                   <td>{{ persona.nombre }}</td>
                                   <td>{{ persona.apellido }}</td>
-                                  <td>{{ persona.grado }}</td>
+                                  <td>{{ persona.get_grado_display }}</td>
                                   <td>{{ persona.grupo }}</td>
-                                  <td><a href='{% url 'usuarios:usuario-detalle' persona.padre_id %}'>{{ persona.padre_id  }}</a></td>
+                                    {% if user.get_type == '1' %}
+                                        <td><a class="tile_count green" href='{% url 'usuarios:usuario-detalle' persona.padre_id %}'>{{ persona.padre_id  }}</a></td>
+                                    {% endif %}
+
                                   <td>{{ persona.sexo }}</td>
                                   <td>{{ persona.fecha_nacimiento }}</td>
+                                {% if user.get_type == '1' %}
                                   <td class="td-btn"><a href='{% url 'usuarios:usuario-detalle-alumnos' persona.matricula %}'><i class="fa fa-info fa-2x text-info" ></i></a></td>
                                   <td class="td-btn"><a href='{% url 'usuarios:usuario-actualizar-alumnos' persona.matricula %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
                                   <td class="td-btn"><form action="" method="post" style="display: inline">{% csrf_token %}<a href="#/trash"><i class="fa fa-trash fa-2x text-danger"></i></a></form></td>
+                                {% endif %}
+
                                 {% else %}
                                   <td scope="row">{{ persona.pk }}</td>
                                   <td>{{ persona.nombre }}</td>
@@ -72,9 +83,11 @@
                                   <td>{{ persona.usuario }}</td>
                                   <td>{{ persona.get_sexo_display }}</td>
                                   <td>{{ persona.fecha_nacimiento }}</td>
-                                  <td class="td-btn"><a href='{% url 'usuarios:usuario-detalle' persona.pk %}'><i class="fa fa-info fa-2x text-info" ></i></a></td>
-                                  <td class="td-btn"><a href='{% url 'usuarios:usuario-actualizar' persona.pk %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
-                                  <td class="td-btn"><form action="" method="post" style="display: inline">{% csrf_token %}<a href="#/trash"><i class="fa fa-trash fa-2x text-danger"></i></a></form></td>
+                                    {% if user.get_type == '1' %}
+                                      <td class="td-btn"><a href='{% url 'usuarios:usuario-detalle' persona.pk %}'><i class="fa fa-info fa-2x text-info" ></i></a></td>
+                                      <td class="td-btn"><a href='{% url 'usuarios:usuario-actualizar' persona.pk %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+                                      <td class="td-btn"><form action="" method="post" style="display: inline">{% csrf_token %}<a href="#/trash"><i class="fa fa-trash fa-2x text-danger"></i></a></form></td>
+                                    {% endif %}
                                 {% endif %}
                             </tr>
                         {% empty %}

@@ -13,8 +13,8 @@
 <link href="{% static 'base/fonts/css/font-awesome.min.css' %}" rel="stylesheet">
 <link href="{% static 'base/css/animate.min.css' %}" rel="stylesheet">
 <!-- Custom styling plus plugins -->
-<link href="{% static 'base/css/custom.css' %}"rel="stylesheet">
-<link href="{% static 'base/css/icheck/flat/green.css' %}"rel="stylesheet">
+<link href="{% static 'base/css/custom.css' %}" rel="stylesheet">
+<link href="{% static 'base/css/icheck/flat/green.css' %}" rel="stylesheet">
   <!-- editor -->
 <link href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
 <link href="{% static 'base/css/editor/external/google-code-prettify/prettify.css' %}" rel="stylesheet">
@@ -51,25 +51,8 @@
                <div class="x_content center">
                   <table id="datatable-responsive" class="dt-responsive" cellspacing="0" width="100%">
                         <div class="col-md-6 ">
-                        {% if alumno %}
-                         <!-- Alumno -->
                          {{ form|crispy }}
                          {% crispy form2 %}
-                         <!-- Alumno -->
-                         {% elif docente %}
-                         <!-- Docente -->
-                         {{ form|crispy }}
-                         {{ form2|crispy }}
-                         {% crispy form3 %}
-                         <!-- Docente -->
-                            {% elif padre %}
-                         <!-- Padre de familia -->
-                         {{ form|crispy }}
-                         {{ form2|crispy }}
-                         {{ form3|crispy }}
-                         {% crispy form4 %}
-                         <!-- Padre de familia -->
-                         {% endif %}
                         </div>
                      </tbody>
                   </table>
@@ -95,39 +78,6 @@
   <script src="{% static 'base/js/select/select2.full.js' %}"></script>
   <script src="{% static 'base/js/autocomplete/jquery.autocomplete.js' %}"></script>
   <script src="{% static 'base/js/validator/validator.js' %}"></script>
-{% if alumno %}
-    <!-- Alumno -->
-    <script>
-    $(function() {
-      $('#id_fecha_nacimiento').daterangepicker({
-        format: 'YYYY-MM-DD',
-        locale: 'es',
-        singleDatePicker: true,
-        showDropdowns: true,
-        defaultDate: new Date('2004-01-01'),
-        minDate: new Date('2004-01-01'),
-        maxDate : new Date('2015-01-01'),
-          value: '2005-01-01'
-      });
-    });
-    </script>
-    <!-- Alumno -->
-{% else %}
-    <script>
-    $(function() {
-      $('#id_fecha_nacimiento').daterangepicker({
-        format: 'YYYY-MM-DD',
-        locale: 'es',
-        singleDatePicker: true,
-        showDropdowns: true,
-        defaultDate: new Date('2004-01-01'),
-        minDate: new Date('1980-01-01'),
-        maxDate : new Date('2015-01-01'),
-          value: '2005-01-01'
-      });
-    });
-    </script>
-{% endif %}
 
 
 {% endblock %}

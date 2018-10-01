@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'cita',
     'incidencia',
     'dashboard',
+    'materia',
 ]
 
 AUTH_USER_MODEL = 'usuario.Usuario'

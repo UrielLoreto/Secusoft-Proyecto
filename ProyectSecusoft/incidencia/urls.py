@@ -1,9 +1,8 @@
 from django.urls import path
-from incidencia.views import IncidenciaUpdateView, IncidenciaDeleteView, IncidenciaDetailView, IncidenciaCreateView
-
+from incidencia.views import *
 app_name = 'incidencias'
 urlpatterns = [
-    # path('', IncidenciaListView.as_view(), name='incidencia-lista'),
+    path('', IncidenciaListView.as_view(), name='incidencia-lista'),
     path('agregar', IncidenciaCreateView.as_view(), name="incidencia-nueva"),
     path('<int:id>/', IncidenciaDetailView.as_view(), name="incidencia-detalle"),
     path('<int:id>/modificar/', IncidenciaUpdateView.as_view(), name="incidencia-actualizar"),

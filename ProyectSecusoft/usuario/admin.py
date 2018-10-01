@@ -40,6 +40,7 @@ admin.site.register(Persona)
 admin.site.register(PadreAlumno)
 admin.site.register(PadreFam)
 admin.site.register(Alumno)
+
 admin.site.register(Docente)
 admin.site.register(Usuario, UserAdmin)
 
