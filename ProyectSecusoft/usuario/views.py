@@ -3,6 +3,10 @@ from datetime import datetime
 from django.shortcuts import reverse, get_object_or_404, get_list_or_404, render
 from django.http import HttpResponseRedirect
 from .forms import *
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.shortcuts import render, redirect
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -41,6 +45,7 @@ class PadreListView(ListView):  # Mostrar todos lo usuarios
         context = {'object_list': self.get_queryset(),
                    'title': 'Lista de usuarios',
                    'year': datetime.now().year,
+                   'padref': True,
                    }
         return render(request, self.template_name, context)
 
@@ -94,6 +99,7 @@ class DocenteListView(ListView):  # Mostrar todos lo usuarios
         context = {'object_list': self.get_queryset(),
                    'title': 'Lista de docentes',
                    'year': datetime.now().year,
+                   'docente': True,
                    }
         return render(request, self.template_name, context)
 
@@ -259,9 +265,28 @@ class UsuarioDetailView(DetailView):  # Detalle de un usuario por su id
     model = Persona
 
     def get_context_data(self, queryset=None, *args, **kwargs):
-        context = super(UsuarioDetailView, self).get_context_data(*args, **kwargs)
+        context = super(UsuarioDetailView, self).get_context_data(**kwargs)
         _id = self.kwargs.get("pk")
         queryset = Persona.objects.filter(id=_id)
+        a = queryset
+        for b in a:
+            if b.tipo_persona == '3':
+                context['padre'] = True
+                padreid = b.pk
+                queryset1 = Alumno.objects.raw(
+                    'Select usuario_alumno.*, usuario_persona.*, usuario_padrealumno_alumno.padrealumno_id, usuario_padrealumno_padre.padrefam_id, usuario_padrefam.padre_id '
+                    'FROM usuario_alumno INNER JOIN usuario_persona ON usuario_alumno.alumno_id=usuario_persona.id '
+                    'INNER JOIN usuario_padrealumno_alumno ON usuario_alumno.matricula=usuario_padrealumno_alumno.alumno_id '
+                    'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_alumno.padrealumno_id=usuario_padrealumno_padre.padrealumno_id  '
+                    'INNER JOIN usuario_padrefam ON usuario_padrealumno_padre.padrefam_id=usuario_padrefam.id WHERE usuario_padrefam.padre_id=%s',
+                    [padreid])
+                context["object_list"] = queryset1
+                queryset1 = PadreFam.objects.filter(padre_id=padreid)
+                queryse2 = PadreAlumno.objects.filter(padre__in=queryset1.values('id'))
+                c = queryse2
+                for d in c:
+                    context["id_padre"] = d.id
+
         context["object"] = queryset
         context['year'] = datetime.now().year
         context['usuario'] = True
@@ -274,7 +299,7 @@ class AlumnoDetailView(DetailView):  # Detalle de un alumno por su id
     model = Alumno
 
     def get_context_data(self, queryset=None, *args, **kwargs):
-        context = super(AlumnoDetailView, self).get_context_data(*args, **kwargs)
+        context = super(AlumnoDetailView, self).get_context_data(**kwargs)
         _id = self.kwargs.get("pk")
         queryset1 = Alumno.objects.filter(matricula=_id)
         queryset = Persona.objects.filter(id__in=queryset1.values('alumno_id'))
@@ -289,8 +314,8 @@ class DocenteDetailView(DetailView):  # Detalle de un alumno por su id
     template_name = 'usuario/usuario_detalle.html'
     model = Persona
 
-    def get_context_data(self, queryset=None, *args, **kwargs):
-        context = super(DocenteDetailView, self).get_context_data(*args, **kwargs)
+    def get_context_data(self, queryset=None, **kwargs):
+        context = super(DocenteDetailView, self).get_context_data(**kwargs)
         _id = self.kwargs.get("pk")
         queryset = Persona.objects.filter(id=_id)
         context["object"] = queryset
@@ -300,66 +325,50 @@ class DocenteDetailView(DetailView):  # Detalle de un alumno por su id
         return context
 
 
-class UsuarioUpdateView(UpdateView):  # Mofificar un usuario por su id
+class UsuarioPadreUpdateView(UpdateView):  # Mofificar un usuario por su id
     template_name = 'usuario/usuario_actualizar.html'
     form_class = PersonaForm
-    segundo_form_class = PadreAlumnoForm
-    tercer_form_class = RegisterForm
-    cuarto_form_class = PadreForm
     model = Persona
 
     def get_context_data(self, **kwargs):
-        context = super(UsuarioUpdateView, self).get_context_data(**kwargs)
+        context = super(UsuarioPadreUpdateView, self).get_context_data(**kwargs)
         if 'form' not in context:
             context['form'] = self.form_class(self.request.GET)
-        if 'form2' not in context:
-            context['form2'] = self.segundo_form_class(self.request.GET)
-        if 'form3' not in context:
-            context['form3'] = self.tercer_form_class(self.request.GET)
-        if 'form4' not in context:
-            context['form4'] = self.cuarto_form_class(self.request.GET)
         context['year'] = datetime.now().year
-        context['padre'] = True
-        context['title'] = 'Agregar Padre de familia'
+        context['title'] = 'Editar Padre de familia'
         return context
 
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object
-        form = self.form_class(request.POST)
-        form2 = self.segundo_form_class(request.POST)
-        form3 = self.tercer_form_class(request.POST)
-        form4 = self.cuarto_form_class(request.POST)
-        if form.is_valid():
-            print("Form valido")
-        if form2.is_valid():
-            print("form2 valido")
-        if form3.is_valid():
-            print("Form3 valido")
-        if form4.is_valid():
-            print("Form4 valido")
-        if form.is_valid() and form3.is_valid() and form4.is_valid():
-            print("Formularios validos ")
-            persona = form.save(commit=False)
-            usuario = form3.save(commit=False)
-            padrefam = form4.save(commit=False)
-            persona.tipo_persona = '3'
-            persona.save()
-            padrefam.padre = persona
-            padrefam.save()
-            usuario.usuario = persona
-            usuario.save()
-            padrealumno = form2.save(commit=False)
-            padrealumno.save()
-            padrealumno.padre.add(padrefam)
-            padrealumno.alumno.add(request.POST['alumno'])
-            return HttpResponseRedirect('..')
-        else:
-            print(form.data)
-            return self.render_to_response(self.get_context_data(form=form, form2=form2, form3=form3))
 
-    def form_valid(self, form):
-        print(form.cleaned_data)
-        return super().form_valid(form)
+class PadreAlumnoUpdateView(UpdateView):  # Mofificar un usuario por su id
+    template_name = 'usuario/usuario_actualizar.html'
+    form_class = PadreAlumnoForm
+    model = PadreAlumno
+
+    def get_context_data(self, **kwargs):
+        context = super(PadreAlumnoUpdateView, self).get_context_data(**kwargs)
+        if 'formp' not in context:
+            context['formp'] = self.form_class(self.request.GET)
+        context['year'] = datetime.now().year
+        context['padre'] = True
+        context['title'] = 'Editar Padre alumnos de familia'
+        return context
+
+    def get_success_url(self):
+        return reverse('usuarios:usuario-lista-padre')
+
+
+class UsuarioDocenteUpdateView(UpdateView):  # Mofificar un usuario por su id
+    template_name = 'usuario/usuario_actualizar.html'
+    form_class = PersonaForm
+    model = Persona
+
+    def get_context_data(self, **kwargs):
+        context = super(UsuarioDocenteUpdateView, self).get_context_data(**kwargs)
+        if 'form' not in context:
+            context['form'] = self.form_class(self.request.GET)
+        context['year'] = datetime.now().year
+        context['title'] = 'Editar Docente'
+        return context
 
 
 class UsuarioDeleteView(DeleteView):  # Eliminar un usuario por su id
@@ -376,17 +385,68 @@ class UsuarioDeleteView(DeleteView):  # Eliminar un usuario por su id
 class AlumnoUpdateView(UpdateView):  # Mofificar un usuario por su id
     template_name = 'usuario/usuario_actualizar.html'
     model = Alumno
-    form_class = AlumnoForm
+    form_class = AlumnoActForm
 
     def get_context_data(self, **kwargs):
         context = super(AlumnoUpdateView, self).get_context_data(**kwargs)
         _id = self.kwargs.get("pk")
         queryset1 = Alumno.objects.filter(matricula=_id)
         queryset = Persona.objects.filter(id__in=queryset1.values('alumno_id'))
+        queryset = queryset.values('pk')
+        print(queryset)
         context["object"] = queryset
-        context["object2"] = queryset1
-        context["form2"] = PersonaForm
         context['year'] = datetime.now().year
-        context['Alumno'] = True
         context['title'] = 'Detalles del alumno'
         return context
+
+
+class PerilUsuario(DetailView):
+    template_name = 'usuario/usuario_detalle.html'
+    model = Persona
+
+    def get_context_data(self, queryset=None, *args, **kwargs):
+        context = super(PerilUsuario, self).get_context_data(*args, **kwargs)
+        _id = self.kwargs.get("pk")
+        queryset = Persona.objects.filter(id=_id)
+        context["object"] = queryset
+        context['year'] = datetime.now().year
+        context['usuario'] = True
+        context['perfil'] = True
+        context['title'] = 'Detalles del usuario'
+        return context
+
+
+class PerilUsuarioUpdate(UpdateView):  # Mofificar un usuario por su id
+    template_name = 'usuario/usuario_perfil_actualizar.html'
+    form_class = PersonaForm
+    model = Persona
+
+    def get_success_url(self):
+        child = self.get_object()
+        return reverse('usuarios:usuario-perfil', kwargs={'pk': str(child.usuario.usuario_id)})
+
+    def get_context_data(self, **kwargs):
+        context = super(PerilUsuarioUpdate, self).get_context_data(**kwargs)
+        if 'form' not in context:
+            context['form'] = self.form_class(self.request.GET)
+        context['year'] = datetime.now().year
+        context['title'] = 'Modificar datos del usuario'
+        context['perfil'] = True
+        return context
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Tu contraseña se cambio corrrectamente')
+            return redirect('dashboard:index')
+        else:
+            messages.error(request, 'Por favor, corrija el error a continuación.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'usuario/usuario_perfil_contra.html', {
+        'form': form
+    })

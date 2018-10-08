@@ -148,6 +148,12 @@ class Usuario(AbstractBaseUser):
     def get_full_name(self):
         return self.usuario.nombre
 
+    def get_id(self):
+        return self.usuario.usuario.usuario_id
+
+    def get_sex(self):
+        return self.usuario.sexo
+
     def get_type_str(self):
         return self.usuario.get_tipo_persona_display()
 

@@ -7,13 +7,25 @@ from django.urls import reverse
 
 
 class TipoIndicencia(models.Model):
+    tipos_incidencia = (
+        ('1', 'Administrativa'),
+        ('2', 'Conducta'),
+        ('3', 'Labor'),
+        ('4', 'Otro'),
+    )
+    tipo_impacto = (
+        ('1', 'Leve'),
+        ('2', 'Moderado'),
+        ('3', 'Grabe'),
+    )
     id_tipo = models.AutoField(max_length=10, primary_key=True)
-    tipo = models.CharField(max_length=20)
-    descripcion = models.TextField()
-    impacto = models.CharField(max_length=10)
+    asunto = models.CharField(max_length=100)
+    descripcion = models.TextField(max_length=200)
+    tipo = models.CharField(max_length=2, choices=tipos_incidencia, default='1')
+    impacto = models.CharField(max_length=10, choices=tipo_impacto, default='1')
 
     def __str__(self):
-        return self.tipo
+        return self.asunto
 
 
 class Incidencia(models.Model):
@@ -25,13 +37,12 @@ class Incidencia(models.Model):
     )
     id_incidencia = models.AutoField(max_length=20, primary_key=True)
     fecha_incidencia = models.DateTimeField()
-    asunto = models.CharField(max_length=200)
     estatus = models.CharField(max_length=2, choices=estatus_tipo, default='1')
-    observaciones = models.TextField()
-    tipo = models.ForeignKey(TipoIndicencia, null=True, blank=True, on_delete=models.CASCADE)
+    observaciones = models.TextField(null=True, blank=True)
+    incidencia = models.ForeignKey(TipoIndicencia, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.asunto
+        return '%s el %s' % (self.incidencia, self.fecha_incidencia.date())
 
     def get_absolute_url(self):
         return reverse("incidencias:incidencia-detalle", kwargs={"id": self.id_incidencia})
@@ -49,7 +60,6 @@ class IncidenciaDocente(models.Model):
 
 class IncidenciaPadre(models.Model):
     incidencia = models.ManyToManyField(Incidencia, blank=True)
-    # padre = models.ManyToManyField(P, blank=True)
 
 
 class IncidenciaCita(models.Model):
