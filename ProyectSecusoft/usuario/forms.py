@@ -50,6 +50,15 @@ class AlumnoForm(forms.ModelForm):
         label='Matricula:')
 
 
+class AlumnoActForm(forms.ModelForm):
+    class Meta:
+        model = Alumno
+        fields = '__all__'
+        exclude = ['alumno', 'matricula']
+        labels = {'grado': 'Grado:',
+                  'grupo': 'Grupo:'}
+
+
 class DocenteForm(forms.ModelForm):
     class Meta:
         model = Docente

@@ -27,8 +27,7 @@
 {% block titulo %}
 <title>Agregar incidencia - SecuSoft</title>
 {% endblock %}
-<form id="form" method="post"  class="form-horizontal form-label-left" novalidate action="{% url 'incidencias:incidencia-nueva' %}" >
-
+<form method="POST"  class="form-horizontal form-label-left" >
    {% csrf_token %}
    <div class="center" role="main">
       <div class="">
@@ -42,12 +41,58 @@
                </div>
                <div class="x_content">
                   <table id="datatable-responsive" class="dt-responsive" cellspacing="10" width="100%">
+                      <tbody>
                       {% crispy form %}
                       {% crispy form2 %}
                       {% crispy form3 %}
+                      <label>Tipo de incidencia:</label>
+                      <select name="incidenciaselector"  class="select form-control" id="incidenciaselector" onchange="showDiv(this)">
+                          <option value="1" selected="">Administrativa</option>
+                          <option value="2">Labor</option>
+                          <option value="3">Conducta</option>
+                          <option value="4">Otro</option>
+                      </select>
+                      <br>
+                      <div id="Admin" >
+                      <label>Incidecia:</label>
+                      {% for incidencia in Administrativa %}
+                      <select name="incidencia"  class="select form-control" id="id_incidencia">
+                          <option value="" selected="">---------</option>
+                          <option value="{{ incidencia.id_tipo }}">{{incidencia}}</option>
+                      </select>
+                      {% endfor %}
+                      </div>
+                      <div id="Lab" style="display: none">
+                      <label>Incidecia:</label>
+                      {% for incidencia in Labor %}
+                      <select name="incidencia" class="select form-control" id="id_incidencia">
+                          <option value="" selected="">---------</option>
+                          <option value="{{ incidencia.id_tipo }}">{{incidencia}}</option>
+                      </select>
+                      </div>
+                      {% endfor %}
+                      <div id="Cond" style="display: none">
+                      <label>Incidecia:</label>
+                      {% for incidencia in Conducta %}
+                      <select name="incidencia" class="select form-control" id="id_incidencia">
+                          <option value="" selected="">---------</option>
+                          <option value="{{ incidencia.id_tipo }}">{{incidencia}}</option>
+                      </select>
+                      {% endfor %}
+                      </div>
+                      <div id="Otr" style="display: none">
+                      <label>Incidecia:</label>
+                      {% for incidencia in Otro %}
+                      <select name="incidencia"  class="select form-control" id="id_incidencia">
+                          <option value="" selected="">---------</option>
+                          <option value="{{ incidencia.id_tipo }}">{{incidencia}}</option>
+                      </select>
+                      {% endfor %}
+                      </div>
                      </tbody>
                   </table>
-                  <button class="btn btn-success" type="submit">Agregar</button>
+               <br>
+                <button class="btn btn-success" type="submit">Agregar</button>
                </div>
             </div>
          </div>
@@ -71,84 +116,50 @@
   <script src="{% static 'base/js/validator/validator.js' %}"></script>
 
   <script type="text/javascript">
-    $(document).ready(function() {
-      $('#id_fecha_incidencia').daterangepicker({
-        singleDatePicker: true,
-        calender_style: "picker_4"
-      }, function(start, end, label) {
-        console.log(start.toISOString(), end.toISOString(), label);
-      });
-    });
+    function showDiv(elem){
+       if(elem.value == 1){
+           document.getElementById('Admin').style.display = "block";
+           document.getElementById('Admin').required = true;
+           document.getElementById('Lab').style.display = "none";
+           document.getElementById('Cond').style.display = "none";
+           document.getElementById('Otr').style.display = "none";
+       }
+        else if(elem.value == 2){
+           document.getElementById('Admin').style.display = "none";
+           document.getElementById('Lab').style.display = "block";
+           document.getElementById('Lab').required = true;
+           document.getElementById('Cond').style.display = "none";
+           document.getElementById('Otr').style.display = "none";
+       }
+        else if(elem.value == 3){
+           document.getElementById('Admin').style.display = "none";
+           document.getElementById('Lab').style.display = "none";
+           document.getElementById('Cond').style.display = "block";
+           document.getElementById('Cond').required = true;
+           document.getElementById('Otr').style.display = "none";
+       }
+        else if(elem.value == 4){
+           document.getElementById('Admin').style.display = "none";
+           document.getElementById('Lab').style.display = "none";
+           document.getElementById('Cond').style.display = "none";
+           document.getElementById('Otr').style.display = "block";
+           document.getElementById('Otr').required = true;
+       }
+    }
   </script>
- <script type="text/javascript">
+        <script>
     $(function() {
-      'use strict';
-      var countriesArray = $.map(countries, function(value, key) {
-        return {
-          value: value,
-          data: key
-        };
-      });
-      // Initialize autocomplete with custom appendTo:
-      $('#autocomplete-custom-append').autocomplete({
-        lookup: countriesArray,
-        appendTo: '#autocomplete-container'
+      $('#id_fecha_incidencia').daterangepicker({
+        format: 'YYYY-MM-DD',
+        locale: 'es',
+        singleDatePicker: true,
+        showDropdowns: true,
+        defaultDate: new Date('2018-02-01'),
+        minDate: new Date('2018-02-01'),
+        var: f = new Date(),
+        maxDate : (f.getFullYear() + "-" + (f.getMonth() +1) + "-" + f.getDate())
       });
     });
-  </script>
-
-  <!-- select2 -->
-  <script>
-    $(document).ready(function() {
-      $(".select2_single").select2({
-        placeholder: "Select a state",
-        allowClear: true
-      });
-    });
-  </script>
-  <!-- /select2 -->
-
-      <script>
-    // initialize the validator function
-    validator.message['date'] = 'not a real date';
-
-    // validate a field on "blur" event, a 'select' on 'change' event & a '.reuired' classed multifield on 'keyup':
-    $('form')
-      .on('blur', 'input[required], input.optional, select.required', validator.checkField)
-      .on('change', 'select.required', validator.checkField)
-      .on('keypress', 'input[required][pattern]', validator.keypress);
-
-    $('.multi.required')
-      .on('keyup blur', 'input', function() {
-        validator.checkField.apply($(this).siblings().last()[0]);
-      });
-
-    // bind the validation to the form submit event
-    //$('#send').click('submit');//.prop('disabled', true);
-
-    $('form').submit(function(e) {
-      e.preventDefault();
-      var submit = true;
-      // evaluate the form using generic validaing
-      if (!validator.checkAll($(this))) {
-        submit = false;
-      }
-
-      if (submit)
-        this.submit();
-      return false;
-    });
-
-    /* FOR DEMO ONLY */
-    $('#vfields').change(function() {
-      $('form').toggleClass('mode2');
-    }).prop('checked', false);
-
-    $('#alerts').change(function() {
-      validator.defaults.alerts = (this.checked) ? false : true;
-      if (this.checked)
-        $('form .alert').remove();
-    }).prop('checked', false);
-  </script>
+    </script>
 
 {% endblock %}

@@ -27,6 +27,10 @@ class IncidenciaCreateView(CreateView):  # Agregar nuevo incidencia
             context['form3'] = self.tercer_form_class(self.request.GET)
         context['year'] = datetime.now().year
         context['title'] = 'Agregar incidencia'
+        context['Administrativa'] = TipoIndicencia.objects.filter(tipo='1')
+        context['Conducta'] = TipoIndicencia.objects.filter(tipo='2')
+        context['Labor'] = TipoIndicencia.objects.filter(tipo='3')
+        context['Otro'] = TipoIndicencia.objects.filter(tipo='4')
         return context
 
     def post(self, request, *args, **kwargs):
@@ -35,11 +39,13 @@ class IncidenciaCreateView(CreateView):  # Agregar nuevo incidencia
         form2 = self.segundo_form_class(request.POST)
         form3 = self.tercer_form_class(request.POST)
         if form.is_valid() and form2.is_valid() and form3.is_valid():
-            print("Valido")
             incidencia = form.save(commit=False)
             alumno = form2.save(commit=False)
             docente = form3.save(commit=False)
-            incidencia.save()
+            print(form.cleaned_data)
+            print(form2.cleaned_data)
+            print(form3.cleaned_data)
+
             return HttpResponseRedirect('..')
         else:
             return self.render_to_response(self.get_context_data(form=form, form2=form2, form3=form3))

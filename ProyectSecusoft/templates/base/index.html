@@ -41,7 +41,11 @@
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_info">
-                <span>Bienvenido,</span>
+                  {% if user.get_sex == 'M' %}
+                <span>Bienvenida,</span>
+                  {% else %}
+                  <span>Bienvenido,</span>
+                  {% endif %}
                 <h2>{{user.get_full_name}}</h2>
               </div>
             </div>
@@ -219,8 +223,8 @@
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
-                    <li><a href="javascript:;"> Profile</a></li>
-                    <li><a href="javascript:;">Help</a></li>
+                    <li><a href="{% url 'usuarios:usuario-perfil' user.get_id %}"> Perfil</a></li>
+                    <li><a href='{% url 'usuarios:change-password' %}'>Cambiar contraseña</a></li>
                     <li><a href="{% url 'dashboard:logout' %}"><i class="fa fa-sign-out pull-right"></i> Cerrar sesion</a></li>
                   </ul>
                 </li>
@@ -235,7 +239,8 @@
             <div class="">
               <div class="clearfix"></div>
                   <div class="row">
-                          {% if messages %}
+                      {% block content %}
+                                {% if messages %}
                               <div class="alert alert-success messages">
                                   {% for message in messages %}
                                   <span{% if message.tags %} class="{{ message.tags }}"{% endif %}>
@@ -245,7 +250,6 @@
                                   {% endfor %}
                               </div>
                           {% endif %}
-                      {% block content %}
                       {% endblock %}
                   </div>
              </div>

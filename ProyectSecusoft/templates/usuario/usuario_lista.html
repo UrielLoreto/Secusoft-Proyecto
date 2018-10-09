@@ -64,9 +64,9 @@
                                   <td>{{ persona.apellido }}</td>
                                   <td>{{ persona.get_grado_display }}</td>
                                   <td>{{ persona.grupo }}</td>
-                                    {% if user.get_type == '1' %}
-                                        <td><a class="tile_count green" href='{% url 'usuarios:usuario-detalle' persona.padre_id %}'>{{ persona.padre_id  }}</a></td>
-                                    {% endif %}
+                                  {% if user.get_type == '1' %}
+                                      <td><a class="tile_count green" href='{% url 'usuarios:usuario-detalle' persona.padre_id %}'>{{ persona.padre_id  }}</a></td>
+                                  {% endif %}
 
                                   <td>{{ persona.sexo }}</td>
                                   <td>{{ persona.fecha_nacimiento }}</td>
@@ -84,9 +84,13 @@
                                   <td>{{ persona.get_sexo_display }}</td>
                                   <td>{{ persona.fecha_nacimiento }}</td>
                                     {% if user.get_type == '1' %}
-                                      <td class="td-btn"><a href='{% url 'usuarios:usuario-detalle' persona.pk %}'><i class="fa fa-info fa-2x text-info" ></i></a></td>
-                                      <td class="td-btn"><a href='{% url 'usuarios:usuario-actualizar' persona.pk %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
-                                      <td class="td-btn"><form action="" method="post" style="display: inline">{% csrf_token %}<a href="#/trash"><i class="fa fa-trash fa-2x text-danger"></i></a></form></td>
+                                        <td class="td-btn"><a href='{% url 'usuarios:usuario-detalle' persona.pk %}'><i class="fa fa-info fa-2x text-info" ></i></a></td>
+                                        {% if padref %}
+                                              <td class="td-btn"><a href='{% url 'usuarios:usuario-padre-actualizar' persona.pk %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+                                        {% elif docente %}
+                                              <td class="td-btn"><a href='{% url 'usuarios:usuario-actualizar' persona.pk %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+                                        {% endif %}
+                                        <td class="td-btn"><form action="" method="post" style="display: inline">{% csrf_token %}<a href="#/trash"><i class="fa fa-trash fa-2x text-danger"></i></a></form></td>
                                     {% endif %}
                                 {% endif %}
                             </tr>
@@ -97,6 +101,7 @@
                         {% endfor %}
                   </tbody>
               </table>
+
         </div>
     </div>
 </div>
