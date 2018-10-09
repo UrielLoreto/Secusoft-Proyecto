@@ -81,26 +81,26 @@
                       <label>Incidecia:</label>
                         <select name="incidencia"  required="" id="id_incidencia" class="select form-control is-invalid">
                           <option value="" selected="">---------</option>
-                              <div id="Admin" >
-                             {% for incidencia in Administrativa %}
-                                  <option value="{{ incidencia.id_tipo}}" class="{{ incidencia.tipo}}">{{incidencia}}</option>
-                              {% endfor %}
-                              </div>
-                              <div id="Lab" style="display: none">
-                              {% for incidencia in Labor %}
-                                  <option value="{{ incidencia.id_tipo}}" class="{{ incidencia.tipo}}">{{incidencia}}</option>
-                              {% endfor %}
-                              </div>
-                              <div id="Cond" style="display: none">
-                             {% for incidencia in Conducta %}
-                                  <option value="{{ incidencia.id_tipo}}" class="{{ incidencia.tipo}}">{{incidencia}}</option>
-                              {% endfor %}
-                              </div>
-                              <div id="Otr" style="display: none">
-                             {% for incidencia in Otro %}
-                                  <option value="{{ incidencia.id_tipo}}" class="{{ incidencia.tipo}}">{{incidencia}}</option>
-                              {% endfor %}
-                              </div>
+                      <div id="Admin" >
+                     {% for incidencia in Administrativa %}
+                          <option value="{{ incidencia.id_tipo}}" class="{{ incidencia.tipo}}">{{incidencia}}</option>
+                      {% endfor %}
+                      </div>
+                      <div id="Lab" style="display: none">
+                      {% for incidencia in Labor %}
+                          <option value="{{ incidencia.id_tipo}}" class="{{ incidencia.tipo}}">{{incidencia}}</option>
+                      {% endfor %}
+                      </div>
+                      <div id="Cond" style="display: none">
+                     {% for incidencia in Conducta %}
+                          <option value="{{ incidencia.id_tipo}}" class="{{ incidencia.tipo}}">{{incidencia}}</option>
+                      {% endfor %}
+                      </div>
+                      <div id="Otr" style="display: none">
+                     {% for incidencia in Otro %}
+                          <option value="{{ incidencia.id_tipo}}" class="{{ incidencia.tipo}}">{{incidencia}}</option>
+                      {% endfor %}
+                      </div>
 
                       </select>
                       </div>

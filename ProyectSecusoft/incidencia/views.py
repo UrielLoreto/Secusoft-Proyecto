@@ -15,7 +15,6 @@ class IncidenciaCreateView(CreateView):  # Agregar nuevo incidencia
     template_name = 'incidencia/incidencia_agregar.html'
     form_class = IncidenciaForm
     segundo_form_class = IncidenciaAlForm
-    tercer_form_class = IndicenciaDocenteForm
 
     def get_context_data(self, **kwargs):
         context = super(IncidenciaCreateView, self).get_context_data(**kwargs)
@@ -23,32 +22,37 @@ class IncidenciaCreateView(CreateView):  # Agregar nuevo incidencia
             context['form'] = self.form_class(self.request.GET)
         if 'form2' not in context:
             context['form2'] = self.segundo_form_class(self.request.GET)
-        if 'form3' not in context:
-            context['form3'] = self.tercer_form_class(self.request.GET)
         context['year'] = datetime.now().year
         context['title'] = 'Agregar incidencia'
         context['Administrativa'] = TipoIndicencia.objects.filter(tipo='1')
         context['Conducta'] = TipoIndicencia.objects.filter(tipo='2')
         context['Labor'] = TipoIndicencia.objects.filter(tipo='3')
         context['Otro'] = TipoIndicencia.objects.filter(tipo='4')
+        context['Todas'] = TipoIndicencia.objects.all()
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object
         form = self.form_class(request.POST)
         form2 = self.segundo_form_class(request.POST)
-        form3 = self.tercer_form_class(request.POST)
-        if form.is_valid() and form2.is_valid() and form3.is_valid():
-            incidencia = form.save(commit=False)
-            alumno = form2.save(commit=False)
-            docente = form3.save(commit=False)
+        if form.is_valid():
+            print("Form valido")
+        if form2.is_valid():
+            print("form2 valido")
+        if form.is_valid() and form2.is_valid():
+            print("Formularios validos ")
+            persona = form.save(commit=False)
+            docente = form2.save(commit=False)
             print(form.cleaned_data)
             print(form2.cleaned_data)
-            print(form3.cleaned_data)
-
             return HttpResponseRedirect('..')
         else:
-            return self.render_to_response(self.get_context_data(form=form, form2=form2, form3=form3))
+            print(form.data)
+            return self.render_to_response(self.get_context_data(form=form, form2=form2))
+
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return super().form_valid(form)
 
 
 class IncidenciaDetailView(DetailView):  # Detalle de un incidencia por su id
