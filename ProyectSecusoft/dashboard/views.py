@@ -2,7 +2,6 @@ from django.shortcuts import render
 from datetime import datetime
 from django.contrib.auth import logout
 from django.urls import reverse
-
 from .forms import LoginForm
 from django.http import HttpResponseRedirect
 from django.views.generic import (

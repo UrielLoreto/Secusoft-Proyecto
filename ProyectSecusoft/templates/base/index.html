@@ -106,7 +106,7 @@
                   </li>
                   <li><a><i class="fa fa-clone"></i> Extras <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="/anuncios">Publicar Avisos</a></li>
+                        <li><a href="/anuncios">Publicar Avisos</a></li>
                     </ul>
                   </li>
                 </ul>
@@ -222,7 +222,7 @@
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
-                    <li><a href="{% url 'usuarios:usuario-perfil' user.get_id %}"> Perfil</a></li>
+                    <li><a href="{% url 'usuarios:usuario-perfil' %}"> Perfil</a></li>
                     <li><a href='{% url 'usuarios:change-password' %}'>Cambiar contraseña</a></li>
                     <li><a href="{% url 'dashboard:logout' %}"><i class="fa fa-sign-out pull-right"></i> Cerrar sesion</a></li>
                   </ul>
@@ -238,17 +238,20 @@
             <div class="">
               <div class="clearfix"></div>
                   <div class="row">
+                              <div class="x_content center">
+
+                {% if messages %}
+                  <div class="alert alert-success messages">
+                      {% for message in messages %}
+                      <span{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                          {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} {% endif %}
+                          {{ message }}<br/>
+                      </span>
+                      {% endfor %}
+                  </div>
+              {% endif %}
+            </div>
                       {% block content %}
-                                {% if messages %}
-                              <div class="alert alert-success messages">
-                                  {% for message in messages %}
-                                  <span{% if message.tags %} class="{{ message.tags }}"{% endif %}>
-                                      {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
-                                      {{ message }}<br/>
-                                  </span>
-                                  {% endfor %}
-                              </div>
-                          {% endif %}
                       {% endblock %}
                   </div>
              </div>

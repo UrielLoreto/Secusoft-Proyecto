@@ -131,6 +131,7 @@ class Usuario(AbstractBaseUser):
     email = models.EmailField(max_length=255, unique=True)
     usuario = models.OneToOneField(Persona, on_delete=models.CASCADE, null=True, blank=True)
     active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
     staff = models.BooleanField(default=False) # a admin user; non super-user
     admin = models.BooleanField(default=False) # a superuser
     # confirm     = models.BooleanField(default=False)
@@ -184,6 +185,6 @@ class Usuario(AbstractBaseUser):
         return self.admin
 
     @property
-    def is_active(self):
+    def is_aactive(self):
         "Is the user active?"
-        return self.active
+        return self.is_active

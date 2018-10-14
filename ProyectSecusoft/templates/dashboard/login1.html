@@ -51,6 +51,16 @@
             <form method='POST'> {% csrf_token %}
             <h1>{{ title }} </h1>
             <div>
+                            {% if messages %}
+                              <div class="alert alert-success messages">
+                                  {% for message in messages %}
+                                  <span{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                                      {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} {% endif %}
+                                      {{ message }}<br/>
+                                  </span>
+                                  {% endfor %}
+                              </div>
+                          {% endif %}
                 {{ form }}
                 <button type='submit' class='btn btn-primary'>Iniciar Sesion</button>
                 <p><a class="reset_pass" href="#" style="alignment:left">¿Olvidaste tu contraseña?</a></p>

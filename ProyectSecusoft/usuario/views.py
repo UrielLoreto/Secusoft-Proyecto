@@ -400,30 +400,31 @@ class AlumnoUpdateView(UpdateView):  # Mofificar un usuario por su id
         return context
 
 
-class PerilUsuario(DetailView):
+def PerilUsuario(request):
     template_name = 'usuario/usuario_detalle.html'
-    model = Persona
-
-    def get_context_data(self, queryset=None, *args, **kwargs):
-        context = super(PerilUsuario, self).get_context_data(*args, **kwargs)
-        _id = self.kwargs.get("pk")
-        queryset = Persona.objects.filter(id=_id)
-        context["object"] = queryset
-        context['year'] = datetime.now().year
-        context['usuario'] = True
-        context['perfil'] = True
-        context['title'] = 'Detalles del usuario'
-        return context
+    usuario = request.user.get_id()
+    queryset = Persona.objects.filter(id=usuario)
+    args = {'user': request.user,
+            'object': queryset,
+            'year': datetime.now().year,
+            'title': 'Detalles del usuario',
+            'perfil': True,
+            'usuario': True}
+    return render(request, template_name, args)
 
 
 class PerilUsuarioUpdate(UpdateView):  # Mofificar un usuario por su id
     template_name = 'usuario/usuario_perfil_actualizar.html'
     form_class = PersonaForm
-    model = Persona
+    # model = Persona
+
+    def get_object(self):
+        usuario = self.request.user.get_id()
+        return get_object_or_404(Persona, pk=usuario)
 
     def get_success_url(self):
         child = self.get_object()
-        return reverse('usuarios:usuario-perfil', kwargs={'pk': str(child.usuario.usuario_id)})
+        return reverse('usuarios:usuario-perfil')
 
     def get_context_data(self, **kwargs):
         context = super(PerilUsuarioUpdate, self).get_context_data(**kwargs)
@@ -448,5 +449,7 @@ def change_password(request):
     else:
         form = PasswordChangeForm(request.user)
     return render(request, 'usuario/usuario_perfil_contra.html', {
-        'form': form
+        'form': form,
+        'year': datetime.now().year,
+        'title': 'Cambio de contraseña',
     })

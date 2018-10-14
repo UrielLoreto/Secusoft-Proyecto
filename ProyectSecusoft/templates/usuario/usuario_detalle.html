@@ -72,7 +72,7 @@
             {% elif usuario %}
                 {% if perfil %}
                     <td scope="row" class="align-right form-group"><br><label> Editar Informacion Personal</label><br>
-                        <a href='{% url 'usuarios:usuario-perfil-actualizar' persona.id %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+                        <a href='{% url 'usuarios:usuario-perfil-actualizar' %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
                 {% else  %}
                     {% if padre %}
                         <td scope="row" class="align-right form-group"><br><label> Editar Informacion Personal</label><br>

@@ -3,9 +3,9 @@ from .views import *
 app_name = 'usuarios'
 urlpatterns = [
     path('', UsuarioListView.as_view(), name='usuario-lista'),
-    path('perfil/<int:pk>/', PerilUsuario.as_view(), name='usuario-perfil'),
+    path('perfil/', PerilUsuario, name='usuario-perfil'),
     path('perfil/change-password', change_password, name='change-password'),
-    path('perfil/<int:pk>/modificar', PerilUsuarioUpdate.as_view(), name='usuario-perfil-actualizar'),
+    path('perfil/modificar', PerilUsuarioUpdate.as_view(), name='usuario-perfil-actualizar'),
     path('alumnos', AlumnoListView.as_view(), name='usuario-lista-alumnos'),
     path('alumnos/<int:pk>/', AlumnoDetailView.as_view(), name='usuario-detalle-alumnos'),
     path('alumnos/<int:pk>/modificar/', AlumnoUpdateView.as_view(), name='usuario-actualizar-alumnos'),
