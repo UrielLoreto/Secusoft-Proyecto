@@ -37,11 +37,6 @@
                                 {% if user.get_type == '1' %}
                                     <th scope="col">Docente</th>
                                 {% endif %}
-                              <th scope="col">Detalles</th>
-                                {% if user.get_type == '1' %}
-                              <th scope="col">Editar</th>
-                              <th scope="col">Eliminar</th>
-                                {% endif %}
                         </tr>
                   </thead>
                   <tbody>
@@ -54,11 +49,6 @@
                                 {% if user.get_type == '1' %}
                                     <td><a class="tile_count green" href='{% url 'usuarios:usuario-detalle' persona.docente_id %}'>{{ persona.docente_id  }}</a></td>
                                     {% else %}
-                                {% endif %}
-                              <td class="td-btn"><a href='{% url 'usuarios:usuario-detalle' persona.pk %}'><i class="fa fa-info fa-2x text-info" ></i></a></td>
-                                {% if user.get_type == '1' %}
-                              <td class="td-btn"><a href='{% url 'usuarios:usuario-actualizar' persona.pk %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
-                              <td class="td-btn"><form action="" method="post" style="display: inline">{% csrf_token %}<a href="#/trash"><i class="fa fa-trash fa-2x text-danger"></i></a></form></td>
                                 {% endif %}
 
                             </tr>

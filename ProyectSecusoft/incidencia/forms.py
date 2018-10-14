@@ -6,14 +6,13 @@ class IncidenciaForm(forms.ModelForm):
     class Meta:
         model = Incidencia
         fields = '__all__'
-        exclude = ['estatus', 'incidencia']
+        exclude = ['estatus']
 
 
 class IncidenciaAlForm(forms.ModelForm):
     class Meta:
         model = IncidenciaAlumno
-        fields = '__all__'
-        exclude = ['incidencia']
+        fields = ['alumno']
 
 
 class IndicenciaDocenteForm(forms.ModelForm):
