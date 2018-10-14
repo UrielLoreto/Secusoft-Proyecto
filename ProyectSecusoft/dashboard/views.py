@@ -35,3 +35,7 @@ class LoginView(FormView):
 def logout_view(request):
         logout(request)
         return HttpResponseRedirect(reverse('dashboard:index'))
+
+
+def avisos(request):
+    return render(request, 'dashboard/avisos.html', {'title': 'Inicio', 'year': datetime.now().year, })

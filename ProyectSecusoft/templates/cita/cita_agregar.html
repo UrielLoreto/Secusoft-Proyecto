@@ -4,9 +4,45 @@
 {% block css %}
 {% endblock %}
 {% block content %}
+<h3>Agregar Cita</h3>
     <form action="." method="POST"> {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Save"/>
+
+       <table class="table">
+           <tr>
+               <td colspan="2">Asunto</td>
+               <td colspan="2"><input type="text" class="form-control"></td>
+           </tr>
+           <tr>
+               <td>Fecha de Inicio</td>
+               <td><input type="date" class="form-control"></td>
+               <td>Hora de Inicio</td>
+               <td><input type="time" class="form-control"></td>
+           </tr>
+           <tr>
+               <td>Fecha Fin</td>
+               <td><input type="date" class="form-control"></td>
+               <td>Hora Fin</td>
+               <td><input type="time" class="form-control"></td>
+           </tr>
+           <tr>
+               <td colspan="2">Incidencia</td>
+               <td colspan="2"><select class="form-control">
+                   <option>Seleccione una Indicidencia</option>
+                   <option>Incidencia 1</option>
+                   <option>Incidencia 2</option>
+                   <option>Incidencia 3</option>
+               </select></td>
+           </tr>
+           <tr>
+               <td colspan="4"><textarea placeholder="Observaciones" class="form-control"></textarea></td>
+           </tr>
+           <tr>
+               <td></td>
+               <td></td>
+               <td><button class="btn btn-success" type="submit">Guardar</button></td>
+               <td><button class="btn btn-danger">Cancelar</button></td>
+           </tr>
+       </table>
     </form>
     {% block js %}
 

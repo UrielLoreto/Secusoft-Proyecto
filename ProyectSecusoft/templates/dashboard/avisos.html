@@ -1,0 +1,57 @@
+{% extends 'base/index.html' %}
+{% load static %}
+{% block css %}
+  <!-- Bootstrap core CSS -->
+
+  <link href="{% static 'base/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <link href="{% static 'base/fonts/css/font-awesome.min.css' %}" rel="stylesheet">
+  <link href="{% static 'base/css/animate.min.css' %}" rel="stylesheet">
+
+  <!-- Custom styling plus plugins -->
+  <link href="{% static 'base/css/custom.css' %}"rel="stylesheet">
+  <link href="{% static 'base/css/icheck/flat/green.css' %}"rel="stylesheet">
+
+{% endblock %}
+{% block content %}
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+          <h2>Avisos</h2>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table class="table">
+                <tr>
+                    <td>Para</td>
+                    <td>
+                        <input type="radio" name="PARA" value="Todos">Todos<br>
+                        <input type="radio" name="PARA" value="Docentes">Docentes<br>
+                        <input type="radio" name="PARA" value="Padres de Familia">Padres de Familia<br>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Fecha de programacion de Envio</td>
+                    <td>
+                        Fecha de envio <input type="date" class="form-control"> Hora de envio <input class="form-control" type="time"><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <textarea class="form-control" placeholder="Descripción del aviso"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td><button class="btn btn-success" type="submit">Guardar</button></td>
+                    <td><button class="btn btn-danger">Cancelar</button></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+    {% block js %}
+        <!-- pace -->
+        <script src="{% static 'base/js/custom.min.js' %}"></script>
+    {% endblock %}
+{% endblock %}
+
