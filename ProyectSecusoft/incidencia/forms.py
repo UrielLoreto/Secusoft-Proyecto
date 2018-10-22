@@ -20,3 +20,6 @@ class IndicenciaDocenteForm(forms.ModelForm):
         model = IncidenciaDocente
         exclude = ['incidencia', 'docente']
 
+
+class UploadFileForm(forms.Form):
+    file = forms.FileField()

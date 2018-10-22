@@ -51,23 +51,16 @@
                <div class="x_content center">
                   <table id="datatable-responsive" class="dt-responsive" cellspacing="0" width="100%">
                         <div class="col-md-6 ">
-                        {% if alumno %}
-                         <!-- Alumno -->
-                         {{ form|crispy }}
-                         {% crispy form2 %}
-                         <!-- Alumno -->
-                         {% elif docente %}
+                         {% if docente %}
                          <!-- Docente -->
                          {{ form|crispy }}
                          {{ form2|crispy }}
                          {% crispy form3 %}
                          <!-- Docente -->
-                            {% elif padre %}
+                         {% elif padre %}
                          <!-- Padre de familia -->
                          {{ form|crispy }}
                          {{ form2|crispy }}
-                         {{ form3|crispy }}
-                         {% crispy form4 %}
                          <!-- Padre de familia -->
                          {% endif %}
                         </div>

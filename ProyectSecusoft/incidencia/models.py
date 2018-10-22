@@ -1,6 +1,5 @@
 from django.db import models
 from usuario.models import Docente, Alumno
-from cita.models import Cita
 from django.urls import reverse
 
 # Create your models here.
@@ -25,7 +24,7 @@ class TipoIndicencia(models.Model):
     impacto = models.CharField(max_length=10, choices=tipo_impacto, default='1')
 
     def __str__(self):
-        return self.asunto
+        return '%s' % self.asunto
 
 
 class Incidencia(models.Model):
@@ -61,19 +60,3 @@ class IncidenciaDocente(models.Model):
 class IncidenciaPadre(models.Model):
     incidencia = models.ManyToManyField(Incidencia, blank=True)
 
-
-class IncidenciaCita(models.Model):
-    incidencia = models.ManyToManyField(Incidencia, blank=True)
-    cita = models.ManyToManyField(Cita, blank=True)
-
-
-class Comentario(models.Model):
-    id_comentario = models.AutoField(max_length=20, primary_key=True)
-    comentario = models.CharField(max_length=500, null=True, blank=True)
-    fecha_creacion = models.DateTimeField(auto_now_add=True)
-
-
-class ComentarioRel(models.Model):
-    comentario = models.ManyToManyField(Comentario, blank=True)
-    rel = models.ManyToManyField(Cita, blank=True)
-    persona = models.ManyToManyField(Docente, blank=True)

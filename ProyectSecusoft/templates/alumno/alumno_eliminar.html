@@ -1,0 +1,17 @@
+{% extends 'base/index.html' %}
+
+{% block title%}
+Eliminar usuarios
+{% endblock %}
+
+
+{% block content %}
+<h1>Eliminar usuario</h1>
+<form action='' method="POST">{% csrf_token %}
+    <h1>"¿Quieres eliminar a la persona {{objetc.nombre}}?</h1>
+    <p><input type="submit" value="Si"/> <a href='../../../templates'> Cancelar </a> </p>
+
+</form>
+
+
+{% endblock%}

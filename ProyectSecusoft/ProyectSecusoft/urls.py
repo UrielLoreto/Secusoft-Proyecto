@@ -20,6 +20,7 @@ urlpatterns = [
     path('', include('dashboard.urls')),
     path('admin/', admin.site.urls),
     path('usuarios/', include('usuario.urls')),
+    path('alumnos/', include('alumno.urls')),
     path('incidencias/', include('incidencia.urls')),
     path('citas/', include('cita.urls')),
     path('materias/', include('materia.urls')),

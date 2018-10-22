@@ -46,7 +46,7 @@
                   {% else %}
                   <span>Bienvenido,</span>
                   {% endif %}
-                <h2>{{user.get_full_name}}</h2>
+                <h2>{{user}}</h2>
               </div>
             </div>
             <!-- /menu profile quick info -->
@@ -62,8 +62,8 @@
                   <li><a href="{% url 'dashboard:index' %}" class="active"><i class="fa fa-home"></i>Inicio</a></li>
                   <li><a><i class="fa fa-user"></i> Alumnos <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{% url 'usuarios:usuario-nuevo-alumno' %}">Agregar</a></li>
-                      <li><a href="{% url 'usuarios:usuario-lista-alumnos' %}">Listado</a></li>
+                      <li><a href="{% url 'alumnos:alumnos-nuevo' %}">Agregar</a></li>
+                      <li><a href="{% url 'alumnos:alumnos-lista' %}">Listado</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-group"></i> Padres de familia <span class="fa fa-chevron-down"></span></a>
@@ -123,7 +123,7 @@
                   <li><a href="{% url 'dashboard:index' %}" class="active"><i class="fa fa-home"></i>Inicio</a></li>
                   <li><a><i class="fa fa-user"></i> Alumnos <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{% url 'usuarios:usuario-lista-alumnos' %}">Listado</a></li>
+                      <li><a href="{% url 'alumnos:alumnos-lista' %}">Listado</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-user"></i> Materias <span class="fa fa-chevron-down"></span></a>
@@ -165,7 +165,7 @@
                   <li><a href="{% url 'dashboard:index' %}" class="active"><i class="fa fa-home"></i>Inicio</a></li>
                   <li><a><i class="fa fa-user"></i> Alumnos <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{% url 'usuarios:usuario-lista-alumnos' %}">Listado</a></li>
+                      <li><a href="{% url 'alumnos:alumnos-lista' %}">Listado</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-book"></i> Incidencias <span class="fa fa-chevron-down"></span></a>

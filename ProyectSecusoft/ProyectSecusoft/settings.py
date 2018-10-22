@@ -20,12 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '9#g+wvgi@38*7+*ozfmjz2nia&7gems7($=w#mvw^@gpo@$uvo'
+SECRET_KEY = 'va+7ib=)o!0@8bc)cff+opxam*5tz2+9j4=ig0bz#9fdbmsly('
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -43,6 +42,7 @@ INSTALLED_APPS = [
     'incidencia',
     'dashboard',
     'materia',
+    'alumno',
 ]
 
 AUTH_USER_MODEL = 'usuario.Usuario'
@@ -87,18 +87,44 @@ WSGI_APPLICATION = 'ProyectSecusoft.wsgi.application'
 #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'smacsoft_secusoft',
+#         'USER': 'RPSadmin',
+#         'PASSWORD': 'k0rak11100293',
+#         'HOST': 'mysql.s404.sureserver.com',
+#
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'secusoft',
+        'NAME': 'secusoft2',
         'USER': 'root',
         'PASSWORD': '',
-        'HOST': '',
+        'HOST': 'localhost',
     }
 }
-
+# DATABASES ={'default': {'ATOMIC_REQUESTS': False,
+#              'AUTOCOMMIT': True,
+#              'CONN_MAX_AGE': 0,
+#              'ENGINE': 'django.db.backends.mysql',
+#              'HOST': 'Secusoft.mysql.pythonanywhere-services.com',
+#              'NAME': 'Secusoft$default',
+#              'OPTIONS': {},
+#              'PASSWORD': 'hola1234',
+#              'PORT': '',
+#              'TEST': {'CHARSET': None,
+#                       'COLLATION': None,
+#                       'MIRROR': None,
+#                       'NAME': None},
+#              'TIME_ZONE': None,
+#              'USER': 'Secusoft'}}
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
+DATABASES['default']['OPTIONS'] = {"init_command": "SET foreign_key_checks = 0;"}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -138,5 +164,16 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = 1025
+STAYIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# EMAIL_HOST = 'localhost'
+# EMAIL_PORT = 1025
+
+FILE_UPLOAD_HANDLERS = ("django_excel.ExcelMemoryFileUploadHandler",
+                        "django_excel.TemporaryExcelFileUploadHandler")
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'secusoft8@gmail.com'
+EMAIL_HOST_PASSWORD = 'pruebas8888'
+EMAIL_PORT = 587
