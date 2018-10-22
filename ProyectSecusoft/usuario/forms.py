@@ -2,17 +2,16 @@ from django import forms
 from .models import *
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from django.utils.safestring import mark_safe
-from django.contrib.admin.widgets import AdminDateWidget
+
 
 User = get_user_model()
 
 
 class PersonaForm(forms.ModelForm):
     class Meta:
-        model = Persona
+        model = Usuario
         fields = '__all__'
-        exclude = ['token', 'fecha_creacion', 'fecha_modificacion', 'tipo_persona']
+        exclude = ['fecha_creacion', 'fecha_modificacion', 'tipo_persona', 'is_active', 'admin', 'active', 'staff', 'last_login']
         labels = {'fecha_nacimiento': 'Fecha de nacimiento:',
                   'sexo': 'Sexo:'}
     nombre = forms.CharField(
@@ -158,5 +157,9 @@ class UserAdminCreationForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+
+class UploadFileForm(forms.Form):
+    file = forms.FileField()
 
 

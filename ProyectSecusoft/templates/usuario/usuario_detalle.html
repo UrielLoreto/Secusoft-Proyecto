@@ -32,51 +32,34 @@
                 <h2><label>Informacion Personal</label></h2>
                 <tbody>
                 {% for persona in object %}
-                    {% if Alumno %}
-                        <tr><td>Matricula:</td><td>{{ alumno.matricula }}</td></tr>
-                        <tr><td>Nombre(s):</td><td>{{ persona.nombre }}</td></tr>
-                        <tr><td>Apellido(s):</td><td>{{ persona.apellido }}</td></tr>
-                        <tr><td>Grado:</td><td>{{ alumno.get_grado_display }}</td></tr>
-                        <tr><td>Grupo:</td><td>{{ alumno.get_grupo_display }}</td></tr>
-                        <tr><td>Sexo:</td><td>{{ persona.get_sexo_display }}</td></tr>
-                        <tr><td>Fecha de nacimiento:</td><td>{{ persona.fecha_nacimiento}}</td></tr>
-                        <tr><td>Fecha de registro:</td><td>{{ persona.fecha_creacion }}</td></tr>
-                        <tr><td>Fecha de modificacion:</td><td>{{ persona.fecha_modificacion }}</td></tr>
-                        <tr><td>Tipo de usuario:</td><td>{{ persona.get_tipo_persona_display }}</td></tr>
-                    {% else %}
                         {% if perfil %}
                             <tr><td>Nombre(s):</td><td>{{ persona.nombre }}</td></tr>
                             <tr><td>Apellido(s):</td><td>{{ persona.apellido }}</td></tr>
-                            <tr><td>Email:</td><td>{{ persona.usuario }}</td></tr>
+                            <tr><td>Email:</td><td>{{ persona.user }}</td></tr>
                             <tr><td>Sexo:</td><td>{{ persona.get_sexo_display }}</td></tr>
                             <tr><td>Fecha de nacimiento:</td><td>{{ persona.fecha_nacimiento }}</td></tr>
                         {% else %}
-                            <tr><td>Id:</td><td>{{ persona.id }}</td></tr>
                             <tr><td>Nombre(s):</td><td>{{ persona.nombre }}</td></tr>
                             <tr><td>Apellido(s):</td><td>{{ persona.apellido }}</td></tr>
-                            <tr><td>Email:</td><td>{{ persona.usuario }}</td></tr>
+                            <tr><td>Email:</td><td>{{ persona.email }}</td></tr>
                             <tr><td>Sexo:</td><td>{{ persona.get_sexo_display }}</td></tr>
-                            <tr><td>Fecha de nacimiento:</td><td>{{ persona.fecha_nacimiento }}</td></tr>
                             <tr><td>Fecha de registro:</td><td>{{ persona.fecha_creacion }}</td></tr>
                             <tr><td>Fecha de modificacion:</td><td>{{ persona.fecha_modificacion }}</td></tr>
                             <tr><td>Tipo de usuario:</td><td>{{ persona.get_tipo_persona_display }}</td></tr>
                         {% endif %}
-                    {% endif %}
                 {% endfor %}
                 </tbody>
             </table>
             <div class="col-md-5 col-sm-12 col-xs-12 form-group"></div>
             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-            {% if Alumno %}
-            <td scope="row" class="align-right col-md-1 col-sm-12 col-xs-12 form-group"><a href='{% url 'usuarios:usuario-actualizar-alumnos' alumno.matricula %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
-            {% elif usuario %}
+                {% if usuario %}
                 {% if perfil %}
                     <td scope="row" class="align-right form-group"><br><label> Editar Informacion Personal</label><br>
-                        <a href='{% url 'usuarios:usuario-perfil-actualizar' %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+                        <a href='{% url 'usuarios:usuario-perfil-actualizar' id_padre %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
                 {% else  %}
                     {% if padre %}
                         <td scope="row" class="align-right form-group"><br><label> Editar Informacion Personal</label><br>
-                        <td class="td-btn"><a href='{% url 'usuarios:usuario-padre-actualizar' persona.pk %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+                        <td class="td-btn"><a href='{% url 'usuarios:usuario-padre-actualizar' persona.id  %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
                         {% else %}
                          <td scope="row" class="align-right form-group"><br><label> Editar Informacion Personal</label><br>
                             <a  href='{% url 'usuarios:usuario-actualizar' persona.id %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary align-left" ></i></a>

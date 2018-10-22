@@ -1,7 +1,8 @@
 from datetime import datetime
-from django.shortcuts import reverse, get_object_or_404, get_list_or_404, render
-from django.http import HttpResponseRedirect
+from django.shortcuts import redirect, get_object_or_404, get_list_or_404, render
+from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from .forms import *
+from django.contrib import messages
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -24,11 +25,7 @@ class IncidenciaCreateView(CreateView):  # Agregar nuevo incidencia
             context['form2'] = self.segundo_form_class(self.request.GET)
         context['year'] = datetime.now().year
         context['title'] = 'Agregar incidencia'
-        context['Administrativa'] = TipoIndicencia.objects.filter(tipo='1')
-        context['Conducta'] = TipoIndicencia.objects.filter(tipo='2')
-        context['Labor'] = TipoIndicencia.objects.filter(tipo='3')
-        context['Otro'] = TipoIndicencia.objects.filter(tipo='4')
-        context['Todas'] = TipoIndicencia.objects.all()
+        context['incidencias'] = TipoIndicencia.objects.all()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -94,11 +91,11 @@ class IncidenciaListView(ListView):  # Mostrar todos lo usuarios
     template_name = 'incidencia/incidencia_lista.html'
 
     def get_queryset(self):
-        if self.request.user.usuario.tipo_persona is '3':
+        if self.request.user.tipo_persona is '3':
             padreid = self.request.user.usuario_id
-            queryset = Incidencia.objects.raw('Select usuario_alumno.*, usuario_persona.*, usuario_padrealumno_alumno.padrealumno_id, usuario_padrealumno_padre.padrefam_id, usuario_padrefam.padre_id, incidencia_incidencia.*,incidencia_tipoindicencia.* '
+            queryset = Incidencia.objects.raw('Select alumno_alumno.*, usuario_padrealumno_alumno.padrealumno_id, usuario_padrealumno_padre.padrefam_id, usuario_padrefam.padre_id, incidencia_incidencia.*,incidencia_tipoindicencia.* '
                                               'FROM usuario_alumno '
-                                              'INNER JOIN usuario_persona ON usuario_alumno.alumno_id=usuario_persona.id  '
+                                              'INNER JOIN usuario_persona ON alumno_alumno.alumno_id=usuario_persona.id  '
                                               'INNER JOIN usuario_padrealumno_alumno ON usuario_alumno.matricula=usuario_padrealumno_alumno.alumno_id '
                                               'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_alumno.padrealumno_id=usuario_padrealumno_padre.padrealumno_id '
                                               'INNER JOIN usuario_padrefam ON usuario_padrealumno_padre.padrefam_id=usuario_padrefam.id '
@@ -107,9 +104,9 @@ class IncidenciaListView(ListView):  # Mostrar todos lo usuarios
                                               'INNER JOIN incidencia_tipoindicencia on incidencia_tipoindicencia.id_tipo=incidencia_incidencia.incidencia_id '
                                               'WHERE usuario_padrefam.padre_id=%s', [padreid])
         else:
-            queryset = Incidencia.objects.raw('Select usuario_alumno.*, usuario_persona.*, usuario_padrealumno_alumno.padrealumno_id, usuario_padrealumno_padre.padrefam_id, usuario_padrefam.padre_id, incidencia_incidencia.*,incidencia_tipoindicencia.* '
-                                              'FROM usuario_alumno '
-                                              'INNER JOIN usuario_persona ON usuario_alumno.alumno_id=usuario_persona.id  '
+            queryset = Incidencia.objects.raw('Select alumno_alumno.*, usuario_padrealumno_alumno.padrealumno_id, usuario_padrealumno_padre.padrefam_id, usuario_padrefam.padre_id, incidencia_incidencia.*,incidencia_tipoindicencia.* '
+                                              'FROM alumno_alumno '
+                                              'INNER JOIN usuario_persona ON alumno_alumno.alumno_id=usuario_persona.id  '
                                               'INNER JOIN usuario_padrealumno_alumno ON usuario_alumno.matricula=usuario_padrealumno_alumno.alumno_id '
                                               'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_alumno.padrealumno_id=usuario_padrealumno_padre.padrealumno_id '
                                               'INNER JOIN usuario_padrefam ON usuario_padrealumno_padre.padrefam_id=usuario_padrefam.id '
@@ -125,3 +122,26 @@ class IncidenciaListView(ListView):  # Mostrar todos lo usuarios
                    'alumno': 'true',
                    }
         return render(request, self.template_name, context)
+
+
+def import_data(request):
+    if request.method == "POST":
+        form = UploadFileForm(request.POST,
+                              request.FILES)
+        if form.is_valid():
+            request.FILES['file'].save_to_database(
+                model=TipoIndicencia,
+                mapdict=['asunto', 'descripcion', 'tipo', 'impacto'])
+            return redirect('dashboard:index')
+        else:
+            return HttpResponseBadRequest()
+    else:
+        form = UploadFileForm()
+    return render(
+        request,
+        'incidencia/importar_incidencias.html',
+        {
+            'form': form,
+            'title': 'Import excel data into database example',
+            'header': 'Please upload sample-data.xls:'
+        })
