@@ -58,7 +58,11 @@
                 {% else  %}
                     {% if padre %}
                         <td scope="row" class="align-right form-group"><br><label> Editar Informacion Personal</label><br>
-                        <td class="td-btn"><a href='{% url 'usuarios:usuario-padre-actualizar'  padre_id %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+                        {% if padre_id  %}
+                            <td class="td-btn"><a href='{% url 'usuarios:usuario-padre-actualizar'  padre_id %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+                        {% else %}
+
+                        {% endif %}
                         {% else %}
                          <td scope="row" class="align-right form-group"><br><label> Editar Informacion Personal</label><br>
                             <a  href='{% url 'usuarios:usuario-actualizar' id %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary align-left" ></i></a>
@@ -101,7 +105,7 @@
             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                 {% if perfil %}
                 {% else  %}
-                    {% if padre %}
+                    {% if id_padre %}
                         <td scope="row" class="align-right form-group"><br><label> Editar Alumnos Asociados</label><br>
                         <td class="td-btn"><a href='{% url 'usuarios:usuario-alumno-padre' id_padre %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
                         {% else %}

@@ -49,14 +49,14 @@
                                   <td scope="row">{{ persona.pk }}</td>
                                   <td>{{ persona.nombre }}</td>
                                   <td>{{ persona.apellido }}</td>
-                                  <td>{{ persona.usuario }}</td>
+                                  <td>{{ persona.email }}</td>
                                   <td>{{ persona.get_sexo_display }}</td>
                                     {% if user.get_type == '1' %}
                                         <td class="td-btn"><a href='{% url 'usuarios:usuario-detalle' persona.id %}'><i class="fa fa-info fa-2x text-info" ></i></a></td>
                                         {% if padref %}
                                               <td class="td-btn"><a href='{% url 'usuarios:usuario-padre-actualizar' persona.id %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
                                         {% elif docente %}
-                                              <td class="td-btn"><a href='{% url 'usuarios:usuario-actualizar' persona.di %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+                                              <td class="td-btn"><a href='{% url 'usuarios:usuario-actualizar' persona.id %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
                                         {% endif %}
                                         <td class="td-btn"><form action="" method="post" style="display: inline">{% csrf_token %}<a href="#/trash"><i class="fa fa-trash fa-2x text-danger"></i></a></form></td>
                                     {% endif %}

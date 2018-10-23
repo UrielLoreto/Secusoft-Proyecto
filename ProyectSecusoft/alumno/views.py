@@ -80,11 +80,6 @@ class AlumnoUpdateView(UpdateView):  # Mofificar un usuario por su id
 
 class AlumnoListView(ListView):  # Mostrar todos lo usuarios
     template_name = 'alumno/alumno_lista.html'
-    # queryset1 = Alumno.objects.all()
-    # queryset2 = Usuario.objects.filter(id__in=queryset1.values('alumno_id'))
-    # queryset = PadreAlumno.objects.filter(alumno__in=queryset1.values('matricula'))
-    # for a in queryset:
-    #     print(a)
 
     def get_queryset(self):
         if self.request.user.tipo_persona is '3':
@@ -96,6 +91,7 @@ class AlumnoListView(ListView):  # Mostrar todos lo usuarios
                                           'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_padre.padrealumno_id=usuario_padrealumno_alumno.padrealumno_id '
                                           'INNER JOIN usuario_padrefam ON usuario_padrefam.id=usuario_padrealumno_padre.padrefam_id '
                                           'INNER JOIN usuario_usuario ON usuario_usuario.id=usuario_padrefam.padre_id WHERE usuario_padrefam.padre_id=%s', [padreid])
+            print(queryset)
         else:
             print("no es padre de familia")
             queryset = Alumno.objects.raw('SELECT alumno_alumno.*, usuario_usuario.id, usuario_usuario.nombre as nombre2, usuario_usuario.apellido as apellido2 FROM alumno_alumno '
@@ -103,10 +99,15 @@ class AlumnoListView(ListView):  # Mostrar todos lo usuarios
                                           'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_padre.padrealumno_id=usuario_padrealumno_alumno.padrealumno_id '
                                           'INNER JOIN usuario_padrefam ON usuario_padrefam.id=usuario_padrealumno_padre.padrefam_id '
                                           'INNER JOIN usuario_usuario ON usuario_usuario.id=usuario_padrefam.padre_id')
+
         return queryset
 
     def get(self, request, *args, **kwargs):
+        for a in self.get_queryset():
+            matriculas = a.matricula
+        queryset2 = Alumno.objects.exclude(matricula=matriculas)
         context = {'object_list': self.get_queryset(),
+                   'object_list2': queryset2,
                    'title': 'Lista de alumnos',
                    'year': datetime.now().year,
                    'alumno': 'true',
@@ -118,23 +119,10 @@ def import_data(request):
     if request.method == "POST":
         form = UploadFileForm(request.POST,
                               request.FILES)
-
-        def choice_func(row):
-            q = Alumno.objects.filter(id=row[0])[0]
-            row[0] = q
-            print(q)
-            return row
         if form.is_valid():
-            print(request.FILES['file'].get_array())
-            for a in request.FILES['file'].iget_array():
-                print(a)
-            # request.FILES['file'].save_book_to_database(
-            #     models=[Usuario, Alumno],
-            #     initializers=[None, choice_func],
-            #     mapdicts=[
-            #         ['nombre', 'apellido', 'tipo_persona', 'sexo', 'fecha_nacimiento'],
-            #         ['matricula', 'grado', 'grupo']]
-            # )
+            request.FILES['file'].save_to_database(
+                model=Alumno,
+                mapdict=['nombre', 'apellido', 'sexo', 'fecha_nacimiento', 'matricula', 'grado', 'grupo'])
             return redirect('dashboard:index')
         else:
             return HttpResponseBadRequest()
@@ -142,9 +130,9 @@ def import_data(request):
         form = UploadFileForm()
     return render(
         request,
-        'usuario/importar_alumnos.html',
+        'alumno/importar_alumnos.html',
         {
             'form': form,
-            'title': 'Import excel data into database example',
-            'header': 'Please upload sample-data.xls:'
+            'year': datetime.now().year,
+            'title': 'Importar Alumnos',
         })

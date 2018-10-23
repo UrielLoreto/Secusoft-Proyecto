@@ -47,39 +47,8 @@
                <div class="x_content">
                   <table id="" class="dt-responsive" cellspacing="10" width="100%">
                       <tbody>
-
-<div id="div_id_fecha_incidencia" class="form-group"> <label for="id_fecha_incidencia" class="col-form-label  requiredField">
-                Fecha incidencia<span class="asteriskField">*</span> </label> <div class=""> <input type="text" name="fecha_incidencia" required="" id="id_fecha_incidencia" class="datetimeinput form-control active"> </div> </div>
-<div id="div_id_observaciones" class="form-group"> <label for="id_observaciones" class="col-form-label ">
-                Observaciones
-            </label> <div class=""> <textarea name="observaciones" id="id_observaciones" rows="10" class="textarea form-control" cols="40"></textarea> </div> </div>
-
-
-<div class="form-row field-alumno">
-
-                <div>
-
-                        <label for="id_alumno">Alumno:</label>
-
-                            <div class="related-widget-wrapper">
-    <select name="alumno" required="" multiple="multiple" id="id_alumno">
-  <option value="15110167">Miguel Haro: 15110167 Primero grado</option>
-
-  <option value="1052121">Pedro nuevo: 1052121 Segundo grado</option>
-
-</select>
-
-
-</div>
-                </div>
-
-        </div>
-
-                      <br>
-                     </tbody>
-                                    </table>
-
-               </div>
+                      {{ form|crispy }}
+                      {{ form2|crispy }}
                 <div class="clearfix"></div>
             <label>Incidencia:</label>
             <br>

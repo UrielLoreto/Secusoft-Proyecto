@@ -30,7 +30,7 @@
 {% endblock %}
 {% block content %}
 {% block titulo %}
-<title>Importar tipos de incidencia - SecuSoft</title>
+<title>{{ title }}- SecuSoft</title>
 {% endblock %}
 <form method="POST"  enctype="multipart/form-data"  class="form-horizontal form-label-left" >
    {% csrf_token %}
@@ -39,7 +39,7 @@
          <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                <div class="x_title">
-                  <h2>Importar tipos de incidencia</h2>
+                  <h2>{{ title }}</h2>
                   <div class="clearfix"></div>
                   <div class="clearfix"></div>
                </div>

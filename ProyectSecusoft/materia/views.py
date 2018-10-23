@@ -18,7 +18,7 @@ class MateriaListView(ListView):  # Mostrar todos lo usuarios
     template_name = 'materia/materia_lista.html'
 
     def get_queryset(self):
-        if self.request.user.usuario.tipo_persona is '2':
+        if self.request.user.tipo_persona is '2':
             print("Docente")
             doceente = self.request.user.usuario_id
             queryset = Materia.objects.raw(
@@ -28,7 +28,7 @@ class MateriaListView(ListView):  # Mostrar todos lo usuarios
                 'Inner join usuario_docente on materia_materiadocente_docente.docente_id=usuario_docente.id '
                 'where usuario_docente.docente_id=%s', [doceente])
 
-        elif self.request.user.usuario.tipo_persona is '1':
+        elif self.request.user.tipo_persona is '1':
             queryset = Materia.objects.raw(
                 'SELECT materia_materia.*, materia_materiadocente_docente.*, usuario_docente.* '
                 'From materia_materia '

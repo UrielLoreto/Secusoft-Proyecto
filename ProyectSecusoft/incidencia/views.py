@@ -38,10 +38,12 @@ class IncidenciaCreateView(CreateView):  # Agregar nuevo incidencia
             print("form2 valido")
         if form.is_valid() and form2.is_valid():
             print("Formularios validos ")
-            persona = form.save(commit=False)
-            docente = form2.save(commit=False)
-            print(form.cleaned_data)
-            print(form2.cleaned_data)
+            incidencia = form.save(commit=False)
+            incidenciaalumnos = form2.save(commit=False)
+            incidencia.save()
+            incidenciaalumnos.save()
+            incidenciaalumnos.alumno.add(request.POST['alumno'])
+            incidenciaalumnos.alumno.add(request.POST['incidencia'])
             return HttpResponseRedirect('..')
         else:
             print(form.data)
@@ -92,27 +94,25 @@ class IncidenciaListView(ListView):  # Mostrar todos lo usuarios
 
     def get_queryset(self):
         if self.request.user.tipo_persona is '3':
-            padreid = self.request.user.usuario_id
-            queryset = Incidencia.objects.raw('Select alumno_alumno.*, usuario_padrealumno_alumno.padrealumno_id, usuario_padrealumno_padre.padrefam_id, usuario_padrefam.padre_id, incidencia_incidencia.*,incidencia_tipoindicencia.* '
-                                              'FROM usuario_alumno '
-                                              'INNER JOIN usuario_persona ON alumno_alumno.alumno_id=usuario_persona.id  '
-                                              'INNER JOIN usuario_padrealumno_alumno ON usuario_alumno.matricula=usuario_padrealumno_alumno.alumno_id '
-                                              'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_alumno.padrealumno_id=usuario_padrealumno_padre.padrealumno_id '
+            padreid = self.request.user.id
+            queryset = Incidencia.objects.raw('Select alumno_alumno.matricula, alumno_alumno.grado, alumno_alumno.grupo, incidencia_incidencia.*, incidencia_tipoindicencia.* '
+                                              'FROM alumno_alumno '
+                                              'INNER JOIN usuario_padrealumno_alumno ON alumno_alumno.matricula=usuario_padrealumno_alumno.alumno_id '
+                                              'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_alumno.padrealumno_id=usuario_padrealumno_padre.padrealumno_id  '
                                               'INNER JOIN usuario_padrefam ON usuario_padrealumno_padre.padrefam_id=usuario_padrefam.id '
-                                              'INNER JOIN incidencia_incidenciaalumno_alumno  ON usuario_alumno.matricula=incidencia_incidenciaalumno_alumno.alumno_id '
-                                              'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_alumno.incidenciaalumno_id  '
+                                              'INNER JOIN incidencia_incidenciaalumno_alumno  ON alumno_alumno.matricula=incidencia_incidenciaalumno_alumno.alumno_id '
+                                              'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
                                               'INNER JOIN incidencia_tipoindicencia on incidencia_tipoindicencia.id_tipo=incidencia_incidencia.incidencia_id '
                                               'WHERE usuario_padrefam.padre_id=%s', [padreid])
         else:
-            queryset = Incidencia.objects.raw('Select alumno_alumno.*, usuario_padrealumno_alumno.padrealumno_id, usuario_padrealumno_padre.padrefam_id, usuario_padrefam.padre_id, incidencia_incidencia.*,incidencia_tipoindicencia.* '
+            queryset = Incidencia.objects.raw('Select alumno_alumno.matricula, alumno_alumno.grado, alumno_alumno.grupo, incidencia_incidencia.*, incidencia_tipoindicencia.* '
                                               'FROM alumno_alumno '
-                                              'INNER JOIN usuario_persona ON alumno_alumno.alumno_id=usuario_persona.id  '
-                                              'INNER JOIN usuario_padrealumno_alumno ON usuario_alumno.matricula=usuario_padrealumno_alumno.alumno_id '
-                                              'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_alumno.padrealumno_id=usuario_padrealumno_padre.padrealumno_id '
+                                              'INNER JOIN usuario_padrealumno_alumno ON alumno_alumno.matricula=usuario_padrealumno_alumno.alumno_id '
+                                              'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_alumno.padrealumno_id=usuario_padrealumno_padre.padrealumno_id  '
                                               'INNER JOIN usuario_padrefam ON usuario_padrealumno_padre.padrefam_id=usuario_padrefam.id '
-                                              'INNER JOIN incidencia_incidenciaalumno_alumno  ON usuario_alumno.matricula=incidencia_incidenciaalumno_alumno.alumno_id '
-                                              'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_alumno.incidenciaalumno_id  '
-                                              'INNER JOIN incidencia_tipoindicencia on incidencia_tipoindicencia.id_tipo=incidencia_incidencia.incidencia_id ')
+                                              'INNER JOIN incidencia_incidenciaalumno_alumno  ON alumno_alumno.matricula=incidencia_incidenciaalumno_alumno.alumno_id '
+                                              'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
+                                              'INNER JOIN incidencia_tipoindicencia on incidencia_tipoindicencia.id_tipo=incidencia_incidencia.incidencia_id')
         return queryset
 
     def get(self, request, *args, **kwargs):
@@ -142,6 +142,5 @@ def import_data(request):
         'incidencia/importar_incidencias.html',
         {
             'form': form,
-            'title': 'Import excel data into database example',
-            'header': 'Please upload sample-data.xls:'
+            'year': datetime.now().year,
         })

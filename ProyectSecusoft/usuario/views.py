@@ -123,7 +123,6 @@ class UsuarioDocenteCreateView(CreateView):  # Agregar nuevo padre
     template_name = 'usuario/usuario_agregar.html'
     form_class = PersonaForm
     segundo_form_class = DocenteForm
-    tercer_form_class = RegisterForm
 
     def get_context_data(self, **kwargs):
         context = super(UsuarioDocenteCreateView, self).get_context_data(**kwargs)
@@ -131,8 +130,6 @@ class UsuarioDocenteCreateView(CreateView):  # Agregar nuevo padre
             context['form'] = self.form_class(self.request.GET)
         if 'form2' not in context:
             context['form2'] = self.segundo_form_class(self.request.GET)
-        if 'form3' not in context:
-            context['form3'] = self.tercer_form_class(self.request.GET)
         context['year'] = datetime.now().year
         context['docente'] = True
         context['title'] = 'Agregar Docente'
@@ -142,29 +139,22 @@ class UsuarioDocenteCreateView(CreateView):  # Agregar nuevo padre
         self.object = self.get_object
         form = self.form_class(request.POST)
         form2 = self.segundo_form_class(request.POST)
-        form3 = self.tercer_form_class(request.POST)
         if form.is_valid():
             print("Form valido")
         if form2.is_valid():
             print("form2 valido")
-        if form3.is_valid():
-            print("Form3 valido")
-        if form.is_valid() and form2.is_valid() and form3.is_valid():
+        if form.is_valid() and form2.is_valid():
             print("Formularios validos ")
             persona = form.save(commit=False)
             docente = form2.save(commit=False)
-            usuario = form3.save(commit=False)
             persona.tipo_persona = '2'
             persona.save()
             docente.docente = persona
             docente.save()
-            usuario.usuario = persona
-            usuario.active = True
-            usuario.save()
             return HttpResponseRedirect('..')
         else:
             print(form.data)
-            return self.render_to_response(self.get_context_data(form=form, form2=form2, form3=form3))
+            return self.render_to_response(self.get_context_data(form=form, form2=form2))
 
     def form_valid(self, form):
         print(form.cleaned_data)
@@ -179,7 +169,6 @@ class UsuarioDetailView(DetailView):  # Detalle de un usuario por su id
         context = super(UsuarioDetailView, self).get_context_data(**kwargs)
         _id = self.kwargs.get("pk")
         queryset = Usuario.objects.filter(id=_id)
-        print (_id)
         a = queryset
         for b in a:
             if b.tipo_persona == '3':
@@ -296,7 +285,7 @@ def PerilUsuario(request):
 class PerilUsuarioUpdate(UpdateView):  # Mofificar un usuario por su id
     template_name = 'usuario/usuario_perfil_actualizar.html'
     form_class = PersonaForm
-    # model = Usuario
+    model = Usuario
 
     def get_object(self):
         usuario = self.request.user.get_id()
