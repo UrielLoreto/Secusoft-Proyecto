@@ -11,9 +11,27 @@ class PersonaForm(forms.ModelForm):
     class Meta:
         model = Usuario
         fields = '__all__'
-        exclude = ['fecha_creacion', 'fecha_modificacion', 'tipo_persona', 'is_active', 'admin', 'active', 'staff', 'last_login']
+        exclude = ['password','fecha_creacion', 'fecha_modificacion', 'tipo_persona', 'is_active', 'admin', 'active', 'staff', 'last_login']
         labels = {'fecha_nacimiento': 'Fecha de nacimiento:',
                   'sexo': 'Sexo:'}
+    """A form for creating new users. Includes all the required
+    fields, plus a repeated password."""
+    password1 = forms.CharField(label='Contraseña:', widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'require': 'true'})
+                                )
+    password2 = forms.CharField(label='Confirmacion de Contraseña:', widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'require': 'true'})
+                                )
+
+    def clean_password2(self):
+        # Check that the two password entries match
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Las contraseñas no coinciden")
+        return password2
     nombre = forms.CharField(
         widget=forms.TextInput(attrs={
             'class': 'form-control',
@@ -26,36 +44,6 @@ class PersonaForm(forms.ModelForm):
             'placeholder': 'Gutierrez Martinez',
             'require': 'true'}),
         label='Apellidos(s):')
-    fecha_nacimiento = forms.DateField(
-        widget=forms.DateInput(attrs={
-            'class': 'form-group',
-            'autocomplete': 'off',
-            'require': 'true'}),
-        label='Fecha de nacimiento:')
-
-
-class AlumnoForm(forms.ModelForm):
-    class Meta:
-        model = Alumno
-        fields = '__all__'
-        exclude = ['alumno']
-        labels = {'grado': 'Grado:',
-                  'grupo': 'Grupo:'}
-    matricula = forms.CharField(
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': '15110167',
-            'require': 'true'}),
-        label='Matricula:')
-
-
-class AlumnoActForm(forms.ModelForm):
-    class Meta:
-        model = Alumno
-        fields = '__all__'
-        exclude = ['alumno', 'matricula']
-        labels = {'grado': 'Grado:',
-                  'grupo': 'Grupo:'}
 
 
 class DocenteForm(forms.ModelForm):
@@ -80,28 +68,7 @@ class PadreAlumnoForm(forms.ModelForm):
 
 
 class RegisterForm(forms.ModelForm):
-    """A form for creating new users. Includes all the required
-    fields, plus a repeated password."""
-    password1 = forms.CharField(label='Contraseña:', widget=forms.PasswordInput(attrs={
-            'class': 'form-control',
-            'require': 'true'})
-                )
-    password2 = forms.CharField(label='Confirmacion de Contraseña:', widget=forms.PasswordInput(attrs={
-            'class': 'form-control',
-            'require': 'true'})
-                )
 
-    class Meta:
-        model = Usuario
-        fields = ('email',)
-
-    def clean_password2(self):
-        # Check that the two password entries match
-        password1 = self.cleaned_data.get("password1")
-        password2 = self.cleaned_data.get("password2")
-        if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Las contraseñas no coinciden")
-        return password2
 
     def save(self, commit=True):
         # Save the provided password in hashed format

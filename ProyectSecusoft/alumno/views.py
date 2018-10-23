@@ -36,7 +36,7 @@ class AlumnoCreateView(CreateView):  # Agregar nuevo alumno
             print("Formularios validos ")
             alumno = form.save(commit=False)
             alumno.save()
-            return HttpResponseRedirect('', alumno.matricula)
+            return HttpResponseRedirect('../', alumno.matricula)
         else:
             print("MAL")
             print(form.data)
@@ -53,7 +53,8 @@ class AlumnoDetailView(DetailView):  # Detalle de un alumno por su id
 
     def get_context_data(self, queryset=None, *args, **kwargs):
         context = super(AlumnoDetailView, self).get_context_data(**kwargs)
-        queryset = Alumno.objects.all()
+        _id = self.kwargs.get("pk")
+        queryset = Alumno.objects.filter(matricula=_id)
         context["object"] = queryset
         context['year'] = datetime.now().year
         context['Alumno'] = True
@@ -88,7 +89,7 @@ class AlumnoListView(ListView):  # Mostrar todos lo usuarios
     def get_queryset(self):
         if self.request.user.tipo_persona is '3':
             print("Padre de femilia")
-            padreid = self.request.user.usuario_id
+            padreid = self.request.user.id
             print(padreid)
             queryset = Alumno.objects.raw('SELECT alumno_alumno.*, usuario_usuario.id, usuario_usuario.nombre as nombre2, usuario_usuario.apellido as apellido2 FROM alumno_alumno '
                                           'INNER JOIN usuario_padrealumno_alumno ON usuario_padrealumno_alumno.alumno_id=alumno_alumno.matricula '

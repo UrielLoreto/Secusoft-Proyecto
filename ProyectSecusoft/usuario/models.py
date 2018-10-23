@@ -100,11 +100,14 @@ class Usuario(AbstractBaseUser):
 
     objects = UserManager()
 
+    def get_absolute_url(self):
+        return reverse('usuarios:usuario-detalle', kwargs={'pk': self.id})
+
     def __str__(self):
         return self.email
 
     def get_full_name(self):
-        return self.nombre
+        return '%s %s' % (self.nombre, self.apellido)
 
     def get_id(self):
         return self.id

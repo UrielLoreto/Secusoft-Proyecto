@@ -101,6 +101,7 @@ class UsuarioPadreCreateView(CreateView):  # Agregar nuevo padre
             persona = form.save(commit=False)
             padrefam = form3.save(commit=False)
             persona.tipo_persona = '3'
+            persona.set_password(request.POST["password1"])
             persona.save()
             padrefam.padre = persona
             padrefam.save()
@@ -178,6 +179,7 @@ class UsuarioDetailView(DetailView):  # Detalle de un usuario por su id
         context = super(UsuarioDetailView, self).get_context_data(**kwargs)
         _id = self.kwargs.get("pk")
         queryset = Usuario.objects.filter(id=_id)
+        print (_id)
         a = queryset
         for b in a:
             if b.tipo_persona == '3':
@@ -194,7 +196,9 @@ class UsuarioDetailView(DetailView):  # Detalle de un usuario por su id
                 queryset1 = PadreFam.objects.filter(padre_id=padreid)
                 queryse2 = PadreAlumno.objects.filter(padre__in=queryset1.values('id'))
                 c = queryse2
+                context['padre_id'] = _id
                 for d in c:
+                    print (d)
                     context["id_padre"] = d.id
 
         context["object"] = queryset
@@ -278,8 +282,8 @@ class UsuarioDeleteView(DeleteView):  # Eliminar un usuario por su id
 
 def PerilUsuario(request):
     template_name = 'usuario/usuario_detalle.html'
-    usuario = request.user.get_id()
-    queryset = Usuario.objects.filter(id=usuario)
+    id = request.user.get_id()
+    queryset = Usuario.objects.filter(id=id)
     args = {'user': request.user,
             'object': queryset,
             'year': datetime.now().year,

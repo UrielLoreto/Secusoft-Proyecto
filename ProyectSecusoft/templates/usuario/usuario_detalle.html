@@ -35,9 +35,8 @@
                         {% if perfil %}
                             <tr><td>Nombre(s):</td><td>{{ persona.nombre }}</td></tr>
                             <tr><td>Apellido(s):</td><td>{{ persona.apellido }}</td></tr>
-                            <tr><td>Email:</td><td>{{ persona.user }}</td></tr>
+                            <tr><td>Email:</td><td>{{ persona.email }}</td></tr>
                             <tr><td>Sexo:</td><td>{{ persona.get_sexo_display }}</td></tr>
-                            <tr><td>Fecha de nacimiento:</td><td>{{ persona.fecha_nacimiento }}</td></tr>
                         {% else %}
                             <tr><td>Nombre(s):</td><td>{{ persona.nombre }}</td></tr>
                             <tr><td>Apellido(s):</td><td>{{ persona.apellido }}</td></tr>
@@ -55,14 +54,14 @@
                 {% if usuario %}
                 {% if perfil %}
                     <td scope="row" class="align-right form-group"><br><label> Editar Informacion Personal</label><br>
-                        <a href='{% url 'usuarios:usuario-perfil-actualizar' id_padre %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+                        <a href='{% url 'usuarios:usuario-perfil-actualizar' %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
                 {% else  %}
                     {% if padre %}
                         <td scope="row" class="align-right form-group"><br><label> Editar Informacion Personal</label><br>
-                        <td class="td-btn"><a href='{% url 'usuarios:usuario-padre-actualizar' persona.id  %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+                        <td class="td-btn"><a href='{% url 'usuarios:usuario-padre-actualizar'  padre_id %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
                         {% else %}
                          <td scope="row" class="align-right form-group"><br><label> Editar Informacion Personal</label><br>
-                            <a  href='{% url 'usuarios:usuario-actualizar' persona.id %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary align-left" ></i></a>
+                            <a  href='{% url 'usuarios:usuario-actualizar' id %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary align-left" ></i></a>
                          </td>
                     {% endif %}
                 {% endif %}
