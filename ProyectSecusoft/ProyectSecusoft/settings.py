@@ -173,7 +173,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
-STAYIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # EMAIL_HOST = 'localhost'
 # EMAIL_PORT = 1025
