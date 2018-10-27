@@ -103,9 +103,7 @@ class AlumnoListView(ListView):  # Mostrar todos lo usuarios
         return queryset
 
     def get(self, request, *args, **kwargs):
-        for a in self.get_queryset():
-            matriculas = a.matricula
-        queryset2 = Alumno.objects.exclude(matricula=matriculas)
+        queryset2 = Alumno.objects.exclude(matricula__in=[o.matricula for o in self.get_queryset()])
         context = {'object_list': self.get_queryset(),
                    'object_list2': queryset2,
                    'title': 'Lista de alumnos',
