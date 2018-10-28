@@ -35,6 +35,9 @@
                         <tr><td>Matricula:</td><td>{{ persona.matricula }}</td></tr>
                         <tr><td>Nombre(s):</td><td>{{ persona.nombre }}</td></tr>
                         <tr><td>Apellido(s):</td><td>{{ persona.apellido }}</td></tr>
+                        {% for p in padre %}
+                        <tr><td>Padre:</td><td><a class="tile_count green" href='{% url 'usuarios:usuario-detalle' p.id %}'>{{ p.nombre2  }} {{ p.apellido2 }}</a></td></tr>
+                        {% endfor %}
                         <tr><td>Grado:</td><td>{{ persona.get_grado_display }}</td></tr>
                         <tr><td>Grupo:</td><td>{{ persona.get_grupo_display }}</td></tr>
                         <tr><td>Sexo:</td><td>{{ persona.get_sexo_display }}</td></tr>

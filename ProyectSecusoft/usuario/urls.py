@@ -14,5 +14,5 @@ urlpatterns = [
     path('agregar/padredefamilia', UsuarioPadreCreateView.as_view(), name='usuario-nuevo-padre'),
     path('<int:pk>/', UsuarioDetailView.as_view(), name='usuario-detalle'),
     path('<int:pk>/modificar/', UsuarioPadreUpdateView.as_view(), name='usuario-padre-actualizar'),
-    path('<int:id>/eliminar/', UsuarioDeleteView.as_view(), name='usuario-eliminar'),
+    path('<int:pk>/eliminar/', UsuarioDeleteView.as_view(), name='usuario-eliminar'),
 ]

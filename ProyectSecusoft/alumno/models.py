@@ -31,7 +31,7 @@ class Alumno(models.Model):
     grupo = models.CharField(max_length=10, choices=grupo_tipo, default='A')
 
     def __str__(self):
-        return '%s %s: %s %s grado' % (self.nombre, self.apellido, self.matricula, self.get_grado_display())
+        return 'Grado: %s,  %s %s %s' % (self.get_grado_display(), self.nombre, self.apellido, self.matricula)
 
     def get_absolute_url(self):
         return reverse('alumnos:alumnos-detalle', kwargs={'pk': self.matricula})

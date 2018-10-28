@@ -11,7 +11,7 @@ class PersonaForm(forms.ModelForm):
     class Meta:
         model = Usuario
         fields = '__all__'
-        exclude = ['password','fecha_creacion', 'fecha_modificacion', 'tipo_persona', 'is_active', 'admin', 'active', 'staff', 'last_login']
+        exclude = ['password', 'fecha_creacion', 'fecha_modificacion', 'tipo_persona', 'is_active', 'admin', 'active', 'staff', 'last_login']
         labels = {'fecha_nacimiento': 'Fecha de nacimiento:',
                   'sexo': 'Sexo:'}
     """A form for creating new users. Includes all the required
@@ -32,6 +32,38 @@ class PersonaForm(forms.ModelForm):
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("Las contraseñas no coinciden")
         return password2
+
+    def save(self, commit=True):
+        # Save the provided password in hashed format
+        usuario = super(PersonaForm, self).save(commit=False)
+        usuario.set_password(self.cleaned_data["password1"])
+        if commit:
+            usuario.save()
+        return usuario
+
+    nombre = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Omar',
+            'require': 'true'}),
+        label='Nombre(s):')
+    apellido = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Gutierrez Martinez',
+            'require': 'true'}),
+        label='Apellidos(s):')
+
+
+class PersonaActForm(forms.ModelForm):
+    class Meta:
+        model = Usuario
+        fields = '__all__'
+        exclude = ['password', 'fecha_creacion', 'fecha_modificacion', 'tipo_persona', 'is_active', 'admin', 'active',
+                   'staff', 'last_login']
+        labels = {'fecha_nacimiento': 'Fecha de nacimiento:',
+                  'sexo': 'Sexo:'}
+
     nombre = forms.CharField(
         widget=forms.TextInput(attrs={
             'class': 'form-control',
@@ -65,20 +97,6 @@ class PadreAlumnoForm(forms.ModelForm):
         fields = '__all__'
         exclude = ('padre',)
         labels = {'alumno': 'Hijo(s):'}
-
-
-class RegisterForm(forms.ModelForm):
-
-
-    def save(self, commit=True):
-        # Save the provided password in hashed format
-        usuario = super(RegisterForm, self).save(commit=False)
-        usuario.set_password(self.cleaned_data["password1"])
-        # obj = EmailActivation.objects.create(user=user)
-        # obj.send_activation_email()
-        if commit:
-            usuario.save()
-        return usuario
 
 
 class UserAdminChangeForm(forms.ModelForm):

@@ -53,17 +53,17 @@
                                   <td>{{ persona.get_sexo_display }}</td>
                                     {% if user.get_type == '1' %}
                                         <td class="td-btn"><a href='{% url 'usuarios:usuario-detalle' persona.id %}'><i class="fa fa-info fa-2x text-info" ></i></a></td>
-                                        {% if padref %}
-                                              <td class="td-btn"><a href='{% url 'usuarios:usuario-padre-actualizar' persona.id %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
-                                        {% elif docente %}
                                               <td class="td-btn"><a href='{% url 'usuarios:usuario-actualizar' persona.id %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
-                                        {% endif %}
                                         <td class="td-btn"><form action="" method="post" style="display: inline">{% csrf_token %}<a href="#/trash"><i class="fa fa-trash fa-2x text-danger"></i></a></form></td>
+                                        {% elif user.get_type == '3' %}
+                                            <td class="td-btn"><a href='{% url 'usuarios:usuario-padre-actualizar' persona.id %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+                                        {% elif user.get_type == '2' %}
+                                              <td class="td-btn"><a href='{% url 'usuarios:usuario-actualizar' persona.id %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
                                     {% endif %}
                             </tr>
                         {% empty %}
                         <tr>
-                          <td scope="row" colspan="6">No hay usuarios.</td>
+                          <td scope="row" colspan="6">No hay usuarios registrados.</td>
                         </tr>
                         {% endfor %}
                   </tbody>

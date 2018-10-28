@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
+    'rest_framework',
     'usuario',
     'cita',
     'incidencia',
@@ -107,30 +108,32 @@ WSGI_APPLICATION = 'ProyectSecusoft.wsgi.application'
 #             'HOST': '127.0.0.1',
 #         }
 # }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'secusoft2',
-#         'USER': 'root',
-#         'PASSWORD': '',
-#         'HOST': 'localhost',
-#     }
-# }
-DATABASES ={'default': {'ATOMIC_REQUESTS': False,
-             'AUTOCOMMIT': True,
-             'CONN_MAX_AGE': 0,
-             'ENGINE': 'django.db.backends.mysql',
-             'HOST': 'Secusoft.mysql.pythonanywhere-services.com',
-             'NAME': 'Secusoft$default',
-             'OPTIONS': {},
-             'PASSWORD': 'hola1234',
-             'PORT': '',
-             'TEST': {'CHARSET': None,
-                      'COLLATION': None,
-                      'MIRROR': None,
-                      'NAME': None},
-             'TIME_ZONE': None,
-             'USER': 'Secusoft'}}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'secusoft2',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'CHARSET': 'utf8',
+        'COLLATION': 'utf8_general_ci',
+    }
+}
+# DATABASES ={'default': {'ATOMIC_REQUESTS': False,
+#              'AUTOCOMMIT': True,
+#              'CONN_MAX_AGE': 0,
+#              'ENGINE': 'django.db.backends.mysql',
+#              'HOST': 'Secusoft.mysql.pythonanywhere-services.com',
+#              'NAME': 'Secusoft$default',
+#              'OPTIONS': {},
+#              'PASSWORD': 'hola1234',
+#              'PORT': '',
+#              'TEST': {'CHARSET': None,
+#                       'COLLATION': None,
+#                       'MIRROR': None,
+#                       'NAME': None},
+#              'TIME_ZONE': None,
+#              'USER': 'Secusoft'}}
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 DATABASES['default']['OPTIONS'] = {"init_command": "SET foreign_key_checks = 0;"}

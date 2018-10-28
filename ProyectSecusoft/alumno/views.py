@@ -2,6 +2,7 @@ from datetime import datetime
 from django.shortcuts import reverse, get_object_or_404, get_list_or_404, render
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from .forms import *
+from usuario.models import PadreAlumno, Usuario
 from django.shortcuts import render, redirect
 from django.views.generic import (
     CreateView,
@@ -55,7 +56,15 @@ class AlumnoDetailView(DetailView):  # Detalle de un alumno por su id
         context = super(AlumnoDetailView, self).get_context_data(**kwargs)
         _id = self.kwargs.get("pk")
         queryset = Alumno.objects.filter(matricula=_id)
+        queryset2 = Alumno.objects.raw(
+            'SELECT alumno_alumno.*, usuario_usuario.id, usuario_usuario.nombre as nombre2, usuario_usuario.apellido as apellido2 FROM alumno_alumno '
+            'INNER JOIN usuario_padrealumno_alumno ON usuario_padrealumno_alumno.alumno_id=alumno_alumno.matricula '
+            'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_padre.padrealumno_id=usuario_padrealumno_alumno.padrealumno_id '
+            'INNER JOIN usuario_padrefam ON usuario_padrefam.id=usuario_padrealumno_padre.padrefam_id '
+            'INNER JOIN usuario_usuario ON usuario_usuario.id=usuario_padrefam.padre_id '
+            'WHERE alumno_alumno.matricula=%s', [_id])
         context["object"] = queryset
+        context["padre"] = queryset2
         context['year'] = datetime.now().year
         context['Alumno'] = True
         context['title'] = 'Detalles del alumno'
@@ -103,13 +112,20 @@ class AlumnoListView(ListView):  # Mostrar todos lo usuarios
         return queryset
 
     def get(self, request, *args, **kwargs):
-        queryset2 = Alumno.objects.exclude(matricula__in=[o.matricula for o in self.get_queryset()])
-        context = {'object_list': self.get_queryset(),
-                   'object_list2': queryset2,
-                   'title': 'Lista de alumnos',
-                   'year': datetime.now().year,
-                   'alumno': 'true',
-                   }
+        if self.request.user.tipo_persona is '1':
+            queryset2 = Alumno.objects.exclude(matricula__in=[o.matricula for o in self.get_queryset()])
+            context = {'object_list': self.get_queryset(),
+                       'object_list2': queryset2,
+                       'title': 'Lista de alumnos',
+                       'year': datetime.now().year,
+                       'alumno': 'true',
+                       }
+        else:
+            context = {'object_list': self.get_queryset(),
+                       'title': 'Lista de alumnos',
+                       'year': datetime.now().year,
+                       'alumno': 'true',
+                       }
         return render(request, self.template_name, context)
 
 

@@ -154,7 +154,7 @@ class PadreFam(models.Model):
     padre = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return '%s %s: %s' % (self.padre.nombre, self.padre.apellido, self.padre)
+        return '%s %s: %s' % (self.padre, self.padre.nombre, self.padre.apellido)
 
     def get_absolute_url(self):
         return reverse('usuarios:usuario-detalle', kwargs={'pk': self.padre_id})
@@ -169,11 +169,22 @@ class Docente(models.Model):
     tutor_tipo = (
         ('1', 'Si'),
         ('2', 'No'),
-        ('3', 'Temporal'),
     )
+    grado_tipo = (
+        ('1', 'Primero'),
+        ('2', 'Segundo'),
+        ('3', 'Tercero'),)
+    grupo_tipo = (
+        ('A', 'A'),
+        ('B', 'B'),
+        ('C', 'C'),
+        ('D', 'D'),
+        ('E', 'E'),
+        ('F', 'F'),)
     docente = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     tutor = models.CharField(max_length=5, choices=tutor_tipo, default='1')
+    grupo = models.CharField(max_length=10, choices=grupo_tipo, null=True, blank=True)
+    grado = models.CharField(max_length=10, choices=grado_tipo, null=True, blank=True)
 
     def __str__(self):
-        return '%s %s: %s' % (self.docente.nombre, self.docente.apellido, self.docente)
-
+        return '%s %s: %s' % (self.docente, self.docente.nombre, self.docente.apellido)

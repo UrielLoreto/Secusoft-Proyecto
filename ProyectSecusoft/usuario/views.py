@@ -2,6 +2,8 @@ import django_excel as excel
 from datetime import datetime
 from django.shortcuts import reverse, get_object_or_404, get_list_or_404, render
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
+
+from materia.models import Materia
 from .forms import *
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
@@ -107,6 +109,8 @@ class UsuarioPadreCreateView(CreateView):  # Agregar nuevo padre
             padrefam.save()
             padrealumno = form2.save(commit=False)
             padrealumno.save()
+            for a in request.POST['alumno']:
+                print(a)
             padrealumno.alumno.add(request.POST['alumno'])
             padrealumno.padre.add(padrefam)
             return HttpResponseRedirect('..')
@@ -168,11 +172,30 @@ class UsuarioDetailView(DetailView):  # Detalle de un usuario por su id
     def get_context_data(self, queryset=None, *args, **kwargs):
         context = super(UsuarioDetailView, self).get_context_data(**kwargs)
         _id = self.kwargs.get("pk")
+        context['id'] = _id
         queryset = Usuario.objects.filter(id=_id)
-        a = queryset
-        for b in a:
-            if b.tipo_persona == '3':
-                context['padre'] = True
+        tipo = queryset.values('tipo_persona')[0]
+        if tipo['tipo_persona'] == '1':
+            print("admin")
+        elif tipo['tipo_persona'] == '2':
+            docente = Docente.objects.filter(docente_id=_id)
+            print(docente.values('tutor'))
+            tutor = docente.values('tutor')
+            if tutor[0]['tutor'] == '1':
+                grupo = docente.values('grupo')
+                grupotutorado = Alumno.objects.filter(grupo=grupo[0]['grupo'])
+                print(grupo[0]['grupo'])
+
+            queryset1 = Materia.objects.raw(
+                'SELECT materia_materia.*, materia_materiadocente_docente.*, usuario_docente.* '
+                'From materia_materia '
+                'Inner join materia_materiadocente_docente on materia_materia.id=materia_materiadocente_docente.materiadocente_id '
+                'Inner join usuario_docente on materia_materiadocente_docente.docente_id=usuario_docente.id '
+                'where usuario_docente.docente_id=%s', [_id])
+            context["object_list"] = queryset1
+        elif tipo['tipo_persona'] == '3':
+            context['padre'] = True
+            for b in queryset:
                 padreid = b.pk
                 queryset1 = Alumno.objects.raw(
                     'SELECT alumno_alumno.*, usuario_usuario.id, usuario_usuario.nombre as nombre2, usuario_usuario.apellido as apellido2 FROM alumno_alumno '
@@ -185,10 +208,8 @@ class UsuarioDetailView(DetailView):  # Detalle de un usuario por su id
                 queryset1 = PadreFam.objects.filter(padre_id=padreid)
                 queryse2 = PadreAlumno.objects.filter(padre__in=queryset1.values('id'))
                 c = queryse2
-                context['padre_id'] = _id
-                for d in c:
-                    print (d)
-                    context["id_padre"] = d.id
+            for d in c:
+                context["id_padre"] = d.id
 
         context["object"] = queryset
         context['year'] = datetime.now().year
@@ -214,7 +235,7 @@ class DocenteDetailView(DetailView):  # Detalle de un alumno por su id
 
 class UsuarioPadreUpdateView(UpdateView):  # Mofificar un usuario por su id
     template_name = 'usuario/usuario_actualizar.html'
-    form_class = PersonaForm
+    form_class = PersonaActForm
     model = Usuario
 
     def get_context_data(self, **kwargs):

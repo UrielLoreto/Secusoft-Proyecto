@@ -1,6 +1,10 @@
 from datetime import datetime
 from django.shortcuts import redirect, get_object_or_404, get_list_or_404, render
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from rest_framework import viewsets
+
+from cita.models import Cita
+from incidencia.serializers import TipoIncidenciaSerializer
 from .forms import *
 from django.contrib import messages
 from django.views.generic import (
@@ -43,7 +47,7 @@ class IncidenciaCreateView(CreateView):  # Agregar nuevo incidencia
             incidencia.save()
             incidenciaalumnos.save()
             incidenciaalumnos.alumno.add(request.POST['alumno'])
-            incidenciaalumnos.alumno.add(request.POST['incidencia'])
+            incidenciaalumnos.incidencia.add(incidencia)
             return HttpResponseRedirect('..')
         else:
             print(form.data)
@@ -58,9 +62,24 @@ class IncidenciaDetailView(DetailView):  # Detalle de un incidencia por su id
     model = Incidencia
     template_name = 'incidencia/incidencia_detalle.html'
 
-    def get_object(self, queryset=None):
-        _id = self.kwargs.get("id")
-        return get_object_or_404(Incidencia, id_incidencia=_id)
+    def get_context_data(self, queryset=None, *args, **kwargs):
+        context = super(IncidenciaDetailView, self).get_context_data(**kwargs)
+        _id = self.kwargs.get("pk")
+        queryset = Incidencia.objects.raw(
+            'Select alumno_alumno.matricula, alumno_alumno.grado, alumno_alumno.grupo, incidencia_incidencia.*, incidencia_tipoindicencia.* '
+            'FROM alumno_alumno '
+            'INNER JOIN usuario_padrealumno_alumno ON alumno_alumno.matricula=usuario_padrealumno_alumno.alumno_id '
+            'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_alumno.padrealumno_id=usuario_padrealumno_padre.padrealumno_id  '
+            'INNER JOIN usuario_padrefam ON usuario_padrealumno_padre.padrefam_id=usuario_padrefam.id '
+            'INNER JOIN incidencia_incidenciaalumno_alumno  ON alumno_alumno.matricula=incidencia_incidenciaalumno_alumno.alumno_id '
+            'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
+            'INNER JOIN incidencia_tipoindicencia on incidencia_tipoindicencia.id_tipo=incidencia_incidencia.incidencia_id '
+            'WHERE incidencia_incidencia.id_incidencia =%s GROUP by incidencia_incidencia.id_incidencia', [_id])
+        # queryset2 = Cita.objects.filter(matricula__in=[o.matricula for o in self.get_queryset()])
+        context["object"] = queryset
+        context['year'] = datetime.now().year
+        context['title'] = 'Detalles de incidencia'
+        return context
 
 
 class IncidenciaUpdateView(UpdateView):  # Mofificar un incidencia por su id
@@ -95,7 +114,7 @@ class IncidenciaListView(ListView):  # Mostrar todos lo usuarios
     def get_queryset(self):
         if self.request.user.tipo_persona is '3':
             padreid = self.request.user.id
-            queryset = Incidencia.objects.raw('Select alumno_alumno.matricula, alumno_alumno.grado, alumno_alumno.grupo, incidencia_incidencia.*, incidencia_tipoindicencia.* '
+            queryset = Incidencia.objects.raw('Select alumno_alumno.matricula, incidencia_incidencia.*, incidencia_tipoindicencia.* '
                                               'FROM alumno_alumno '
                                               'INNER JOIN usuario_padrealumno_alumno ON alumno_alumno.matricula=usuario_padrealumno_alumno.alumno_id '
                                               'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_alumno.padrealumno_id=usuario_padrealumno_padre.padrealumno_id  '
@@ -103,7 +122,7 @@ class IncidenciaListView(ListView):  # Mostrar todos lo usuarios
                                               'INNER JOIN incidencia_incidenciaalumno_alumno  ON alumno_alumno.matricula=incidencia_incidenciaalumno_alumno.alumno_id '
                                               'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
                                               'INNER JOIN incidencia_tipoindicencia on incidencia_tipoindicencia.id_tipo=incidencia_incidencia.incidencia_id '
-                                              'WHERE usuario_padrefam.padre_id=%s', [padreid])
+                                              'WHERE usuario_padrefam.padre_id=%s GROUP by incidencia_incidencia.id_incidencia', [padreid])
         else:
             queryset = Incidencia.objects.raw('Select alumno_alumno.matricula, alumno_alumno.grado, alumno_alumno.grupo, incidencia_incidencia.*, incidencia_tipoindicencia.* '
                                               'FROM alumno_alumno '
@@ -112,12 +131,12 @@ class IncidenciaListView(ListView):  # Mostrar todos lo usuarios
                                               'INNER JOIN usuario_padrefam ON usuario_padrealumno_padre.padrefam_id=usuario_padrefam.id '
                                               'INNER JOIN incidencia_incidenciaalumno_alumno  ON alumno_alumno.matricula=incidencia_incidenciaalumno_alumno.alumno_id '
                                               'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
-                                              'INNER JOIN incidencia_tipoindicencia on incidencia_tipoindicencia.id_tipo=incidencia_incidencia.incidencia_id')
+                                              'INNER JOIN incidencia_tipoindicencia on incidencia_tipoindicencia.id_tipo=incidencia_incidencia.incidencia_id GROUP by incidencia_incidencia.id_incidencia')
         return queryset
 
     def get(self, request, *args, **kwargs):
         context = {'object_list': self.get_queryset(),
-                   'title': 'Lista de alumnos',
+                   'title': 'Lista de incidencias',
                    'year': datetime.now().year,
                    'alumno': 'true',
                    }
@@ -144,3 +163,9 @@ def import_data(request):
             'form': form,
             'year': datetime.now().year,
         })
+
+
+class TipoIncidenciaView(viewsets.ModelViewSet):
+    queryset = TipoIndicencia.objects.all()
+    serializer_class = TipoIncidenciaSerializer
+
