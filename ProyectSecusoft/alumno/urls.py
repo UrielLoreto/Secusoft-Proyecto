@@ -1,8 +1,11 @@
 from django.urls import path
+from django.views.generic import RedirectView
+
 from .views import *
 app_name = 'alumnos'
 urlpatterns = [
-    path('', AlumnoListView.as_view(), name='alumnos-lista'),
+    path('', RedirectView.as_view(pattern_name='dashboard:index')),
+    path('lista', AlumnoListView.as_view(), name='alumnos-lista'),
     path('importar', import_data, name='alumnos-importar'),
     path('<int:pk>/', AlumnoDetailView.as_view(), name='alumnos-detalle'),
     path('<int:pk>/modificar/', AlumnoUpdateView.as_view(), name='alumnos-actualizar'),

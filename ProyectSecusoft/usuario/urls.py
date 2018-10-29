@@ -1,8 +1,11 @@
 from django.urls import path
+from django.views.generic import RedirectView
+
 from .views import *
 app_name = 'usuarios'
 urlpatterns = [
-    path('', UsuarioListView.as_view(), name='usuario-lista'),
+    path('', RedirectView.as_view(pattern_name='dashboard:index')),
+    path('lista', UsuarioListView.as_view(), name='usuario-lista'),
     path('perfil/', PerilUsuario, name='usuario-perfil'),
     path('perfil/change-password', change_password, name='change-password'),
     path('perfil/modificar', PerilUsuarioUpdate.as_view(), name='usuario-perfil-actualizar'),

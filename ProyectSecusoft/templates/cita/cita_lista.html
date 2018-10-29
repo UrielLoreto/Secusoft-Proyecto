@@ -25,44 +25,37 @@
 <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
         <div class="x_title">
-          <h2>Lista de usuarios <small>Aquí se muestran los usuarios del sistema.</small></h2>
+          <h2>Lista de citas</h2>
           <div class="clearfix"></div>
         </div>
           <div class="x_content">
-            <p class="text-muted font-13 m-b-30">
-              Responsive is an extension for DataTables that resolves that problem by optimising the table's layout for different screen sizes through the dynamic insertion and removal of columns from the table.
-                </p>
+
                 <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap key" cellspacing="0" width="100%">
                   <thead>
                         <tr>
                           <th scope="col">Id</th>
-                          <th scope="col">Fecha de incidencia</th>
+                          <th scope="col">Fecha de cita</th>
                           <th scope="col">Asunto</th>
                           <th scope="col">Estatus</th>
                           <th scope="col">Observaciones</th>
-                          <th scope="col">Tipo de incidencia</th>
-                          <th scope="col">Editar</th>
-                          <th scope="col">Eliminar</th>
+                          <th scope="col">Descripcion</th>
+                          <th scope="col">Detalles</th>
                         </tr>
                   </thead>
                   <tbody>
-                        {% for incidencia in object_list%}
+                        {% for cita in object_list%}
                         <tr>
-                            <td scope="row">{{ incidencia.id_incidencia }}</td>
-                            <td>{{incidencia.fecha_incidencia}}</td>
-                            <td>{{incidencia.asunto}}</td>
-                            <td>{{incidencia.estatus}}</td>
-                            <td>{{incidencia.observaciones}}</td>
-                            <td>{{incidencia.tipo}}</td>
-                        <td scope="row"><a href="#/pencil-square-o"><i class="fa fa-edit fa-2x" ></i></a></td>
-                          <td><form action="" method="post" style="display: inline">{% csrf_token %}
-                                <a href="#/trash"><i class="fa fa-trash fa-2x"></i></a>
-                          </form>
-                          </td>
+                            <td scope="row">{{ cita.id_cita }}</td>
+                            <td>{{cita.fecha_cita}}</td>
+                            <td>{{cita.asunto}}</td>
+                            <td>{{cita.estatus}}</td>
+                            <td>{{cita.observaciones}}</td>
+                            <td>{{cita.descripcion}}</td>
+                          <td class="td-btn"><a href='{% url 'citas:cita-incidencia-detalle' cita.id_cita%}'><i class="fa fa-info fa-2x text-info" ></i></a></td>
                         </tr>
                         {% empty %}
                         <tr>
-                          <td scope="row" colspan="6">No hay usuarios.</td>
+                          <td scope="row" colspan="6">No hay citas.</td>
                         </tr>
                         {% endfor %}
                   </tbody>

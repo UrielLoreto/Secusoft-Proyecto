@@ -66,17 +66,23 @@ class IncidenciaDetailView(DetailView):  # Detalle de un incidencia por su id
         context = super(IncidenciaDetailView, self).get_context_data(**kwargs)
         _id = self.kwargs.get("pk")
         queryset = Incidencia.objects.raw(
-            'Select alumno_alumno.matricula, alumno_alumno.grado, alumno_alumno.grupo, incidencia_incidencia.*, incidencia_tipoindicencia.* '
-            'FROM alumno_alumno '
-            'INNER JOIN usuario_padrealumno_alumno ON alumno_alumno.matricula=usuario_padrealumno_alumno.alumno_id '
-            'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_alumno.padrealumno_id=usuario_padrealumno_padre.padrealumno_id  '
-            'INNER JOIN usuario_padrefam ON usuario_padrealumno_padre.padrefam_id=usuario_padrefam.id '
-            'INNER JOIN incidencia_incidenciaalumno_alumno  ON alumno_alumno.matricula=incidencia_incidenciaalumno_alumno.alumno_id '
-            'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
-            'INNER JOIN incidencia_tipoindicencia on incidencia_tipoindicencia.id_tipo=incidencia_incidencia.incidencia_id '
-            'WHERE incidencia_incidencia.id_incidencia =%s GROUP by incidencia_incidencia.id_incidencia', [_id])
+            'Select alumno_alumno.matricula, incidencia_incidencia.*, incidencia_tipoindicencia.* '
+            'FROM alumno_alumno INNER JOIN incidencia_incidenciaalumno_alumno on incidencia_incidenciaalumno_alumno.alumno_id = alumno_alumno.matricula '
+            'INNER JOIN incidencia_incidenciaalumno_incidencia ON incidencia_incidenciaalumno_incidencia.incidenciaalumno_id=incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
+            'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_incidencia.incidencia_id '
+            'INNER JOIN incidencia_tipoindicencia ON incidencia_tipoindicencia.id_tipo = incidencia_incidencia.incidencia_id '
+            'WHERE incidencia_incidencia.id_incidencia =%s LIMIT 1', [_id])
+        queryset2 = Incidencia.objects.raw(
+            'Select alumno_alumno.matricula, incidencia_incidencia.id_incidencia '
+            'FROM alumno_alumno INNER JOIN incidencia_incidenciaalumno_alumno on incidencia_incidenciaalumno_alumno.alumno_id = alumno_alumno.matricula '
+            'INNER JOIN incidencia_incidenciaalumno_incidencia ON incidencia_incidenciaalumno_incidencia.incidenciaalumno_id=incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
+            'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_incidencia.incidencia_id '
+            'INNER JOIN incidencia_tipoindicencia ON incidencia_tipoindicencia.id_tipo = incidencia_incidencia.incidencia_id '
+            'WHERE incidencia_incidencia.id_incidencia =%s ', [_id])
+        print(_id)
         # queryset2 = Cita.objects.filter(matricula__in=[o.matricula for o in self.get_queryset()])
         context["object"] = queryset
+        context["alumnos"] = queryset2
         context['year'] = datetime.now().year
         context['title'] = 'Detalles de incidencia'
         return context
@@ -114,32 +120,39 @@ class IncidenciaListView(ListView):  # Mostrar todos lo usuarios
     def get_queryset(self):
         if self.request.user.tipo_persona is '3':
             padreid = self.request.user.id
-            queryset = Incidencia.objects.raw('Select alumno_alumno.matricula, incidencia_incidencia.*, incidencia_tipoindicencia.* '
-                                              'FROM alumno_alumno '
-                                              'INNER JOIN usuario_padrealumno_alumno ON alumno_alumno.matricula=usuario_padrealumno_alumno.alumno_id '
-                                              'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_alumno.padrealumno_id=usuario_padrealumno_padre.padrealumno_id  '
-                                              'INNER JOIN usuario_padrefam ON usuario_padrealumno_padre.padrefam_id=usuario_padrefam.id '
-                                              'INNER JOIN incidencia_incidenciaalumno_alumno  ON alumno_alumno.matricula=incidencia_incidenciaalumno_alumno.alumno_id '
-                                              'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
-                                              'INNER JOIN incidencia_tipoindicencia on incidencia_tipoindicencia.id_tipo=incidencia_incidencia.incidencia_id '
-                                              'WHERE usuario_padrefam.padre_id=%s GROUP by incidencia_incidencia.id_incidencia', [padreid])
-        else:
             queryset = Incidencia.objects.raw('Select alumno_alumno.matricula, alumno_alumno.grado, alumno_alumno.grupo, incidencia_incidencia.*, incidencia_tipoindicencia.* '
-                                              'FROM alumno_alumno '
+                                              'FROM alumno_alumno INNER JOIN incidencia_incidenciaalumno_alumno on incidencia_incidenciaalumno_alumno.alumno_id = alumno_alumno.matricula '
+                                              'INNER JOIN incidencia_incidenciaalumno_incidencia ON incidencia_incidenciaalumno_incidencia.incidenciaalumno_id=incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
+                                              'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_incidencia.incidencia_id '
+                                              'INNER JOIN incidencia_tipoindicencia ON incidencia_tipoindicencia.id_tipo = incidencia_incidencia.incidencia_id '
                                               'INNER JOIN usuario_padrealumno_alumno ON alumno_alumno.matricula=usuario_padrealumno_alumno.alumno_id '
-                                              'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_alumno.padrealumno_id=usuario_padrealumno_padre.padrealumno_id  '
+                                              'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_alumno.padrealumno_id=usuario_padrealumno_padre.padrealumno_id '
                                               'INNER JOIN usuario_padrefam ON usuario_padrealumno_padre.padrefam_id=usuario_padrefam.id '
-                                              'INNER JOIN incidencia_incidenciaalumno_alumno  ON alumno_alumno.matricula=incidencia_incidenciaalumno_alumno.alumno_id '
-                                              'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
-                                              'INNER JOIN incidencia_tipoindicencia on incidencia_tipoindicencia.id_tipo=incidencia_incidencia.incidencia_id GROUP by incidencia_incidencia.id_incidencia')
+                                              'WHERE usuario_padrefam.padre_id =%s', [padreid])
+        else:
+            queryset = Incidencia.objects.raw('Select cita_cita.id_cita, alumno_alumno.matricula, alumno_alumno.grado, alumno_alumno.grupo, incidencia_incidencia.*, incidencia_tipoindicencia.* '
+                                              'FROM alumno_alumno INNER JOIN incidencia_incidenciaalumno_alumno on incidencia_incidenciaalumno_alumno.alumno_id = alumno_alumno.matricula '
+                                              'INNER JOIN incidencia_incidenciaalumno_incidencia ON incidencia_incidenciaalumno_incidencia.incidenciaalumno_id=incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
+                                              'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_incidencia.incidencia_id '
+                                              'INNER JOIN incidencia_tipoindicencia ON incidencia_tipoindicencia.id_tipo = incidencia_incidencia.incidencia_id '
+                                              'LEFT JOIN cita_citaincidencia_incidencia on cita_citaincidencia_incidencia.incidencia_id = incidencia_incidencia.id_incidencia '
+                                              'LEFT JOIN cita_cita ON cita_cita.id_cita = cita_citaincidencia_incidencia.citaincidencia_id')
         return queryset
 
     def get(self, request, *args, **kwargs):
-        context = {'object_list': self.get_queryset(),
-                   'title': 'Lista de incidencias',
-                   'year': datetime.now().year,
-                   'alumno': 'true',
-                   }
+        if self.request.user.tipo_persona is '3':
+            context = {'object_list': self.get_queryset(),
+                       'title': 'Lista de incidencias',
+                       'padre': True,
+                       'year': datetime.now().year,
+                       'alumno': 'true',
+                       }
+        else:
+            context = {'object_list': self.get_queryset(),
+                       'title': 'Lista de incidencias',
+                       'year': datetime.now().year,
+                       'alumno': 'true',
+                       }
         return render(request, self.template_name, context)
 
 

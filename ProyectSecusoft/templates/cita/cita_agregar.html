@@ -1,6 +1,7 @@
 {% extends 'base/index.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
+{% crispy example_form example_form.helper %}
 {% block css %}
     <style>
 .asteriskField {
@@ -48,46 +49,22 @@
                   <div class="clearfix"></div>
                </div>
                <div class="x_content center">
-<h3>Agregar Cita</h3>
-    <form action="." method="POST"> {% csrf_token %}
-
-       <table class="table">
-           <tr>
-               <td colspan="2">Asunto</td>
-               <td colspan="2"><input type="text" class="form-control"></td>
-           </tr>
-           <tr>
-               <td>Fecha de Inicio</td>
-               <td><input type="date" class="form-control"></td>
-               <td>Hora de Inicio</td>
-               <td><input type="time" class="form-control"></td>
-           </tr>
-           <tr>
-               <td>Fecha Fin</td>
-               <td><input type="date" class="form-control"></td>
-               <td>Hora Fin</td>
-               <td><input type="time" class="form-control"></td>
-           </tr>
-           <tr>
-               <td colspan="2">Incidencia</td>
-               <td colspan="2"><select class="form-control">
-                   <option>Seleccione una Indicidencia</option>
-                   <option>Incidencia 1</option>
-                   <option>Incidencia 2</option>
-                   <option>Incidencia 3</option>
-               </select></td>
-           </tr>
-           <tr>
-               <td colspan="4"><textarea placeholder="Observaciones" class="form-control"></textarea></td>
-           </tr>
-           <tr>
-               <td></td>
-               <td></td>
-               <td><button class="btn btn-success" type="submit">Guardar</button></td>
-               <td><button class="btn btn-danger">Cancelar</button></td>
-           </tr>
-       </table>
-    </form>
+                  <table id="datatable-responsive" class="dt-responsive" cellspacing="0" width="100%">
+                        <div class="col-md-6 ">
+                         {% if incidencia %}
+                         <!-- Docente -->
+                      {{ form|crispy }}
+                            {{ form2|crispy }}
+                         <!-- Docente -->
+                         {% else %}
+                         <!-- Padre de familia -->
+                      {{ form|crispy }}
+                             <!-- Padre de familia -->
+                         {% endif %}
+                        </div>
+                     </tbody>
+                  </table>
+                  <button class="btn btn-success" type="submit">Agregar</button>
                </div>
             </div>
          </div>
@@ -109,39 +86,18 @@
   <script src="{% static 'base/js/select/select2.full.js' %}"></script>
   <script src="{% static 'base/js/autocomplete/jquery.autocomplete.js' %}"></script>
   <script src="{% static 'base/js/validator/validator.js' %}"></script>
-{% if alumno %}
-    <!-- Alumno -->
     <script>
     $(function() {
-      $('#id_fecha_nacimiento').daterangepicker({
+      $('#id_fecha_cita').daterangepicker({
         format: 'YYYY-MM-DD',
         locale: 'es',
         singleDatePicker: true,
         showDropdowns: true,
-        defaultDate: new Date('2004-01-01'),
-        minDate: new Date('2004-01-01'),
-        maxDate : new Date('2015-01-01'),
-          value: '2005-01-01'
+        var: f = new Date(),
+        defaultDate: (f.getFullYear() + "-" + f.getMonth() + "-" + f.getDate()),
+        minDate: (f.getFullYear() + "-" + (f.getMonth() +1) + "-" + f.getDate()),
+        maxDate : (f.getFullYear() + "-" + (f.getMonth() +2) + "-" + f.getDate())
       });
     });
     </script>
-    <!-- Alumno -->
-{% else %}
-    <script>
-    $(function() {
-      $('#id_fecha_nacimiento').daterangepicker({
-        format: 'YYYY-MM-DD',
-        locale: 'es',
-        singleDatePicker: true,
-        showDropdowns: true,
-        defaultDate: new Date('2004-01-01'),
-        minDate: new Date('1980-01-01'),
-        maxDate : new Date('2015-01-01'),
-          value: '2005-01-01'
-      });
-    });
-    </script>
-{% endif %}
-
-
 {% endblock %}

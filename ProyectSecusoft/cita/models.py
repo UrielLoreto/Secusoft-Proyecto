@@ -19,8 +19,8 @@ class Cita(models.Model):
 
 
 class CitaIncidencia(models.Model):
-    incidencia = models.ManyToManyField(Incidencia, blank=True)
-    cita = models.ManyToManyField(Cita, blank=True)
+    incidencia = models.ManyToManyField(Incidencia)
+    cita = models.ManyToManyField(Cita)
 
 
 class Comentario(models.Model):

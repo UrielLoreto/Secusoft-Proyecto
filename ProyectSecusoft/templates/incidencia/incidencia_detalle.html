@@ -29,10 +29,11 @@
         </div>
         <div class="x_content">
             <table id="datatable-responsive 2" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                <h2><label>Informacion Personal</label></h2>
+                <h2><label>Detalle de la incidencia</label></h2>
                 <tbody>
                 {% for incidencia in object %}
-                        <tr><td>Matricula del alumno:</td><td>{{ incidencia.matricula }}</td></tr>
+
+                        <tr><td>Matricula del/(los) alumno(s):</td><td>{% for alumno in alumnos %}<a class="tile_count green" href='{% url 'alumnos:alumnos-detalle' alumno.matricula %}'>{{ alumno.matricula  }}</a><br>{% endfor %}</td></tr>
                         <tr><td>Asunto de la incidencia:</td><td>{{ incidencia.asunto }}</td></tr>
                         <tr><td>Estatus:</td><td>{{ incidencia.get_estatus_display }}</td></tr>
                         <tr><td>Tipo:</td><td>{{ incidencia.tipo}}</td></tr>

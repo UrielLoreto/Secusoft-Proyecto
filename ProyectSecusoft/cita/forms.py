@@ -1,22 +1,25 @@
 from django import forms
 from .models import *
 
-#
-# class PersonaForm(forms.ModelForm):
-#     class Meta:
-#         model = Persona
-#         fields = (
-#             'nombre',
-#             'apellido',
-#             'fecha_nacimiento',
-#             'correo',
-#             'telefono',
-#             'tipo_persona',
-#             'sexo'
-#         )
+
+class CitaOtroForm(forms.ModelForm):
+    class Meta:
+        model = Cita
+        fields = '__all__'
+        exclude = ['estatus']
 
 
-class RawCita(forms.Form):
-    nombre = forms.CharField()
-    apellido = forms.CharField()
-    fecha_nacimiento = forms.DateField()
+class CitaIncidenciaForm(forms.ModelForm):
+    class Meta:
+        model = Cita
+        fields = '__all__'
+        exclude = ['estatus']
+
+
+class IncidenciaForm(forms.ModelForm):
+    class Meta:
+        model = CitaIncidencia
+        fields = ['incidencia']
+        print(fields)
+        print("holaaaa")
+
