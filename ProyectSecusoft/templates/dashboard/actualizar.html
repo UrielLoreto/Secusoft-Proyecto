@@ -24,17 +24,10 @@
 <!-- switchery -->
 <link rel="stylesheet" href="{% static 'base/css/switchery/switchery.min.css' %}" />
 {% endblock %}
-
 {% block content %}
 {% block titulo %}
 <title>{{ title }} - SecuSoft</title>
 {% endblock %}
-{#Solo deja agregar al administrador#}
-{% if user.get_type == '1' %}
-    {% else %}
-<meta http-equiv="REFRESH" content="0;url={% url 'dashboard:index' %}">
-{% endif %}
-
 <form method="POST"  class="form-horizontal form-label-left">
 
    {% csrf_token %}
@@ -51,11 +44,15 @@
                <div class="x_content center">
                   <table id="datatable-responsive" class="dt-responsive" cellspacing="0" width="100%">
                         <div class="col-md-6 ">
-                         {{ form|crispy }}
+                            {% if padre %}
+                                {% crispy formp %}
+                            {% else %}
+                                {% crispy form %}
+                            {% endif %}
                         </div>
                      </tbody>
                   </table>
-                  <button class="btn btn-success" type="submit">Agregar</button>
+                  <button class="btn btn-success" type="submit">Actualizar</button>
                </div>
             </div>
          </div>
@@ -67,5 +64,49 @@
 <!-- pace -->
 <script src="{% static 'base/js/custom.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'base/js/moment/moment.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'base/js/datepicker/daterangepicker.js' %}"></script>
+<script type="text/javascript" src="{% static 'base/js/autocomplete/countries.js' %}"></script>
+
+  <!-- daterangepicker -->
+  <script type="text/javascript" src="{% static 'base/js/moment/moment.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'base/js/datepicker/daterangepicker.js' %}"></script>
+  <!-- select2 -->
+  <script src="{% static 'base/js/select/select2.full.js' %}"></script>
+  <script src="{% static 'base/js/autocomplete/jquery.autocomplete.js' %}"></script>
+  <script src="{% static 'base/js/validator/validator.js' %}"></script>
+{% if alumno %}
+    <!-- Alumno -->
+    <script>
+    $(function() {
+      $('#id_fecha_nacimiento').daterangepicker({
+        format: 'YYYY-MM-DD',
+        locale: 'es',
+        singleDatePicker: true,
+        showDropdowns: true,
+        defaultDate: new Date('2004-01-01'),
+        minDate: new Date('2004-01-01'),
+        maxDate : new Date('2015-01-01'),
+          value: '2005-01-01'
+      });
+    });
+    </script>
+    <!-- Alumno -->
+{% else %}
+    <script>
+    $(function() {
+      $('#id_fecha_nacimiento').daterangepicker({
+        format: 'YYYY-MM-DD',
+        locale: 'es',
+        singleDatePicker: true,
+        showDropdowns: true,
+        defaultDate: new Date('2004-01-01'),
+        minDate: new Date('1980-01-01'),
+        maxDate : new Date('2015-01-01'),
+          value: '2005-01-01'
+      });
+    });
+    </script>
+{% endif %}
+
 
 {% endblock %}

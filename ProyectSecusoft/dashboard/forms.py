@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login
 from usuario.models import Usuario
+from .models import Aviso
 from django import forms
 
 
@@ -32,3 +33,12 @@ class LoginForm(forms.Form):
         return data
 
 
+class AvisoForm(forms.ModelForm):
+    class Meta:
+        model = Aviso
+        fields = '__all__'
+    asunto = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'require': 'true'}),
+        label='Asunto del aviso:')
