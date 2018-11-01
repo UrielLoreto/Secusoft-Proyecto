@@ -1,10 +1,15 @@
+import pickle
 from datetime import datetime
 from django.shortcuts import redirect, get_object_or_404, get_list_or_404, render
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from rest_framework import viewsets
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.response import Response
 
 from cita.models import Cita
 from incidencia.serializers import TipoIncidenciaSerializer
+from usuario.models import PadreFam, PadreAlumno
 from .forms import *
 from django.contrib import messages
 from django.views.generic import (
@@ -182,3 +187,28 @@ class TipoIncidenciaView(viewsets.ModelViewSet):
     queryset = TipoIndicencia.objects.all()
     serializer_class = TipoIncidenciaSerializer
 
+
+class CustomAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        if user.tipo_persona is '3':
+            queryset = PadreAlumno.objects.filter(padre__padre_id=user.pk)
+            alumnos = {}
+            for a in queryset:
+                alumnos = a.alumno.values('matricula'), a.alumno.values('nombre'), a.alumno.values('grado'), a.alumno.values('grupo')
+            return Response({
+                'token': token.key,
+                'user_id': user.pk,
+                'alumnos': alumnos,
+            })
+        else:
+
+            return Response({
+                'token': token.key,
+                'user_id': user.pk,
+                'email': user.email
+            })

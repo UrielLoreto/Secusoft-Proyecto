@@ -155,7 +155,8 @@ class CitaIncidenciaListView(ListView):  # Mostrar todos lo usuarios
             #                                   'INNER JOIN incidencia_tipoindicencia ON incidencia_tipoindicencia.id_tipo = incidencia_incidencia.incidencia_id '
             #                                   'INNER JOIN cita_citaincidencia_incidencia on cita_citaincidencia_incidencia.incidencia_id = incidencia_incidencia.id_incidencia '
             #                                   'INNER JOIN cita_cita ON cita_cita.id_cita = cita_citaincidencia_incidencia.citaincidencia_id GROUP BY cita_cita.id_cita')
-            queryset = Cita.objects.all()
+            print("a")
+        queryset = Cita.objects.all()
         return queryset
 
     def get(self, request, *args, **kwargs):

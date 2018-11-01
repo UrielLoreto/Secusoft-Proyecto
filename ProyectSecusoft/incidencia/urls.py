@@ -19,5 +19,5 @@ urlpatterns = [
     path('<int:pk>/modificar/', IncidenciaUpdateView.as_view(), name="incidencia-actualizar"),
     path('<int:pk>/eliminar/', IncidenciaDeleteView.as_view(), name="incidencia-eliminar"),
     path('mobile/api/', include(router.urls)),
-    path('mobile/api/api-token-auth/', views.obtain_auth_token, name='api-token-auth'),
+    path('mobile/api/api-token-auth/', CustomAuthToken.as_view(), name='api-token-auth'),
 ]
