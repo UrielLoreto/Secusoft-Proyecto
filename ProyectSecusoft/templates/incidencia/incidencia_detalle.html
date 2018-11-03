@@ -31,6 +31,13 @@
             <table id="datatable-responsive 2" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                 <h2><label>Detalle de la incidencia</label></h2>
                 <tbody>
+                {% if Tipo %}
+                {% for incidencia in object %}
+                        <tr><td>Asunto de la incidencia:</td><td>{{ incidencia.asunto }}</td></tr>
+                        <tr><td>Tipo:</td><td>{{ incidencia.get_tipo_display}}</td></tr>
+                        <tr><td>Impacto:</td><td>{{ incidencia.get_impacto_display }}</td></tr>
+                {% endfor %}
+                {% else %}
                 {% for incidencia in object %}
 
                         <tr><td>Matricula del/(los) alumno(s):</td><td>{% for alumno in alumnos %}<a class="tile_count green" href='{% url 'alumnos:alumnos-detalle' alumno.matricula %}'>{{ alumno.matricula  }}</a><br>{% endfor %}</td></tr>
@@ -42,6 +49,7 @@
                         <tr><td>Cita relacionada:</td><td>{{ incidencia.fecha_incidencia}}</td></tr>
                         <tr><td>Fecha de registro:</td><td>{{ incidencia.fecha_incidencia }}</td></tr>
                 {% endfor %}
+                {% endif %}
                 </tbody>
             </table>
             <div class="col-md-5 col-sm-12 col-xs-12 form-group"></div>

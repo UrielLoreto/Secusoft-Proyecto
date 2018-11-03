@@ -9,6 +9,12 @@ class IncidenciaForm(forms.ModelForm):
         exclude = ['estatus']
 
 
+class IncidenciaTipoForm(forms.ModelForm):
+    class Meta:
+        model = TipoIndicencia
+        fields = '__all__'
+
+
 class IncidenciaAlForm(forms.ModelForm):
     class Meta:
         model = IncidenciaAlumno

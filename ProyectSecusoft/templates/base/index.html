@@ -33,7 +33,7 @@
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="{% url 'dashboard:index' %}" class="site_title"><i class="fa fa-university"></i> <span>SecuSoft</span></a>
+              <a href="{% url 'dashboard:index' %}" class="site_title"><i class="fa fa-paper-plane"></i> <span>SecuSoft</span></a>
             </div>
 
             <div class="clearfix"></div>
@@ -47,6 +47,7 @@
                   <span>Bienvenido,</span>
                   {% endif %}
                 <h2>{{user.get_full_name}}</h2>
+
               </div>
             </div>
             <!-- /menu profile quick info -->
@@ -90,6 +91,12 @@
                       <li><a href="{% url 'incidencias:incidencia-nueva' %}">Agregar</a></li>
                       <li><a href="{% url 'incidencias:incidencia-lista' %}">Listado</a></li>
                     </ul>
+                    </li>
+                    <li><a><i class="fa fa-book"></i> Tipo de Incidencias <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{% url 'incidencias:incidenciatipo-nueva' %}">Agregar</a></li>
+                      <li><a href="{% url 'incidencias:incidenciatipo-lista' %}">Listado</a></li>
+                    </ul>
                   </li>
                   <li><a><i class="fa fa-calendar"></i> Citas <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
@@ -110,7 +117,7 @@
                       <li><a href="{% url 'incidencias:incidencia-importar' %}">Importar lista de tipos de incidencia</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-clone"></i> Avisos <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-comment"></i> Avisos <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{% url 'dashboard:avisos' %}">Agregar</a></li>
                       <li><a href="{% url 'dashboard:aviso-lista' %}">Lista</a></li>
@@ -128,29 +135,48 @@
                 <h3>General</h3>
                 <ul class="nav side-menu">
                   <li><a href="{% url 'dashboard:index' %}" class="active"><i class="fa fa-home"></i>Inicio</a></li>
-                  <li><a><i class="fa fa-user"></i> Alumnos <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-bookmark"></i> Grupo Tutorado<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{% url 'alumnos:alumnos-lista' %}">Listado</a></li>
+                        {% for a in grupotutor %}
+                        <li><a href="#">{{ a.grado}}°{{ a.grupo }} </a></li>
+                        {% endfor %}
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-user"></i> Materias <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-briefcase"></i> Materias Asignadas <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{% url 'materias:materia-lista' %}">Listado</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-book"></i> Incidencias <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-book"></i> Registrar Incidencias <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{% url 'incidencias:incidencia-nueva' %}">Agregar</a></li>
-                      <li><a href="#">Listado</a></li>
+                        {% for a in materias %}
+                        <li><a href="#">{{ a.grado}}°{{ a.grupo }}, Materia {{ a.nombre }} </a></li>
+                            {% endfor %}
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-calendar"></i> Citas <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-folder-open"></i> Mostrar Incidencias <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{% url 'citas:cita-incidencia-nueva' %}">Agregar por incidencia</a></li>
-                      <li><a href="{% url 'citas:cita-incidencia-lista' %}">Listado por incidencia</a></li>
+                        {% for a in materias %}
+                        <li><a href="#">{{ a.grado}}°{{ a.grupo }}, Materia {{ a.nombre }} </a></li>
+                        {% endfor %}
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-bar-chart-o"></i> Concentrados <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-envelope"></i>Agregar Citas <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        {% for a in materias %}
+                        <li><a href="#">{{ a.grado}}°{{ a.grupo }}, Materia {{ a.nombre }} </a></li>
+                        {% endfor %}
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-calendar"></i>Mostrar Citas <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        {% for a in materias %}
+                        <li><a href="#">{{ a.grado}}°{{ a.grupo }}, Materia {{ a.nombre }} </a></li>
+                        {% endfor %}
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-print"></i>Concentrados de informacion <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="#">Usuarios</a></li>
                       <li><a href="#">Incidencias</a></li>

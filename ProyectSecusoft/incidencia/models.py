@@ -26,6 +26,9 @@ class TipoIndicencia(models.Model):
     def __str__(self):
         return '%s' % self.asunto
 
+    def get_absolute_url(self):
+        return reverse("incidencias:incidenciatipo-detalle", kwargs={"id": self.id_tipo})
+
 
 class Incidencia(models.Model):
     estatus_tipo = (

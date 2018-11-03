@@ -1,6 +1,8 @@
 from datetime import datetime
 from django.shortcuts import reverse, get_object_or_404, get_list_or_404, render
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
+
+from materia.models import Materia
 from .forms import *
 from usuario.models import PadreAlumno, Usuario
 from django.shortcuts import render, redirect
@@ -121,9 +123,18 @@ class AlumnoListView(ListView):  # Mostrar todos lo usuarios
                        'alumno': 'true',
                        }
         else:
+            id = self.request.user.id
+            materias = Materia.objects.raw(
+                'SELECT DISTINCT materia_materia.* FROM usuario_docente '
+                'LEFT JOIN materia_materiadocente_docente on materia_materiadocente_docente.docente_id = usuario_docente.id '
+                'LEFT JOIN materia_materiadocente_materia on materia_materiadocente_materia.materiadocente_id = materia_materiadocente_docente.materiadocente_id '
+                'LEFT JOIN materia_materia on materia_materia.id = materia_materiadocente_materia.materia_id '
+                'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_docente.docente_id '
+                'WHERE usuario_usuario.id = %s ORDER by materia_materia.id', [id])
             context = {'object_list': self.get_queryset(),
                        'title': 'Lista de alumnos',
                        'year': datetime.now().year,
+                       'materias': materias,
                        'alumno': 'true',
                        }
         return render(request, self.template_name, context)

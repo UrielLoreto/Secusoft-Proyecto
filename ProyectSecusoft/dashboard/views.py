@@ -2,8 +2,9 @@ from django.shortcuts import render
 from datetime import datetime
 from django.contrib.auth import logout
 from django.urls import reverse
-
 from dashboard.models import Aviso
+from materia.models import MateriaDocente, Materia
+from usuario.models import Docente
 from .forms import LoginForm, AvisoForm
 from django.http import HttpResponseRedirect
 from django.views.generic import (
@@ -11,8 +12,52 @@ from django.views.generic import (
     CreateView, ListView, UpdateView)
 
 
-def index(request):
-    return render(request, 'dashboard/index.html', {'title': 'Inicio', 'year': datetime.now().year, })
+class Index(ListView):
+    template_name = 'dashboard/index.html'
+
+    def get(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            if self.request.user.tipo_persona is '1':
+                context = {'title': 'Lista de avisos',
+                           'year': datetime.now().year,
+                           }
+                return render(request, self.template_name, context)
+
+            elif self.request.user.tipo_persona is '2':
+                id = self.request.user.id
+                docente = Docente.objects.filter(docente_id=id)
+                tutor = [b.tutor for b in docente]
+                materias = Materia.objects.raw(
+                    'SELECT DISTINCT materia_materia.* FROM usuario_docente '
+                    'LEFT JOIN materia_materiadocente_docente on materia_materiadocente_docente.docente_id = usuario_docente.id '
+                    'LEFT JOIN materia_materiadocente_materia on materia_materiadocente_materia.materiadocente_id = materia_materiadocente_docente.materiadocente_id '
+                    'LEFT JOIN materia_materia on materia_materia.id = materia_materiadocente_materia.materia_id '
+                    'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_docente.docente_id '
+                    'WHERE usuario_usuario.id = %s ORDER by materia_materia.id', [id])
+                if tutor == ['1']:
+                    context = {'title': 'Lista de avisos',
+                               'year': datetime.now().year,
+                               'materias': materias,
+                               'grupotutor': docente,
+                               }
+                    return render(request, self.template_name, context)
+                else:
+                    print("no es tutor")
+                    context = {'title': 'Lista de avisos',
+                           'year': datetime.now().year,
+                           'materias': materias,
+                           }
+                    return render(request, self.template_name, context)
+            elif self.request.user.tipo_persona is '3':
+                context = {'title': 'Lista de avisos',
+                           'year': datetime.now().year,
+                           }
+                return render(request, self.template_name, context)
+        else:
+            context = {'title': 'Lista de avisos',
+                       'year': datetime.now().year,
+                       }
+            return render(request, self.template_name, context)
 
 
 class LoginView(FormView):
@@ -114,5 +159,4 @@ class AlumnoListView(ListView):  # Mostrar todos lo usuarios
                    'title': 'Lista de avisos',
                    'year': datetime.now().year,
                    }
-
         return render(request, self.template_name, context)
