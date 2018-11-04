@@ -1,6 +1,8 @@
 from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.urls import reverse
+
 from .forms import *
 from django.views.generic import (
     CreateView,
@@ -31,28 +33,32 @@ class MateriaListView(ListView):  # Mostrar todos lo usuarios
 
         elif self.request.user.tipo_persona is '1':
             queryset = Materia.objects.raw(
-                'SELECT materia_materia.*, materia_materiadocente_docente.*, usuario_docente.* '
-                'From materia_materia '
-                'LEFT join materia_materiadocente_docente on materia_materia.id=materia_materiadocente_docente.materiadocente_id '
-                'LEFT join usuario_docente on materia_materiadocente_docente.docente_id=usuario_docente.id')
+                    'SELECT DISTINCT materia_materia.*, usuario_docente.*, usuario_usuario.nombre as nombre2, usuario_usuario.apellido as apellido2 FROM usuario_docente '
+                    'INNER JOIN materia_materiadocente_docente on materia_materiadocente_docente.docente_id = usuario_docente.id '
+                    'INNER JOIN materia_materiadocente_materia on materia_materiadocente_materia.materiadocente_id = materia_materiadocente_docente.materiadocente_id '
+                    'INNER JOIN materia_materia on materia_materia.id = materia_materiadocente_materia.materia_id '
+                    'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_docente.docente_id '
+                    'ORDER by materia_materia.id')
             return queryset
 
     def get(self, request, *args, **kwargs):
-        id = self.request.user.id
-        materias = Materia.objects.raw(
-            'SELECT DISTINCT materia_materia.* FROM usuario_docente '
-            'LEFT JOIN materia_materiadocente_docente on materia_materiadocente_docente.docente_id = usuario_docente.id '
-            'LEFT JOIN materia_materiadocente_materia on materia_materiadocente_materia.materiadocente_id = materia_materiadocente_docente.materiadocente_id '
-            'LEFT JOIN materia_materia on materia_materia.id = materia_materiadocente_materia.materia_id '
-            'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_docente.docente_id '
-            'WHERE usuario_usuario.id = %s ORDER by materia_materia.id', [id])
-        context = {
-            'object_list': self.get_queryset(),
-            'materias': materias,
-            'title': 'Lista de materias',
-            'year': datetime.now().year,
-        }
-        return render(request, self.template_name, context)
+        if self.request.user.is_authenticated:
+            id = self.request.user.id
+            materias = Materia.objects.raw(
+                'SELECT DISTINCT materia_materia.* FROM usuario_docente '
+                'INNER JOIN materia_materiadocente_docente on materia_materiadocente_docente.docente_id = usuario_docente.id '
+                'INNER JOIN materia_materiadocente_materia on materia_materiadocente_materia.materiadocente_id = materia_materiadocente_docente.materiadocente_id '
+                'INNER JOIN materia_materia on materia_materia.id = materia_materiadocente_materia.materia_id '
+                'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_docente.docente_id '
+                'WHERE usuario_usuario.id = %s ORDER by materia_materia.grado', [id])
+            context = {
+                'object_list': self.get_queryset(),
+                'materias': materias,
+                'title': 'Lista de materias',
+                'year': datetime.now().year,
+            }
+            return render(request, self.template_name, context)
+        return HttpResponseRedirect(reverse('dashboard:index'))
 
 
 class MateriaCreateView(CreateView):  # Mostrar todos lo usuarios

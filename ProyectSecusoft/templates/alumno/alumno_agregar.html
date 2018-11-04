@@ -7,6 +7,7 @@
 .asteriskField {
     display: none;
 }
+
     </style>
 <!-- Bootstrap core CSS -->
 <link href="{% static 'base/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -30,10 +31,9 @@
 <title>{{ title }} - SecuSoft</title>
 {% endblock %}
 {#Solo deja agregar al administrador#}
-{% if user.get_type == '1' %}
-    {% else %}
-<meta http-equiv="REFRESH" content="0;url={% url 'dashboard:index' %}">
-{% endif %}
+    {% if user.get_type != '1' %}
+    <meta http-equiv="REFRESH" content="0;url={% url 'dashboard:index' %}">
+    {% endif %}
 
 <form method="POST"  class="form-horizontal form-label-left">
 

@@ -7,6 +7,7 @@ class IncidenciaForm(forms.ModelForm):
         model = Incidencia
         fields = '__all__'
         exclude = ['estatus']
+        labels = {'incidencia': 'Tipo de incidencia'}
 
 
 class IncidenciaTipoForm(forms.ModelForm):
@@ -18,7 +19,16 @@ class IncidenciaTipoForm(forms.ModelForm):
 class IncidenciaAlForm(forms.ModelForm):
     class Meta:
         model = IncidenciaAlumno
-        fields = ['alumno']
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        grado = kwargs.pop('grado')
+        grupo = kwargs.pop('grupo')
+        pk = kwargs.pop('pk')
+        super(IncidenciaAlForm, self).__init__(*args, **kwargs)
+        print(grado)
+        self.fields['alumno'].queryset = Alumno.objects.filter(grado=grado, grupo=grupo)
+        self.fields['incidencia'].queryset = Incidencia.objects.filter(id_incidencia=pk)
 
 
 class IndicenciaDocenteForm(forms.ModelForm):

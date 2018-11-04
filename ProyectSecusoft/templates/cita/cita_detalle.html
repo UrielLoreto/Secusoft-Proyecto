@@ -33,20 +33,34 @@
                 <tbody>
                 {% for cita in object %}
                         <tr><td>Asunto de la cita:</td><td>{{ cita.asunto }}</td></tr>
-                        <tr><td>Estatus:</td><td>{{ cita.get_estatus_display }}</td></tr>
+                    {% if cita.estatus == '1' %}
+                            <tr><td>Estatus:</td>
+                                <td>{{cita.get_estatus_display}}</td></tr>
+                                                            {% if user.get_type == '3' %}
+
+                        <tr><td>Responder a la solicitud:</td>
+                                <td><br> <a href='#' title="Aceptar"><i class="fa fa-thumbs-up fa-2x" ></i></a>     <a href='#' title="Rechazar"><i class="fa fa-thumbs-down fa-2x" ></i></a></td></tr>
+                                                                {% endif %}
+                                {% else %}
+                               <tr><td>Estatus:</td> <td>{{cita.get_estatus_display}}</td>
+                            </tr>{% endif %}
                         <tr><td>Descripcion:</td><td>{{ cita.descripcion }}</td></tr>
                         <tr><td>Observaciones:</td><td>{{ cita.observaciones }}</td></tr>
-                        <tr><td>Incidencia relacionada:</td><td><a class="tile_count green" href='{% url 'incidencias:incidencia-detalle' cita.id_incidencia%}'>{{ cita.asunto2 }}</a></td></tr>
-                        <tr><td>Fecha de registro:</td><td>{{ cita.fecha_cita }}</td></tr>
+                        <tr><td>Incidencia relacionada:</td><td><a class="tile_count green" href='{% url 'incidencias:incidencia-detalle' cita.idincidencia%}'>{{ cita.asunto2 }}</a></td></tr>
+                        <tr><td>Fecha de la cita:</td><td>{{ cita.fecha_cita }}</td></tr>
                 {% endfor %}
                 </tbody>
             </table>
             <div class="col-md-5 col-sm-12 col-xs-12 form-group"></div>
+        {% if user.get_type == '1' %}
             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                 Editar informacion
 {#            <td scope="row" class="align-right col-md-1 col-sm-12 col-xs-12 form-group"><a href='{% url 'alumnos:alumnos-actualizar' alumno.matricula %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>#}
             <div class="col-md-4 col-sm-12 col-xs-12 form-group"></div>
         </div>
+        {% endif %}
+        <div class="col-md-5 col-sm-12 col-xs-12 form-group">     <a href="{% url 'citas:cita-incidencia-lista' %}" class="btn btn-success" role="button">Regresar</a>
+</div>
     </div>
 </div>
 

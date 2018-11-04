@@ -29,11 +29,11 @@ class Index(ListView):
                 tutor = [b.tutor for b in docente]
                 materias = Materia.objects.raw(
                     'SELECT DISTINCT materia_materia.* FROM usuario_docente '
-                    'LEFT JOIN materia_materiadocente_docente on materia_materiadocente_docente.docente_id = usuario_docente.id '
-                    'LEFT JOIN materia_materiadocente_materia on materia_materiadocente_materia.materiadocente_id = materia_materiadocente_docente.materiadocente_id '
-                    'LEFT JOIN materia_materia on materia_materia.id = materia_materiadocente_materia.materia_id '
+                    'INNER JOIN materia_materiadocente_docente on materia_materiadocente_docente.docente_id = usuario_docente.id '
+                    'INNER JOIN materia_materiadocente_materia on materia_materiadocente_materia.materiadocente_id = materia_materiadocente_docente.materiadocente_id '
+                    'INNER JOIN materia_materia on materia_materia.id = materia_materiadocente_materia.materia_id '
                     'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_docente.docente_id '
-                    'WHERE usuario_usuario.id = %s ORDER by materia_materia.id', [id])
+                    'WHERE usuario_usuario.id = %s ORDER by materia_materia.grado ASC ', [id])
                 if tutor == ['1']:
                     context = {'title': 'Lista de avisos',
                                'year': datetime.now().year,

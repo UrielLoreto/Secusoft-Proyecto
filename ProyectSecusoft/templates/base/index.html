@@ -88,7 +88,9 @@
                   </li>
                   <li><a><i class="fa fa-book"></i> Incidencias <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{% url 'incidencias:incidencia-nueva' %}">Agregar</a></li>
+                      <li><a href="{% url 'incidencias:incidencia-nueva' grado=1 grupo='A' %}">Agregar</a></li>
+{#                      <li><a href="{% url 'incidencias:incidencia-nueva-al' grado=1 grupo='A'%}">Agregar a</a></li>#}
+
                       <li><a href="{% url 'incidencias:incidencia-lista' %}">Listado</a></li>
                     </ul>
                     </li>
@@ -149,16 +151,15 @@
                   </li>
                   <li><a><i class="fa fa-book"></i> Registrar Incidencias <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{% url 'incidencias:incidencia-nueva' %}">Agregar</a></li>
                         {% for a in materias %}
-                        <li><a href="#">{{ a.grado}}°{{ a.grupo }}, Materia {{ a.nombre }} </a></li>
+                        <li><a href="{% url 'incidencias:incidencia-nueva' grado=a.grado grupo=a.grupo%}">{{ a.grado}}°{{ a.grupo }}, Materia {{ a.nombre }} </a></li>
                             {% endfor %}
                     </ul>
                   </li>
                   <li><a><i class="fa fa-folder-open"></i> Mostrar Incidencias <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         {% for a in materias %}
-                        <li><a href="#">{{ a.grado}}°{{ a.grupo }}, Materia {{ a.nombre }} </a></li>
+                        <li><a href="{% url 'incidencias:incidencia-lista-al' grado=a.grado grupo=a.grupo%}">{{ a.grado}}°{{ a.grupo }}, Materia {{ a.nombre }} </a></li>
                         {% endfor %}
                     </ul>
                   </li>
@@ -254,12 +255,38 @@
                     {{user.get_full_name}}
                     <span class=" fa fa-angle-down"></span>
                   </a>
-                  <ul class="dropdown-menu dropdown-usermenu pull-right">
+                  <ul class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">
+
+                </a>
                     <li><a href="{% url 'usuarios:usuario-perfil' %}"> Perfil</a></li>
                     <li><a href='{% url 'usuarios:change-password' %}'>Cambiar contraseña</a></li>
                     <li><a href="{% url 'dashboard:logout' %}"><i class="fa fa-sign-out pull-right"></i> Cerrar sesion</a></li>
                   </ul>
                 </li>
+{#                <li role="presentation" class="dropdown">#}
+{#                <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">#}
+{#                  <i class="fa fa-envelope-o"></i>#}
+{#                  <span class="badge bg-green">1</span>#}
+{#                </a>#}
+{#                <ul id="menu1" class="dropdown-menu list-unstyled msg_list animated fadeInDown" role="menu">#}
+{#                  <li>#}
+{#                    <a>#}
+{#                      <span>#}
+{#                          <span>John Smith</span>#}
+{#                      <span class="time">3 mins ago</span>#}
+{#                      </span>#}
+{#                      <span class="message">Film festivals used to be do-or-die moments for movie makers. They were where...   </span>#}
+{#                    </a>#}
+{#                  </li>#}
+{#                    <div class="text-center">#}
+{#                      <a>#}
+{#                        <strong>See All Alerts</strong>#}
+{#                        <i class="fa fa-angle-right"></i>#}
+{#                      </a>#}
+{#                    </div>#}
+{#                  </li>#}
+{#                </ul>#}
+{#              </li>#}
               </ul>
             </nav>
           </div>

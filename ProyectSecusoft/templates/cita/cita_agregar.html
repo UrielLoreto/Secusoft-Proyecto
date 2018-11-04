@@ -30,7 +30,7 @@
 <title>{{ title }} - SecuSoft</title>
 {% endblock %}
 {#Solo deja agregar al administrador#}
-{% if user.get_type == '1' %}
+{% if user.get_type == '1' or user.get_type == '2' %}
     {% else %}
 <meta http-equiv="REFRESH" content="0;url={% url 'dashboard:index' %}">
 {% endif %}
@@ -50,7 +50,7 @@
                </div>
                <div class="x_content center">
                   <table id="datatable-responsive" class="dt-responsive" cellspacing="0" width="100%">
-                        <div class="col-md-6 ">
+                        <div class="x_content">
                          {% if incidencia %}
                          <!-- Docente -->
                       {{ form|crispy }}

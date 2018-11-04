@@ -1,14 +1,112 @@
 {% extends 'base/index.html' %}
-
-{% block title%}
-Incidencia
+{% load static %}
+{% load crispy_forms_tags %}
+{% crispy example_form example_form.helper %}
+{% block css %}
+    <style>
+.asteriskField {
+    display: none;
+}
+    </style>
+<!-- Bootstrap core CSS -->
+<link href="{% static 'base/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'base/fonts/css/font-awesome.min.css' %}" rel="stylesheet">
+<link href="{% static 'base/css/animate.min.css' %}" rel="stylesheet">
+<!-- Custom styling plus plugins -->
+<link href="{% static 'base/css/custom.css' %}"rel="stylesheet">
+<link href="{% static 'base/css/icheck/flat/green.css' %}"rel="stylesheet">
+  <!-- editor -->
+<link href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+<link href="{% static 'base/css/editor/external/google-code-prettify/prettify.css' %}" rel="stylesheet">
+<link href="{% static 'base/css/editor/index.css' %}" rel="stylesheet">
+<!-- select2 -->
+<link href="{% static 'base/css/select/select2.min.css' %}" rel="stylesheet">
+<!-- switchery -->
+<link rel="stylesheet" href="{% static 'base/css/switchery/switchery.min.css' %}" />
 {% endblock %}
-
-
 {% block content %}
-    <h1>Modificar incidencia</h1>
-<form action="." method="POST"> {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Save"/>
+{% block titulo %}
+<title>{{ title }} - SecuSoft</title>
+{% endblock %}
+<form method="POST"  class="form-horizontal form-label-left">
+
+   {% csrf_token %}
+   <div class="center" role="main">
+      <div class="">
+         <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+               <div class="x_title">
+                  <h2>{{ title }}</h2>
+                  <div class="clearfix"></div>
+                  <p><small>Datos:</small></p>
+                  <div class="clearfix"></div>
+               </div>
+               <div class="x_content center">
+                  <table id="datatable-responsive" class="dt-responsive" cellspacing="0" width="100%">
+                        <div class="col-md-6 ">
+                            {% if padre %}
+                                {% crispy form %}
+                            {% else %}
+                                {% crispy form %}
+                            {% endif %}
+                        </div>
+                     </tbody>
+                  </table>
+                  <button class="btn btn-success" type="submit">Actualizar</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
 </form>
-{% endblock%}
+{% endblock %}
+{% block js %}
+<!-- pace -->
+<script src="{% static 'base/js/custom.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'base/js/moment/moment.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'base/js/datepicker/daterangepicker.js' %}"></script>
+<script type="text/javascript" src="{% static 'base/js/autocomplete/countries.js' %}"></script>
+
+  <!-- daterangepicker -->
+  <script type="text/javascript" src="{% static 'base/js/moment/moment.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'base/js/datepicker/daterangepicker.js' %}"></script>
+  <!-- select2 -->
+  <script src="{% static 'base/js/select/select2.full.js' %}"></script>
+  <script src="{% static 'base/js/autocomplete/jquery.autocomplete.js' %}"></script>
+  <script src="{% static 'base/js/validator/validator.js' %}"></script>
+{% if alumno %}
+    <!-- Alumno -->
+    <script>
+    $(function() {
+      $('#id_fecha_nacimiento').daterangepicker({
+        format: 'YYYY-MM-DD',
+        locale: 'es',
+        singleDatePicker: true,
+        showDropdowns: true,
+        defaultDate: new Date('2004-01-01'),
+        minDate: new Date('2004-01-01'),
+        maxDate : new Date('2015-01-01'),
+          value: '2005-01-01'
+      });
+    });
+    </script>
+    <!-- Alumno -->
+{% else %}
+    <script>
+    $(function() {
+      $('#id_fecha_nacimiento').daterangepicker({
+        format: 'YYYY-MM-DD',
+        locale: 'es',
+        singleDatePicker: true,
+        showDropdowns: true,
+        defaultDate: new Date('2004-01-01'),
+        minDate: new Date('1980-01-01'),
+        maxDate : new Date('2015-01-01'),
+          value: '2005-01-01'
+      });
+    });
+    </script>
+{% endif %}
+
+
+{% endblock %}

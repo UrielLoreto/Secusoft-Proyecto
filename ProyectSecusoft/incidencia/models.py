@@ -23,11 +23,14 @@ class TipoIndicencia(models.Model):
     tipo = models.CharField(max_length=2, choices=tipos_incidencia, default='1')
     impacto = models.CharField(max_length=10, choices=tipo_impacto, default='1')
 
+    class Meta:
+        ordering = ('tipo',)
+
     def __str__(self):
-        return '%s' % self.asunto
+        return 'Tipo: %s,  %s' % (self.get_tipo_display(), self.asunto)
 
     def get_absolute_url(self):
-        return reverse("incidencias:incidenciatipo-detalle", kwargs={"id": self.id_tipo})
+        return reverse("incidencias:incidenciatipo-detalle", kwargs={"pk": self.id_tipo})
 
 
 class Incidencia(models.Model):
@@ -47,12 +50,12 @@ class Incidencia(models.Model):
         return '%s el %s' % (self.incidencia, self.fecha_incidencia.date())
 
     def get_absolute_url(self):
-        return reverse("incidencias:incidencia-detalle", kwargs={"id": self.id_incidencia})
+        return reverse("inincidencia-nueva-al", kwargs={"pk": self.id_incidencia})
 
 
 class IncidenciaAlumno(models.Model):
-    incidencia = models.ManyToManyField(Incidencia, blank=True)
-    alumno = models.ManyToManyField(Alumno, blank=True)
+    incidencia = models.ManyToManyField(Incidencia)
+    alumno = models.ManyToManyField(Alumno)
 
 
 class IncidenciaDocente(models.Model):

@@ -48,7 +48,17 @@
                             <td scope="row">{{ cita.id_cita }}</td>
                             <td>{{cita.fecha_cita}}</td>
                             <td>{{cita.asunto}}</td>
-                            <td>{{cita.estatus}}</td>
+                            {% if cita.estatus == '1' %}
+                                <td>{{cita.get_estatus_display}}
+                                    {% if user.get_type == '3' %}
+                                    <br> <a href='#' title="Aceptar"><i class="fa fa-thumbs-up fa-2x" ></i></a>
+                                    <a href='#' title="Rechazar"><i class="fa fa-thumbs-down fa-2x" ></i></a>
+                                    {% endif %}
+
+                                </td>
+                                {% else %}
+                                <td>{{cita.get_estatus_display}}</td>
+                            {% endif %}
                             <td>{{cita.observaciones}}</td>
                             <td>{{cita.descripcion}}</td>
                           <td class="td-btn"><a href='{% url 'citas:cita-incidencia-detalle' cita.id_cita%}'><i class="fa fa-info fa-2x text-info" ></i></a></td>
