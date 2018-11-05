@@ -173,7 +173,7 @@ class IncidenciaUpdateView(UpdateView):  # Mofificar un incidencia por su id
         return context
 
     def get_success_url(self):
-        return reverse('incidencias:incidencia-lista')
+        return reverse('dashboard:index')
 
 
 class IncidenciaDeleteView(DeleteView):  # Eliminar un incidencia por su id
@@ -253,7 +253,7 @@ class IncidenciaAlListView(ListView):  # Mostrar todos lo usuarios
                     'INNER JOIN incidencia_tipoindicencia ON incidencia_tipoindicencia.id_tipo = incidencia_incidencia.incidencia_id '
                     'LEFT JOIN cita_citaincidencia_incidencia on cita_citaincidencia_incidencia.incidencia_id = incidencia_incidencia.id_incidencia '
                     'LEFT JOIN cita_cita ON cita_cita.id_cita = cita_citaincidencia_incidencia.citaincidencia_id '
-                    'WHERE alumno_alumno.grado = %s and alumno_alumno.grupo = %s ', [grado ,grupo])
+                    'WHERE alumno_alumno.grado = %s and alumno_alumno.grupo = %s ', [grado, grupo])
                 return queryset
 
     def get(self, request, *args, **kwargs):
@@ -276,6 +276,24 @@ class IncidenciaAlListView(ListView):  # Mostrar todos lo usuarios
                 return render(request, self.template_name, context)
 
         return HttpResponseRedirect(reverse('dashboard:index'))
+
+
+class IncidenciaAlUpdateView(UpdateView):  # Mofificar un usuario por su id
+    form_class = IncidenciaAlForm
+    template_name = 'incidencia/incidencia_agregar.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(IncidenciaAlUpdateView, self).get_form_kwargs()
+        kwargs['grado'] = self.kwargs.get("grado")
+        kwargs['grupo'] = self.kwargs.get("grupo")
+        kwargs['pk'] = self.kwargs.get("pk")
+        return kwargs
+
+    def get_success_url(self):
+        if self.request.user.tipo_persona is '1':
+            return reverse_lazy('incidencias:incidencia-lista')
+        else:
+            return reverse_lazy('dashboard:index')
 
 
 def import_data(request):
@@ -383,7 +401,7 @@ class IncidenciaView(viewsets.ModelViewSet):
             incidencia2['fecha_incidencia'] = [a[3] for a in incidencia]
             incidencia2['asunto'] = [a[0] for a in incidencia]
             incidencia2['observaciones'] = [a[4] for a in incidencia]
-            return Response({'output': ['incidencia', str(incidencia2)]})
+            return Response({'output': incidencia2})
         else:
             return Response({
                 'incidencia': 'ninguna',
@@ -394,3 +412,21 @@ class TipoIncidenciaView(viewsets.ModelViewSet):
     queryset = TipoIndicencia.objects.all()
     serializer_class = TipoIncidenciaSerializer
 
+
+class CitaView(viewsets.ModelViewSet):
+    queryset = Cita.objects.all()
+    serializer_class = CitaSerializer
+
+    def post(self, request, *args, **kwargs):
+        user = self.kwargs.get("pk")
+        print(user)
+        print(Incidencia.objects.filter(id_incidencia=user))
+        queryset = Cita.objects.filter(citaincidencia__incidencia__id_incidencia=user)
+        for a in queryset.values():
+            print(a)
+        if queryset:
+            return Response({'output': queryset.values()})
+        else:
+            return Response({
+                'incidencia': 'ninguna',
+            })

@@ -45,7 +45,7 @@ class PadreListView(ListView):  # Mostrar todos lo usuarios
 
     def get(self, request, *args, **kwargs):
         context = {'object_list': self.get_queryset(),
-                   'title': 'Lista de usuarios',
+                   'title': 'Lista de padres de familia',
                    'year': datetime.now().year,
                    'padref': True,
                    }
@@ -267,7 +267,7 @@ class PadreAlumnoUpdateView(UpdateView):  # Mofificar un usuario por su id
 
 class UsuarioDocenteUpdateView(UpdateView):  # Mofificar un usuario por su id
     template_name = 'usuario/usuario_actualizar.html'
-    form_class = PersonaForm
+    form_class = PersonaActForm
     model = Usuario
 
     def get_context_data(self, **kwargs):

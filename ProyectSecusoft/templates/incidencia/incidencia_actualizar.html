@@ -28,6 +28,10 @@
 {% block titulo %}
 <title>{{ title }} - SecuSoft</title>
 {% endblock %}
+        {% if user.get_type == '1' or user.get_type == '2'  %}
+    {% else %}
+<meta http-equiv="REFRESH" content="0;url={% url 'dashboard:index' %}">
+{% endif %}
 <form method="POST"  class="form-horizontal form-label-left">
 
    {% csrf_token %}
@@ -52,7 +56,9 @@
                         </div>
                      </tbody>
                   </table>
+                 <div class="col-md-5 col-sm-12 col-xs-12 form-group">     <a href="{% url 'incidencias:incidencia-detalle' incidencia.id_incidencia %}" class="btn btn-primary" role="button">Regresar</a></div>
                   <button class="btn btn-success" type="submit">Actualizar</button>
+
                </div>
             </div>
          </div>

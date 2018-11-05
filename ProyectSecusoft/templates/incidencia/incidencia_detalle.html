@@ -57,9 +57,9 @@
                             </tr>
                         <tr><td>Impacto:</td>{% if incidencia.impacto == '1' %}
                                 <td>Leve</td>
-                            {% elif incidencia.tipo == '2' %}
+                            {% elif incidencia.impacto == '2' %}
                                 <td>Moderado</td>
-                            {% elif incidencia.tipo == '3' %}
+                            {% elif incidencia.impacto == '3' %}
                                 <td>Grabe</td>
                             {% endif %}</tr>
                         <tr><td>Observaciones:</td><td>{{ incidencia.observaciones }}</td></tr>
@@ -70,17 +70,17 @@
                 </tbody>
             </table>
             <div class="col-md-5 col-sm-12 col-xs-12 form-group"></div>
-        {% if user.get_type == '1' %}
-            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+        {% if user.get_type == '1' or  user.get_type == '2' %}
+
                                 {% if Tipo %}
             <div class="col-md-5 col-sm-12 col-xs-12 form-group">     <a href="{% url 'incidencias:incidenciatipo-lista' %}" class="btn btn-success" role="button">Regresar</a>
                                     {% else %}
-                                                    Editar informacion
-                <br>
-{#            <td scope="row" class="align-right col-md-1 col-sm-12 col-xs-12 form-group"><a href='{% url 'incidencias:incidencia-actualizar' incidencia.id_incidencia%}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>#}
 
-
-                                    <div class="col-md-4 col-sm-12 col-xs-12 form-group"></div>
+            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                <td scope="row" class="align-right form-group"><br><label> Editar datos de la Incidencia</label><br>
+                       <a href='{% url 'incidencias:incidencia-actualizar' incidencia.id_incidencia%}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a>
+                </td>
+            </div>
         </div>
                 <br><br><br><br> <br><br><br><br>
 
@@ -111,18 +111,16 @@
                         {% endfor %}
                   </tbody>
               </table>
-            <div class="col-md-5 col-sm-12 col-xs-12 form-group"></div>
-            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                        <td scope="row" class="align-right form-group"><br><label> Editar Alumnos Asociados</label><br>
-{#                        <td class="td-btn"><a href='{% url 'usuarios:usuario-alumno-padre' id_padre %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a></td>#}
-            </div>
-            <div class="col-md-5 col-sm-12 col-xs-12 form-group">     <a href="{% url 'incidencias:incidencia-lista' %}" class="btn btn-success" role="button">Regresar</a>
 
-{% endif %}
-{% elif user.get_type == '3' %}
-                        <div class="col-md-5 col-sm-12 col-xs-12 form-group">     <a href="{% url 'incidencias:incidencia-lista' %}" class="btn btn-success" role="button">Regresar</a>
+            {% if user.get_type == '1' %}
+                        <div class="col-md-5 col-sm-12 col-xs-12 form-group"><a href="{% url 'incidencias:incidencia-lista' %}" class="btn btn-primary" role="button">Regresar</a>
+            {% else %}
+                        <div class="col-md-5 col-sm-12 col-xs-12 form-group"><a href="{% url 'dashboard:index' %}" class="btn btn-primary" role="button">Regresar</a>
 
             {% endif %}
+{% endif %}
+            {% endif %}
+
     </div>
 </div>
 

@@ -51,16 +51,16 @@
                 {% endfor %}
                 </tbody>
             </table>
-            <div class="col-md-5 col-sm-12 col-xs-12 form-group"></div>
         {% if user.get_type == '1' %}
+                    <div class="col-md-5 col-sm-12 col-xs-12 form-group">     <a href="{% url 'dashboard:index' %}" class="btn btn-primary" role="button">Regresar</a></div>
+
+            <div class="col-md-5 col-sm-12 col-xs-12 form-group"></div>
             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                Editar informacion
-{#            <td scope="row" class="align-right col-md-1 col-sm-12 col-xs-12 form-group"><a href='{% url 'alumnos:alumnos-actualizar' alumno.matricula %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>#}
-            <div class="col-md-4 col-sm-12 col-xs-12 form-group"></div>
-        </div>
+                <td scope="row" class="align-right form-group"><br><label>   Editar datos de la Cita  </label><br>
+                       <a href='#'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a>
+                </td>
+            </div>
         {% endif %}
-        <div class="col-md-5 col-sm-12 col-xs-12 form-group">     <a href="{% url 'citas:cita-incidencia-lista' %}" class="btn btn-success" role="button">Regresar</a>
-</div>
     </div>
 </div>
 

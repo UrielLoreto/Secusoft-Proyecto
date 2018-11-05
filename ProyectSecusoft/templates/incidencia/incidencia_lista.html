@@ -86,8 +86,9 @@
                         </tr>
                   </thead>
                   <tbody>
+                                          <tr>
+
                         {% for incidencia in object_list %}
-                        <tr>
                             {% if padre %}
                           <td>{{ incidencia.asunto }}</td>
                           <td>{{ incidencia.get_estatus_display }}</td>
@@ -102,9 +103,9 @@
                             {% endif %}
                             {% if incidencia.impacto == '1' %}
                                 <td>Leve</td>
-                            {% elif incidencia.tipo == '2' %}
+                            {% elif incidencia.impacto == '2' %}
                                 <td>Moderado</td>
-                            {% elif incidencia.tipo == '3' %}
+                            {% elif incidencia.impacto == '3' %}
                                 <td>Grabe</td>
                             {% endif %}
                             <td>{{ incidencia.nombre}}</td>
@@ -115,7 +116,7 @@
                               <td>No</td>
                             {% endif %}
                             {% else %}
-                          <td scope="row">{{ incidencia.id_incidencia }}</td>
+                          <td >{{ incidencia.id_incidencia }}</td>
                             <td>{{ incidencia.asunto }}</td>
                           <td>{{ incidencia.get_estatus_display }}</td>
                             {% if incidencia.tipo == '1' %}
@@ -129,9 +130,9 @@
                             {% endif %}
                             {% if incidencia.impacto == '1' %}
                                 <td>Leve</td>
-                            {% elif incidencia.tipo == '2' %}
+                            {% elif incidencia.impacto == '2' %}
                                 <td>Moderado</td>
-                            {% elif incidencia.tipo == '3' %}
+                            {% elif incidencia.impacto == '3' %}
                                 <td>Grabe</td>
                             {% endif %}
                               <td><a class="tile_count green" href='{% url 'alumnos:alumnos-detalle' incidencia.matricula %}'>{{ incidencia.matricula  }}</a></td>

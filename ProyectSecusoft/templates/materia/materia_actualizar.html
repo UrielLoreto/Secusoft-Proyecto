@@ -7,7 +7,6 @@
 .asteriskField {
     display: none;
 }
-
     </style>
 <!-- Bootstrap core CSS -->
 <link href="{% static 'base/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -25,16 +24,14 @@
 <!-- switchery -->
 <link rel="stylesheet" href="{% static 'base/css/switchery/switchery.min.css' %}" />
 {% endblock %}
-
 {% block content %}
 {% block titulo %}
 <title>{{ title }} - SecuSoft</title>
 {% endblock %}
-{#Solo deja agregar al administrador#}
-    {% if user.get_type != '1' %}
-    <meta http-equiv="REFRESH" content="0;url={% url 'dashboard:index' %}">
-    {% endif %}
-
+        {% if user.get_type == '1' or user.get_type == '2'  %}
+    {% else %}
+<meta http-equiv="REFRESH" content="0;url={% url 'dashboard:index' %}">
+{% endif %}
 <form method="POST"  class="form-horizontal form-label-left">
 
    {% csrf_token %}
@@ -51,13 +48,13 @@
                <div class="x_content center">
                   <table id="datatable-responsive" class="dt-responsive" cellspacing="0" width="100%">
                         <div class="col-md-6 ">
-                         <!-- Alumno -->
-                         {{ form|crispy }}
+                                {% crispy form %}
                         </div>
                      </tbody>
                   </table>
-                  <button class="btn btn-success" type="submit">Agregar</button>
-                   <div class="col-md-5 col-sm-12 col-xs-12 form-group"><a href="{% url 'dashboard:index' %}" class="btn btn-primary" role="button">Regresar</a> </div>
+                 <div class="col-md-5 col-sm-12 col-xs-12 form-group">     <a href="{% url 'materias:materia-lista'%}" class="btn btn-primary" role="button">Regresar</a></div>
+                  <button class="btn btn-success" type="submit">Actualizar</button>
+
                </div>
             </div>
          </div>
@@ -79,6 +76,7 @@
   <script src="{% static 'base/js/select/select2.full.js' %}"></script>
   <script src="{% static 'base/js/autocomplete/jquery.autocomplete.js' %}"></script>
   <script src="{% static 'base/js/validator/validator.js' %}"></script>
+{% if alumno %}
     <!-- Alumno -->
     <script>
     $(function() {
@@ -95,6 +93,22 @@
     });
     </script>
     <!-- Alumno -->
+{% else %}
+    <script>
+    $(function() {
+      $('#id_fecha_nacimiento').daterangepicker({
+        format: 'YYYY-MM-DD',
+        locale: 'es',
+        singleDatePicker: true,
+        showDropdowns: true,
+        defaultDate: new Date('2004-01-01'),
+        minDate: new Date('1980-01-01'),
+        maxDate : new Date('2015-01-01'),
+          value: '2005-01-01'
+      });
+    });
+    </script>
+{% endif %}
 
 
 {% endblock %}

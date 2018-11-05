@@ -159,21 +159,21 @@
                   <li><a><i class="fa fa-folder-open"></i> Mostrar Incidencias <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         {% for a in materias %}
-                        <li><a href="{% url 'incidencias:incidencia-lista-al' grado=a.grado grupo=a.grupo%}">{{ a.grado}}°{{ a.grupo }}, Materia {{ a.nombre }} </a></li>
+                        <li><a href="{% url 'incidencias:incidencia-lista-al' grado=a.grado grupo=a.grupo %}">{{ a.grado}}°{{ a.grupo }}, Materia {{ a.nombre }} </a></li>
                         {% endfor %}
                     </ul>
                   </li>
                   <li><a><i class="fa fa-envelope"></i>Agregar Citas <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         {% for a in materias %}
-                        <li><a href="#">{{ a.grado}}°{{ a.grupo }}, Materia {{ a.nombre }} </a></li>
+                        <li><a href="{% url 'citas:cita-incidencia-nueva-al' grado=a.grado grupo=a.grupo %}">{{ a.grado}}°{{ a.grupo }}, Materia {{ a.nombre }} </a></li>
                         {% endfor %}
                     </ul>
                   </li>
                   <li><a><i class="fa fa-calendar"></i>Mostrar Citas <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         {% for a in materias %}
-                        <li><a href="#">{{ a.grado}}°{{ a.grupo }}, Materia {{ a.nombre }} </a></li>
+                        <li><a href="{% url 'citas:cita-incidencia-lista-al' grado=a.grado grupo=a.grupo %}">{{ a.grado}}°{{ a.grupo }}, Materia {{ a.nombre }} </a></li>
                         {% endfor %}
                     </ul>
                   </li>

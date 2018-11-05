@@ -6,6 +6,7 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register('tipo_incidencia', TipoIncidenciaView)
 router.register('incidencia', IncidenciaView)
+router.register('cita', CitaView)
 
 app_name = 'incidencias'
 urlpatterns = [

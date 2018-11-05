@@ -21,14 +21,14 @@ class MateriaListView(ListView):  # Mostrar todos lo usuarios
 
     def get_queryset(self):
         if self.request.user.tipo_persona is '2':
-            print("Docente")
             doceente = self.request.user.id
             queryset = Materia.objects.raw(
-                'SELECT materia_materia.*, materia_materiadocente_docente.*, usuario_docente.* '
-                'From materia_materia '
-                'Inner join materia_materiadocente_docente on materia_materia.id=materia_materiadocente_docente.materiadocente_id '
-                'Inner join usuario_docente on materia_materiadocente_docente.docente_id=usuario_docente.id '
-                'where usuario_docente.docente_id=%s', [doceente])
+                'SELECT DISTINCT materia_materia.* FROM usuario_docente '
+                'INNER JOIN materia_materiadocente_docente on materia_materiadocente_docente.docente_id = usuario_docente.id '
+                'INNER JOIN materia_materiadocente_materia on materia_materiadocente_materia.materiadocente_id = materia_materiadocente_docente.materiadocente_id '
+                'INNER JOIN materia_materia on materia_materia.id = materia_materiadocente_materia.materia_id '
+                'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_docente.docente_id '
+                'WHERE usuario_usuario.id = %s ORDER by materia_materia.grado', [doceente])
             return queryset
 
         elif self.request.user.tipo_persona is '1':
@@ -106,41 +106,60 @@ class MateriaCreateView(CreateView):  # Mostrar todos lo usuarios
         print(form.cleaned_data)
         return super().form_valid(form)
 
-#
-# class MateriaDetailView(DetailView):  # Detalle de un alumno por su id
-#     template_name = 'alumno/alumno_detalle.html'
-#     model = Alumno
-#
-#     def get_context_data(self, queryset=None, *args, **kwargs):
-#         context = super(AlumnoDetailView, self).get_context_data(**kwargs)
-#         _id = self.kwargs.get("pk")
-#         queryset = Alumno.objects.filter(matricula=_id)
-#         queryset2 = Alumno.objects.raw(
-#             'SELECT alumno_alumno.*, usuario_usuario.id, usuario_usuario.nombre as nombre2, usuario_usuario.apellido as apellido2 FROM alumno_alumno '
-#             'INNER JOIN usuario_padrealumno_alumno ON usuario_padrealumno_alumno.alumno_id=alumno_alumno.matricula '
-#             'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_padre.padrealumno_id=usuario_padrealumno_alumno.padrealumno_id '
-#             'INNER JOIN usuario_padrefam ON usuario_padrefam.id=usuario_padrealumno_padre.padrefam_id '
-#             'INNER JOIN usuario_usuario ON usuario_usuario.id=usuario_padrefam.padre_id '
-#             'WHERE alumno_alumno.matricula=%s', [_id])
-#         context["object"] = queryset
-#         context["padre"] = queryset2
-#         context['year'] = datetime.now().year
-#         context['Alumno'] = True
-#         context['title'] = 'Detalles del alumno'
-#         return context
-#
-#
-# class MateriaUpdateView(UpdateView):  # Mofificar un usuario por su id
-#     template_name = 'alumno/alumno_actualizar.html'
-#     model = Alumno
-#     form_class = AlumnoActForm
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(AlumnoUpdateView, self).get_context_data(**kwargs)
-#         _id = self.kwargs.get("pk")
-#         queryset = Alumno.objects.filter(matricula=_id)
-#         print(queryset)
-#         context["object"] = queryset
-#         context['year'] = datetime.now().year
-#         context['title'] = 'Detalles del alumno'
-#         return context
+
+class MateriaDetailView(DetailView):  # Detalle de un alumno por su id
+    template_name = 'materia/materia_detalle.html'
+    model = Materia
+
+    def get_context_data(self, queryset=None, *args, **kwargs):
+        context = super(MateriaDetailView, self).get_context_data(**kwargs)
+        _id = self.kwargs.get("pk")
+        queryset = Materia.objects.filter(id=_id)
+        queryset2 = Materia.objects.raw(
+            'SELECT materia_materia.id as khe ,materia_materia.*, usuario_docente.*, usuario_usuario.id as idd, usuario_usuario.nombre as nombre2, usuario_usuario.apellido as apellido2 FROM usuario_docente '
+            'INNER JOIN materia_materiadocente_docente on materia_materiadocente_docente.docente_id = usuario_docente.id '
+            'INNER JOIN materia_materiadocente_materia on materia_materiadocente_materia.materiadocente_id = materia_materiadocente_docente.materiadocente_id '
+            'INNER JOIN materia_materia on materia_materia.id = materia_materiadocente_materia.materia_id '
+            'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_docente.docente_id '
+            'WHERE materia_materia.id = %s ORDER by materia_materia.id', [_id])
+        context["object"] = queryset
+        context["padre"] = queryset2
+        context['year'] = datetime.now().year
+        context['Alumno'] = True
+        context['title'] = 'Detalles de la materia'
+        return context
+
+
+class MateriaUpdateView(UpdateView):  # Mofificar un usuario por su id
+    template_name = 'materia/materia_actualizar.html'
+    model = Materia
+    form_class = MateriaForm
+
+    def get_context_data(self, **kwargs):
+        context = super(MateriaUpdateView, self).get_context_data(**kwargs)
+        _id = self.kwargs.get("pk")
+        queryset = Materia.objects.filter(id=_id)
+        print(queryset)
+        context["object"] = queryset
+        context['year'] = datetime.now().year
+        context['title'] = 'Actualizar materia'
+        return context
+
+
+class MateriaDocenteUpdateView(UpdateView):  # Mofificar un usuario por su id
+    template_name = 'materia/materia_actualizar.html'
+    model = MateriaDocente
+    form_class = MateriaDocenteForm
+
+    def get_context_data(self, **kwargs):
+        context = super(MateriaDocenteUpdateView, self).get_context_data(**kwargs)
+        _id = self.kwargs.get("pk")
+        queryset = MateriaDocente.objects.filter(id=_id)
+        print(queryset)
+        context["object"] = queryset
+        context['year'] = datetime.now().year
+        context['title'] = 'Actualizar materia-docente'
+        return context
+
+    def get_success_url(self):
+        return HttpResponseRedirect(reverse('materias:materia-lista'))

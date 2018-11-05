@@ -50,12 +50,14 @@
                 {% endfor %}
                 </tbody>
             </table>
+            <div class="col-md-5 col-sm-12 col-xs-12 form-group"><a href="{% url 'alumnos:alumnos-lista' %}" class="btn btn-primary" role="button">Regresar</a> </div>
+
             <div class="col-md-5 col-sm-12 col-xs-12 form-group"></div>
             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                Editar informacion
-            <td scope="row" class="align-right col-md-1 col-sm-12 col-xs-12 form-group"><a href='{% url 'alumnos:alumnos-actualizar' alumno.matricula %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
-            <div class="col-md-4 col-sm-12 col-xs-12 form-group"></div>
-        </div>
+                <td scope="row" class="align-right form-group"><br><label> Editar Informacion Personal</label><br>
+                       <a href='{% url 'alumnos:alumnos-actualizar' alumno.matricula %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a>
+                </td>
+            </div>
     </div>
 </div>
 

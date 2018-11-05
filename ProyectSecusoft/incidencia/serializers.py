@@ -1,5 +1,7 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers, exceptions
+
+from cita.models import Cita
 from .models import TipoIndicencia, Incidencia
 
 
@@ -21,3 +23,8 @@ class IncidenciaSerializer(serializers.HyperlinkedModelSerializer):
             'incidencia': {'view_name': 'incidencias:incidenciatipo-detalle'}
         }
 
+
+class CitaSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Cita
+        fields = '__all__'

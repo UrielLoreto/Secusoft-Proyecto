@@ -49,7 +49,9 @@
                 {% endfor %}
                 </tbody>
             </table>
-            <div class="col-md-5 col-sm-12 col-xs-12 form-group"></div>
+            <div class="col-md-5 col-sm-12 col-xs-12 form-group">                        <div><a href="{% url 'usuarios:usuario-lista' %}" class="btn btn-primary" role="button">Regresar</a> </div>
+</div>
+
             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                 {% if usuario %}
                 {% if perfil %}
@@ -61,7 +63,7 @@
                         {% if padre_id  %}
                             <td class="td-btn"><a href='{% url 'usuarios:usuario-padre-actualizar'  id %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
                         {% else %}
-                                                        <td class="td-btn"><a href='{% url 'usuarios:usuario-padre-actualizar'  id %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+                            <td class="td-btn"><a href='{% url 'usuarios:usuario-padre-actualizar'  id %}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
 
                         {% endif %}
                         {% else %}
@@ -102,7 +104,8 @@
                         {% endfor %}
                   </tbody>
               </table>
-            <div class="col-md-5 col-sm-12 col-xs-12 form-group"></div>
+            <div class="col-md-5 col-sm-12 col-xs-12 form-group">
+</div>
             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                 {% if perfil %}
                 {% else  %}
@@ -113,7 +116,8 @@
                     {% endif %}
                 {% endif %}
             </div>
-            <div class="col-md-4 col-sm-12 col-xs-12 form-group"></div>
+            <div ></div><br><br><br><br>
+
         {% endif %}
         </div>
     </div>

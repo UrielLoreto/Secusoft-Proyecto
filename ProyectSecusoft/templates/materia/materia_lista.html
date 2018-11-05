@@ -38,7 +38,12 @@
                               <th scope="col">Grupo</th>
                                 {% if user.get_type == '1' %}
                                     <th scope="col">Docente</th>
+                                    <th scope="col">Detalles</th>
+
+                                    <th scope="col">Editar</th>
+
                                 {% endif %}
+
                         </tr>
                   </thead>
                   <tbody>
@@ -56,7 +61,11 @@
                                     {% else %}
                                     <td>No hay docente registrado para esta materia</td>
                                     {% endif %}
+                                    <td class="td-btn"><a href='{% url 'materias:materia-detalle' persona.pk %}'><i class="fa fa-info fa-2x text-primary" ></i></a></td>
+                                    <td class="td-btn"><a href='{% url 'materias:materia-actualizar' persona.pk %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+
                                 {% else %}
+
                                 {% endif %}
 
                             </tr>
