@@ -4,7 +4,9 @@
 Eliminar usuarios
 {% endblock %}
 
-
+    {% if user.get_type != '1' %}
+    <meta http-equiv="REFRESH" content="0;url={% url 'dashboard:index' %}">
+    {% endif %}
 {% block content %}
 <h1>Eliminar usuario</h1>
 <form action='' method="POST">{% csrf_token %}

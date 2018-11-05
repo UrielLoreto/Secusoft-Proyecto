@@ -32,6 +32,10 @@
 {% block titulo %}
 <title>Agregar incidencia - SecuSoft</title>
 {% endblock %}
+    {% if user.get_type == '1' or user.get_type == '2'  %}
+    {% else %}
+<meta http-equiv="REFRESH" content="0;url={% url 'dashboard:index' %}">
+{% endif %}
 <form method="POST"  class="form-horizontal form-label-left" >
    {% csrf_token %}
    <div class="center" role="main">
@@ -47,10 +51,11 @@
                <div class="x_content">
                   <table id="" class="dt-responsive" cellspacing="10" width="100%">
                       <tbody>
+
                       {{ form|crispy }}
-                      {{ form2|crispy }}
+                      {% if incidencias %}
                 <div class="clearfix"></div>
-            <label>Incidencia:</label>
+            <label>Tipo de incidencia de forma detallada:</label>
             <br>
             <div class="x_content 2" >
               <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap key" cellspacing="0" width="100%">
@@ -75,8 +80,12 @@
                         {% endfor %}
                   </tbody>
                     </table>
+            {% endif %}
             </div>
-                <button class="btn btn-success" type="submit">Agregar</button>
+              </tbody>
+            </table>
+                <button class="btn btn-success" type="submit">Seleccionar Alumnos</button>
+                   <div class="col-md-5 col-sm-12 col-xs-12 form-group"><a href="{% url 'dashboard:index' %}" class="btn btn-primary" role="button">Regresar</a>
             </div>
          </div>
       </div>

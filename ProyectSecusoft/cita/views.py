@@ -1,9 +1,11 @@
 from datetime import datetime
 from django.shortcuts import redirect, get_object_or_404, get_list_or_404, render
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.urls import reverse, reverse_lazy
 from rest_framework import viewsets
 from cita.models import Cita
 from incidencia.serializers import TipoIncidenciaSerializer
+from materia.models import Materia
 from .forms import *
 from django.contrib import messages
 from django.views.generic import (
@@ -13,37 +15,6 @@ from django.views.generic import (
     ListView,
     UpdateView
 )
-
-
-class CitaCreateView(CreateView):  # Agregar nuevo incidencia
-    template_name = 'cita/cita_agregar.html'
-    form_class = CitaIncidenciaForm
-
-    def get_context_data(self, **kwargs):
-        context = super(CitaCreateView, self).get_context_data(**kwargs)
-        if 'form' not in context:
-            context['form'] = self.form_class(self.request.GET)
-        context['year'] = datetime.now().year
-        context['title'] = 'Agregar cita'
-        return context
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            print("Form valido")
-        if form.is_valid():
-            print("Formularios validos ")
-            cita = form.save(commit=False)
-            print(cita)
-            return HttpResponseRedirect('..')
-        else:
-            print(form.data)
-            return self.render_to_response(self.get_context_data(form=form))
-
-    def form_valid(self, form):
-        print(form.cleaned_data)
-        return super().form_valid(form)
 
 
 class CitaIncidenciaCreateView(CreateView):  # Agregar nuevo incidencia
@@ -88,6 +59,54 @@ class CitaIncidenciaCreateView(CreateView):  # Agregar nuevo incidencia
         return super().form_valid(form)
 
 
+class CitaIncidenciaAlCreateView(CreateView):  # Agregar nuevo incidencia
+    template_name = 'cita/cita_agregar.html'
+    form_class = CitaIncidenciaForm
+
+    def get_context_data(self, **kwargs):
+        context = super(CitaIncidenciaAlCreateView, self).get_context_data(**kwargs)
+        if 'form' not in context:
+            context['form'] = self.form_class(self.request.GET)
+        id = self.request.user.id
+        materias = Materia.objects.raw(
+            'SELECT DISTINCT materia_materia.* FROM usuario_docente '
+            'INNER JOIN materia_materiadocente_docente on materia_materiadocente_docente.docente_id = usuario_docente.id '
+            'INNER JOIN materia_materiadocente_materia on materia_materiadocente_materia.materiadocente_id = materia_materiadocente_docente.materiadocente_id '
+            'INNER JOIN materia_materia on materia_materia.id = materia_materiadocente_materia.materia_id '
+            'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_docente.docente_id '
+            'WHERE usuario_usuario.id = %s ORDER by materia_materia.grado', [id])
+        context['materias'] = materias
+        context['year'] = datetime.now().year
+        context['title'] = 'Agregar incidencia'
+        return context
+
+    def get_success_url(self, **kwargs):
+        if kwargs != None:
+            print(self.kwargs.get("grupo"))
+            print(self.object.pk)
+            return reverse_lazy('citas:cita-incidencia-nueva-al-cit', kwargs={'pk': self.object.pk, 'grado': self.kwargs.get("grado"), 'grupo': self.kwargs.get("grupo")})
+        else:
+            return reverse_lazy('citas:cita-incidencia-detalle', args=(self.object.pk,))
+
+
+class IncidenciaAlCreateView(CreateView):  # Agregar nuevo incidencia
+    form_class = CitaIncidenciaAlForm
+    template_name = 'cita/cita_agregar.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(IncidenciaAlCreateView, self).get_form_kwargs()
+        kwargs['grado'] = self.kwargs.get("grado")
+        kwargs['grupo'] = self.kwargs.get("grupo")
+        kwargs['pk'] = self.kwargs.get("pk")
+        return kwargs
+
+    def get_success_url(self):
+        if self.request.user.tipo_persona is '1':
+            return reverse_lazy('incidencias:incidencia-lista')
+        else:
+            return reverse_lazy('dashboard:index')
+
+
 class CitaIncidenciaDetailView(DetailView):  # Detalle de un incidencia por su id
     model = Cita
     template_name = 'cita/cita_detalle.html'
@@ -95,7 +114,7 @@ class CitaIncidenciaDetailView(DetailView):  # Detalle de un incidencia por su i
     def get_context_data(self, queryset=None, *args, **kwargs):
         context = super(CitaIncidenciaDetailView, self).get_context_data(**kwargs)
         _id = self.kwargs.get("pk")
-        queryset = Incidencia.objects.raw('Select incidencia_incidencia.id_incidencia, incidencia_tipoindicencia.asunto as asunto2, cita_cita.* from alumno_alumno '
+        queryset = Cita.objects.raw('Select cita_cita.*, incidencia_incidencia.id_incidencia as idincidencia, incidencia_tipoindicencia.asunto as asunto2, cita_cita.* from alumno_alumno '
                                           'INNER JOIN incidencia_incidenciaalumno_alumno on incidencia_incidenciaalumno_alumno.alumno_id = alumno_alumno.matricula '
                                           'INNER JOIN incidencia_incidenciaalumno_incidencia ON incidencia_incidenciaalumno_incidencia.incidenciaalumno_id=incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
                                           'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_incidencia.incidencia_id '
@@ -138,39 +157,87 @@ class CitaIncidenciaListView(ListView):  # Mostrar todos lo usuarios
     def get_queryset(self):
         if self.request.user.tipo_persona is '3':
             padreid = self.request.user.id
-            queryset = Incidencia.objects.raw('Select alumno_alumno.matricula, alumno_alumno.grado, alumno_alumno.grupo, incidencia_incidencia.*, incidencia_tipoindicencia.* '
+            queryset = Cita.objects.raw('Select cita_cita.*, incidencia_incidencia.id_incidencia '
                                               'FROM alumno_alumno INNER JOIN incidencia_incidenciaalumno_alumno on incidencia_incidenciaalumno_alumno.alumno_id = alumno_alumno.matricula '
                                               'INNER JOIN incidencia_incidenciaalumno_incidencia ON incidencia_incidenciaalumno_incidencia.incidenciaalumno_id=incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
                                               'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_incidencia.incidencia_id '
                                               'INNER JOIN incidencia_tipoindicencia ON incidencia_tipoindicencia.id_tipo = incidencia_incidencia.incidencia_id '
+                                              'INNER JOIN cita_citaincidencia_incidencia on cita_citaincidencia_incidencia.incidencia_id = incidencia_incidencia.id_incidencia '
+                                              'INNER JOIN cita_cita ON cita_cita.id_cita = cita_citaincidencia_incidencia.citaincidencia_id '
                                               'INNER JOIN usuario_padrealumno_alumno ON alumno_alumno.matricula=usuario_padrealumno_alumno.alumno_id '
                                               'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_alumno.padrealumno_id=usuario_padrealumno_padre.padrealumno_id '
                                               'INNER JOIN usuario_padrefam ON usuario_padrealumno_padre.padrefam_id=usuario_padrefam.id '
                                               'WHERE usuario_padrefam.padre_id =%s', [padreid])
-        else:
-            # queryset = Incidencia.objects.raw('Select cita_cita.*, incidencia_incidencia.id_incidencia '
-            #                                   'FROM alumno_alumno INNER JOIN incidencia_incidenciaalumno_alumno on incidencia_incidenciaalumno_alumno.alumno_id = alumno_alumno.matricula '
-            #                                   'INNER JOIN incidencia_incidenciaalumno_incidencia ON incidencia_incidenciaalumno_incidencia.incidenciaalumno_id=incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
-            #                                   'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_incidencia.incidencia_id '
-            #                                   'INNER JOIN incidencia_tipoindicencia ON incidencia_tipoindicencia.id_tipo = incidencia_incidencia.incidencia_id '
-            #                                   'INNER JOIN cita_citaincidencia_incidencia on cita_citaincidencia_incidencia.incidencia_id = incidencia_incidencia.id_incidencia '
-            #                                   'INNER JOIN cita_cita ON cita_cita.id_cita = cita_citaincidencia_incidencia.citaincidencia_id GROUP BY cita_cita.id_cita')
-            queryset = Cita.objects.all()
+        if self.request.user.tipo_persona is '1':
+            queryset = Cita.objects.raw('Select cita_cita.*, incidencia_incidencia.id_incidencia '
+                                              'FROM alumno_alumno INNER JOIN incidencia_incidenciaalumno_alumno on incidencia_incidenciaalumno_alumno.alumno_id = alumno_alumno.matricula '
+                                              'INNER JOIN incidencia_incidenciaalumno_incidencia ON incidencia_incidenciaalumno_incidencia.incidenciaalumno_id=incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
+                                              'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_incidencia.incidencia_id '
+                                              'INNER JOIN incidencia_tipoindicencia ON incidencia_tipoindicencia.id_tipo = incidencia_incidencia.incidencia_id '
+                                              'INNER JOIN cita_citaincidencia_incidencia on cita_citaincidencia_incidencia.incidencia_id = incidencia_incidencia.id_incidencia '
+                                              'INNER JOIN cita_cita ON cita_cita.id_cita = cita_citaincidencia_incidencia.citaincidencia_id GROUP BY cita_cita.id_cita')
+            # queryset = Cita.objects.all()
         return queryset
 
     def get(self, request, *args, **kwargs):
-        if self.request.user.tipo_persona is '3':
-            context = {'object_list': self.get_queryset(),
-                       'title': 'Lista de citas',
-                       'padre': True,
-                       'year': datetime.now().year,
-                       'alumno': 'true',
-                       }
-        else:
-            context = {'object_list': self.get_queryset(),
-                       'title': 'Lista de citas',
-                       'year': datetime.now().year,
-                       'alumno': 'true',
-                       }
-        return render(request, self.template_name, context)
+        if self.request.user.is_authenticated:
+            if self.request.user.tipo_persona is '3':
+                context = {'object_list': self.get_queryset(),
+                           'title': 'Lista de citas',
+                           'padre': True,
+                           'year': datetime.now().year,
+                           'alumno': 'true',
+                           }
+            else:
+                context = {'object_list': self.get_queryset(),
+                           'title': 'Lista de citas',
+                           'year': datetime.now().year,
+                           'alumno': 'true',
+                           }
+            return render(request, self.template_name, context)
+        return HttpResponseRedirect(reverse('dashboard:index'))
 
+
+class CitaIncidenciaAlListView(ListView):  # Mostrar todos lo usuarios
+    template_name = 'cita/cita_lista.html'
+
+    def get_queryset(self):
+        if self.request.user.tipo_persona is '2':
+            grupo = self.kwargs.get("grupo")
+            grado = self.kwargs.get("grado")
+            queryset = Cita.objects.raw(
+            'Select cita_cita.* '
+            'FROM alumno_alumno INNER JOIN incidencia_incidenciaalumno_alumno on incidencia_incidenciaalumno_alumno.alumno_id = alumno_alumno.matricula '
+            'INNER JOIN incidencia_incidenciaalumno_incidencia ON incidencia_incidenciaalumno_incidencia.incidenciaalumno_id=incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
+            'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_incidencia.incidencia_id '
+            'INNER JOIN incidencia_tipoindicencia ON incidencia_tipoindicencia.id_tipo = incidencia_incidencia.incidencia_id '
+            'INNER JOIN cita_citaincidencia_incidencia on cita_citaincidencia_incidencia.incidencia_id = incidencia_incidencia.id_incidencia '
+            'INNER JOIN cita_cita ON cita_cita.id_cita = cita_citaincidencia_incidencia.citaincidencia_id '
+            'WHERE alumno_alumno.grado = %s and alumno_alumno.grupo = %s ', [grado, grupo])
+            return queryset
+
+    def get(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            if self.request.user.tipo_persona is '2':
+                id = self.request.user.id
+                materias = Materia.objects.raw(
+                    'SELECT DISTINCT materia_materia.* FROM usuario_docente '
+                    'INNER JOIN materia_materiadocente_docente on materia_materiadocente_docente.docente_id = usuario_docente.id '
+                    'INNER JOIN materia_materiadocente_materia on materia_materiadocente_materia.materiadocente_id = materia_materiadocente_docente.materiadocente_id '
+                    'INNER JOIN materia_materia on materia_materia.id = materia_materiadocente_materia.materia_id '
+                    'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_docente.docente_id '
+                    'WHERE usuario_usuario.id = %s ORDER by materia_materia.grado', [id])
+                context = {'object_list': self.get_queryset(),
+                           'title': 'Lista de incidencias',
+                           'materias': materias,
+                           'year': datetime.now().year,
+                           'alumno': 'true',
+                           }
+                return render(request, self.template_name, context)
+            context = {'object_list': self.get_queryset(),
+                       'title': 'Lista de citas',
+                       'year': datetime.now().year,
+                       'alumno': 'true',
+                       }
+            return render(request, self.template_name, context)
+        return HttpResponseRedirect(reverse('dashboard:index'))

@@ -32,6 +32,9 @@
 {% block titulo %}
 <title>{{ title }}- SecuSoft</title>
 {% endblock %}
+        {% if user.get_type != '1' %}
+    <meta http-equiv="REFRESH" content="0;url={% url 'dashboard:index' %}">
+    {% endif %}
 <form method="POST"  enctype="multipart/form-data"  class="form-horizontal form-label-left" >
    {% csrf_token %}
    <div class="center" role="main">

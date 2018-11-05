@@ -30,25 +30,42 @@
               <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap key" cellspacing="0" width="100%">
                   <thead>
                         <tr>
+                                {% if user.get_type == '1' %}
                               <th scope="col">Id materia</th>
+                                {% endif %}
                               <th scope="col">Nombre de la materia</th>
                               <th scope="col">Grado</th>
                               <th scope="col">Grupo</th>
                                 {% if user.get_type == '1' %}
                                     <th scope="col">Docente</th>
+                                    <th scope="col">Detalles</th>
+
+                                    <th scope="col">Editar</th>
+
                                 {% endif %}
+
                         </tr>
                   </thead>
                   <tbody>
                         {% for persona in object_list %}
                             <tr>
+                            {% if user.get_type == '1' %}
                               <td scope="row">{{ persona.pk }}</td>
+                                {% endif %}
                               <td>{{ persona.nombre }}</td>
                               <td>{{ persona.get_grado_display }}</td>
                               <td>{{ persona.grupo }}</td>
                                 {% if user.get_type == '1' %}
-                                    <td><a class="tile_count green" href='{% url 'usuarios:usuario-detalle' persona.docente_id %}'>{{ persona.docente_id  }}</a></td>
+                                    {% if persona.docente_id %}
+                                    <td><a class="tile_count green" href='{% url 'usuarios:usuario-detalle' persona.docente_id %}'>{{ persona.nombre2 }} {{ persona.apellido2 }}</a></td>
                                     {% else %}
+                                    <td>No hay docente registrado para esta materia</td>
+                                    {% endif %}
+                                    <td class="td-btn"><a href='{% url 'materias:materia-detalle' persona.pk %}'><i class="fa fa-info fa-2x text-primary" ></i></a></td>
+                                    <td class="td-btn"><a href='{% url 'materias:materia-actualizar' persona.pk %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+
+                                {% else %}
+
                                 {% endif %}
 
                             </tr>

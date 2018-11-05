@@ -1,6 +1,8 @@
 from datetime import datetime
 from django.shortcuts import reverse, get_object_or_404, get_list_or_404, render
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
+
+from materia.models import Materia
 from .forms import *
 from usuario.models import PadreAlumno, Usuario
 from django.shortcuts import render, redirect
@@ -18,30 +20,6 @@ from django.views.generic import (
 class AlumnoCreateView(CreateView):  # Agregar nuevo alumno
     template_name = 'alumno/alumno_agregar.html'
     form_class = AlumnoForm
-
-    def get_context_data(self, **kwargs):
-        context = super(AlumnoCreateView, self).get_context_data(**kwargs)
-        if 'form' not in context:
-            context['form'] = self.form_class(self.request.GET)
-        context['year'] = datetime.now().year
-        context['alumno'] = True
-        context['title'] = 'Agregar Alumno'
-        return context
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            print("Form valido")
-        if form.is_valid():
-            print("Formularios validos ")
-            alumno = form.save(commit=False)
-            alumno.save()
-            return HttpResponseRedirect('../', alumno.matricula)
-        else:
-            print("MAL")
-            print(form.data)
-            return self.render_to_response(self.get_context_data(form=form))
 
     def form_valid(self, form):
         print(form.cleaned_data)
@@ -112,21 +90,33 @@ class AlumnoListView(ListView):  # Mostrar todos lo usuarios
         return queryset
 
     def get(self, request, *args, **kwargs):
-        if self.request.user.tipo_persona is '1':
-            queryset2 = Alumno.objects.exclude(matricula__in=[o.matricula for o in self.get_queryset()])
-            context = {'object_list': self.get_queryset(),
-                       'object_list2': queryset2,
-                       'title': 'Lista de alumnos',
-                       'year': datetime.now().year,
-                       'alumno': 'true',
-                       }
-        else:
-            context = {'object_list': self.get_queryset(),
-                       'title': 'Lista de alumnos',
-                       'year': datetime.now().year,
-                       'alumno': 'true',
-                       }
-        return render(request, self.template_name, context)
+        if self.request.user.is_authenticated:
+            if self.request.user.tipo_persona is '1':
+                queryset2 = Alumno.objects.exclude(matricula__in=[o.matricula for o in self.get_queryset()])
+                context = {'object_list': self.get_queryset(),
+                           'object_list2': queryset2,
+                           'title': 'Lista de alumnos',
+                           'year': datetime.now().year,
+                           'alumno': 'true',
+                           }
+            else:
+                id = self.request.user.id
+                materias = Materia.objects.raw(
+                    'SELECT DISTINCT materia_materia.* FROM usuario_docente '
+                    'LEFT JOIN materia_materiadocente_docente on materia_materiadocente_docente.docente_id = usuario_docente.id '
+                    'LEFT JOIN materia_materiadocente_materia on materia_materiadocente_materia.materiadocente_id = materia_materiadocente_docente.materiadocente_id '
+                    'LEFT JOIN materia_materia on materia_materia.id = materia_materiadocente_materia.materia_id '
+                    'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_docente.docente_id '
+                    'WHERE usuario_usuario.id = %s ORDER by materia_materia.id', [id])
+                context = {'object_list': self.get_queryset(),
+                           'title': 'Lista de alumnos',
+                           'year': datetime.now().year,
+                           'materias': materias,
+                           'alumno': 'true',
+                           }
+            return render(request, self.template_name, context)
+        return HttpResponseRedirect(reverse('dashboard:index'))
+
 
 
 def import_data(request):

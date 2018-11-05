@@ -13,9 +13,9 @@ class Cita(models.Model):
     id_cita = models.AutoField(max_length=20, primary_key=True)
     fecha_cita = models.DateTimeField()
     asunto = models.CharField(max_length=200)
-    observaciones = models.TextField()
+    observaciones = models.TextField(blank=True)
     estatus = models.CharField(max_length=2, choices=estatus_tipo, default='1')
-    descripcion = models.TextField()
+    descripcion = models.TextField(blank=True)
 
 
 class CitaIncidencia(models.Model):

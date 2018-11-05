@@ -19,6 +19,9 @@
   <link href="{% static 'base/js/datatables/scroller.bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
 
 {% endblock %}
+{% if user.get_type != '1' %}
+<meta http-equiv="REFRESH" content="0;url={% url 'dashboard:index' %}">
+{% endif %}
 {% block content %}
 
 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -29,27 +32,60 @@
         </div>
         <div class="x_content">
             <table id="datatable-responsive 2" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                <h2><label>Informacion avisol</label></h2>
+                <h2><label>Detalle de la Materia</label></h2>
                 <tbody>
-                {% for aviso in object %}
-                        <tr><td>Id aviso:</td><td>{{ aviso.id }}</td></tr>
-                        <tr><td>Asunto:</td><td>{{ aviso.asunto }}</td></tr>
-                        <tr><td>Dirigido a :</td><td>{{ aviso.get_dirigido_a_display }}</td></tr>
-                        <tr><td>Grado:</td><td>{{ aviso.grado }}</td></tr>
-                        <tr><td>Grupo:</td><td>{{ aviso.grupo }}</td></tr>
-                        <tr><td>Fecha de publicacion:</td><td>{{ aviso.fecha_creacion }}</td></tr>
-
+                {% for incidencia in object %}
+                        <tr><td>Nombre:</td><td>{{ incidencia.nombre }}</td></tr>
+                        <tr><td>Grado:</td><td>{{ incidencia.get_grado_display}}</td></tr>
+                        <tr><td>Grupo:</td><td>{{ incidencia.grupo }}</td></tr>
                 </tbody>
             </table>
-                    <div class="col-md-5 col-sm-12 col-xs-12 form-group">     <a href="{% url 'dashboard:aviso-lista' %}" class="btn btn-primary" role="button">Regresar</a></div>
             <div class="col-md-5 col-sm-12 col-xs-12 form-group"></div>
             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                <td scope="row" class="align-right form-group"><br><label>   Editar datos del Aviso </label><br>
-                       <a href='{% url 'dashboard:aviso-actualizar' aviso.id%}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a>
+                <td scope="row" class="align-right form-group"><br><label> Editar datos de la Incidencia</label><br>
+                       <a href='{% url 'materias:materia-actualizar' incidencia.id%}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a>
                 </td>
-            </div>{% endfor %}
-
+            </div>
         </div>
+                    {% endfor %}
+
+                <br><br><br><br> <br><br><br><br>
+
+        <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap key" cellspacing="0" width="100%">
+                  <h2><label>Docente Asociados</label></h2>
+                <thead>
+                        <tr>
+                              <th scope="col">Id</th>
+                              <th scope="col">Nombre</th>
+                              <th scope="col">Apellidos</th>
+                        </tr>
+                </thead>
+                  <tbody>
+                        {% for persona in padre %}
+                            <tr>
+                                  <td>{{ persona.idd }}</td>
+                                  <td>{{ persona.nombre2 }}</td>
+                                  <td>{{ persona.apellido2 }}</td>
+                            </tr>
+                        {% empty %}
+                        <tr>
+                          <td scope="row" colspan="6">No hay alumnos asociados a este padre de familia.</td>
+                        </tr>
+                        {% endfor %}
+                  </tbody>
+              </table>
+            <div class="col-md-5 col-sm-12 col-xs-12 form-group"></div>
+            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                <td scope="row" class="align-right form-group"><br><label> Editar datos de la Incidencia</label><br>
+                    {% for materia in padre %}
+
+                       <a href='{% url 'materias:materia-docente-actualizar' materia.khe%}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a>
+                                            {% endfor %}
+
+                </td>
+            </div>
+
+
     </div>
 </div>
 

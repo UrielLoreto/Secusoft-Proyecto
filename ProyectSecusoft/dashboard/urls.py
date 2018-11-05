@@ -5,7 +5,7 @@ from django.contrib.auth import views as auth_views
 
 app_name = 'dashboard'
 urlpatterns = (
-    path('', index, name='index'),
+    path('', Index.as_view(), name='index'),
     path('aviso/agregar', AvisoCreateView.as_view(), name='avisos'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', logout_view, name='logout'),
