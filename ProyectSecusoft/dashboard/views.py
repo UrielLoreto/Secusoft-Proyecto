@@ -12,7 +12,8 @@ from django.views.generic import (
 
 
 def index(request):
-    return render(request, 'dashboard/index.html', {'title': 'Inicio', 'year': datetime.now().year, })
+    queryMike = Aviso.objects.all()
+    return render(request, 'dashboard/index.html', {'title': 'Inicio', 'year': datetime.now().year, 'object_list': queryMike})
 
 
 class LoginView(FormView):

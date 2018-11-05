@@ -22,7 +22,57 @@
         </div>
         <div class="x_content">
                     <h2>{{ user.get_type_str}}</h2>
-//aqui
+
+ {% for aviso in object_list %}
+    <div class="table-responsive">
+       <table class="table mySlides">
+        <tr>
+            <td>Asunto</td>
+            <td>Dirigido a</td>
+            <td>Grado</td>
+            <td>Grupo</td>
+            <td>Fecha</td>
+        </tr>
+            {% if aviso.dirigido_a == user.get_type %}
+        <tr>
+              <!--<td>{{ aviso.id }}</td>-->
+              <td>{{ aviso.asunto}}</td>
+              <td>{{ aviso.get_dirigido_a_display }}</td>
+              <!--<td>{{ aviso.dirigido_a }}</td>-->
+              <td>{{ aviso.grado }}</td>
+              <td>{{ aviso.grupo}}</td>
+              <td>{{ aviso.fecha_creacion}}</td>
+        </tr>
+            {% endif %}
+        </table>
+    </div>
+      {% endfor %}
+          <!--  <button class="w3-button w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
+            <button class="w3-button w3-display-right" onclick="plusDivs(+1)">&#10095;</button> -->
+            <script type="text/javascript">
+             var slideIndex = 1;
+            var myVar = setInterval(myTimer, 5000);
+             showDivs(slideIndex);
+            function myTimer() {
+                showDivs(slideIndex);
+                slideIndex+=1;
+                console.log(slideIndex);
+            }
+
+                function plusDivs(n) {
+                    showDivs(slideIndex += n);
+                }
+                function showDivs(n) {
+                    var i;
+                    var x = document.getElementsByClassName("mySlides");
+                    if (n > x.length) {slideIndex = 1}
+                    if (n < 1) {slideIndex = x.length} ;
+                    for (i = 0; i < x.length; i++) {
+                        x[i].style.display = "none";
+                    }
+                    x[slideIndex-1].style.display = "block";
+                }
+            </script>
         </div>
     </div>
 </div>
