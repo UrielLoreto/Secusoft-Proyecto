@@ -305,7 +305,7 @@ def PerilUsuario(request):
 
 class PerilUsuarioUpdate(UpdateView):  # Mofificar un usuario por su id
     template_name = 'usuario/usuario_perfil_actualizar.html'
-    form_class = PersonaForm
+    form_class = PersonaActForm
     model = Usuario
 
     def get_object(self):

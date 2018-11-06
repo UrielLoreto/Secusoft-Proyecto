@@ -1,19 +1,18 @@
 from datetime import datetime
+from django.core.mail import send_mail
 from django.shortcuts import redirect, get_object_or_404, get_list_or_404, render
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse_lazy
+from fcm_django.models import FCMDevice
 from rest_framework import viewsets, status
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.views import APIView
-
+from ProyectSecusoft import settings
 from incidencia.serializers import *
 from materia.models import Materia
-from usuario.models import PadreFam, PadreAlumno
+from usuario.models import PadreFam, PadreAlumno, Usuario
 from .forms import *
-from django.contrib import messages
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -47,8 +46,6 @@ class IncidenciaCreateView(CreateView):  # Agregar nuevo incidencia
 
     def get_success_url(self, **kwargs):
         if kwargs != None:
-            print(self.kwargs.get("grupo"))
-            print(self.object.pk)
             return reverse_lazy('incidencias:incidencia-nueva-al', kwargs={'pk': self.object.pk, 'grado': self.kwargs.get("grado"), 'grupo': self.kwargs.get("grupo")})
         else:
             return reverse_lazy('incidencias:incidencia-detalle', args=(self.object.pk,))
@@ -67,9 +64,111 @@ class IncidenciaAlCreateView(CreateView):  # Agregar nuevo incidencia
 
     def get_success_url(self):
         if self.request.user.tipo_persona is '1':
+            enviar_notificacion(self.kwargs.get("pk"))
+            correo_incidencia(self.kwargs.get("pk"))
             return reverse_lazy('incidencias:incidencia-lista')
         else:
+            enviar_notificacion(self.kwargs.get("pk"))
+            correo_incidencia(self.kwargs.get("pk"))
             return reverse_lazy('dashboard:index')
+
+
+def enviar_notificacion(id_incidencia):
+    incidencia = TipoIndicencia.objects.raw(
+        'SELECT incidencia_tipoindicencia.* FROM incidencia_incidenciaalumno '
+        'INNER JOIN incidencia_incidenciaalumno_incidencia ON incidencia_incidenciaalumno.id = incidencia_incidenciaalumno_incidencia.incidenciaalumno_id '
+        'INNER JOIN incidencia_incidenciaalumno_alumno on incidencia_incidenciaalumno_alumno.incidenciaalumno_id = incidencia_incidenciaalumno_incidencia.incidenciaalumno_id '
+        'INNER JOIN incidencia_incidencia on incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_incidencia.incidencia_id '
+        'INNER JOIN incidencia_tipoindicencia on incidencia_tipoindicencia.id_tipo = incidencia_incidencia.incidencia_id '
+        'INNER JOIN alumno_alumno on alumno_alumno.matricula = incidencia_incidenciaalumno_alumno.alumno_id '
+        'INNER JOIN usuario_padrealumno_alumno on usuario_padrealumno_alumno.alumno_id = alumno_alumno.matricula '
+        'INNER JOIN usuario_padrealumno_padre on usuario_padrealumno_padre.padrealumno_id = usuario_padrealumno_alumno.padrealumno_id '
+        'INNER JOIN usuario_padrefam ON usuario_padrefam.id=usuario_padrealumno_padre.padrefam_id '
+        'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_padrefam.padre_id '
+        'WHERE incidencia_incidenciaalumno_incidencia.incidencia_id = %s', [id_incidencia])
+    alumnos = Alumno.objects.raw(
+        'SELECT alumno_alumno.nombre, alumno_alumno.matricula, usuario_usuario.email, incidencia_incidencia.*, incidencia_tipoindicencia.asunto FROM incidencia_incidenciaalumno '
+        'INNER JOIN incidencia_incidenciaalumno_incidencia ON incidencia_incidenciaalumno.id = incidencia_incidenciaalumno_incidencia.incidenciaalumno_id '
+        'INNER JOIN incidencia_incidenciaalumno_alumno on incidencia_incidenciaalumno_alumno.incidenciaalumno_id = incidencia_incidenciaalumno_incidencia.incidenciaalumno_id '
+        'INNER JOIN incidencia_incidencia on incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_incidencia.incidencia_id '
+        'INNER JOIN incidencia_tipoindicencia on incidencia_tipoindicencia.id_tipo = incidencia_incidencia.incidencia_id '
+        'INNER JOIN alumno_alumno on alumno_alumno.matricula = incidencia_incidenciaalumno_alumno.alumno_id '
+        'INNER JOIN usuario_padrealumno_alumno on usuario_padrealumno_alumno.alumno_id = alumno_alumno.matricula '
+        'INNER JOIN usuario_padrealumno_padre on usuario_padrealumno_padre.padrealumno_id = usuario_padrealumno_alumno.padrealumno_id '
+        'INNER JOIN usuario_padrefam ON usuario_padrefam.id=usuario_padrealumno_padre.padrefam_id '
+        'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_padrefam.padre_id '
+        'WHERE incidencia_incidenciaalumno_incidencia.incidencia_id = %s', [id_incidencia])
+    padres = Usuario.objects.raw(
+        'SELECT usuario_usuario.* FROM incidencia_incidenciaalumno '
+        'INNER JOIN incidencia_incidenciaalumno_incidencia ON incidencia_incidenciaalumno.id = incidencia_incidenciaalumno_incidencia.incidenciaalumno_id '
+        'INNER JOIN incidencia_incidenciaalumno_alumno on incidencia_incidenciaalumno_alumno.incidenciaalumno_id = incidencia_incidenciaalumno_incidencia.incidenciaalumno_id '
+        'INNER JOIN incidencia_incidencia on incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_incidencia.incidencia_id '
+        'INNER JOIN incidencia_tipoindicencia on incidencia_tipoindicencia.id_tipo = incidencia_incidencia.incidencia_id '
+        'INNER JOIN alumno_alumno on alumno_alumno.matricula = incidencia_incidenciaalumno_alumno.alumno_id '
+        'INNER JOIN usuario_padrealumno_alumno on usuario_padrealumno_alumno.alumno_id = alumno_alumno.matricula '
+        'INNER JOIN usuario_padrealumno_padre on usuario_padrealumno_padre.padrealumno_id = usuario_padrealumno_alumno.padrealumno_id '
+        'INNER JOIN usuario_padrefam ON usuario_padrefam.id=usuario_padrealumno_padre.padrefam_id '
+        'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_padrefam.padre_id '
+        'WHERE incidencia_incidenciaalumno_incidencia.incidencia_id = %s', [id_incidencia])
+    al = {}
+    al['alumnos'] = [o.nombre for o in alumnos]
+    num = len(al['alumnos'])
+    al['padres'] = [o.id for o in padres]
+    al['incidencias'] = [o.asunto for o in incidencia]
+    for x in range(num):
+        device = FCMDevice.objects.filter(user=al['padres'][x])
+        print(device)
+        device.send_message(title="Incidencia nueva: " + al['incidencias'][x], body="Alumno: " + al['alumnos'][x])
+
+
+def correo_incidencia(id_incidencia):
+    incidencia = TipoIndicencia.objects.raw(
+        'SELECT incidencia_tipoindicencia.* FROM incidencia_incidenciaalumno '
+        'INNER JOIN incidencia_incidenciaalumno_incidencia ON incidencia_incidenciaalumno.id = incidencia_incidenciaalumno_incidencia.incidenciaalumno_id '
+        'INNER JOIN incidencia_incidenciaalumno_alumno on incidencia_incidenciaalumno_alumno.incidenciaalumno_id = incidencia_incidenciaalumno_incidencia.incidenciaalumno_id '
+        'INNER JOIN incidencia_incidencia on incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_incidencia.incidencia_id '
+        'INNER JOIN incidencia_tipoindicencia on incidencia_tipoindicencia.id_tipo = incidencia_incidencia.incidencia_id '
+        'INNER JOIN alumno_alumno on alumno_alumno.matricula = incidencia_incidenciaalumno_alumno.alumno_id '
+        'INNER JOIN usuario_padrealumno_alumno on usuario_padrealumno_alumno.alumno_id = alumno_alumno.matricula '
+        'INNER JOIN usuario_padrealumno_padre on usuario_padrealumno_padre.padrealumno_id = usuario_padrealumno_alumno.padrealumno_id '
+        'INNER JOIN usuario_padrefam ON usuario_padrefam.id=usuario_padrealumno_padre.padrefam_id '
+        'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_padrefam.padre_id '
+        'WHERE incidencia_incidenciaalumno_incidencia.incidencia_id = %s', [id_incidencia])
+    alumnos = Alumno.objects.raw(
+        'SELECT alumno_alumno.nombre, alumno_alumno.matricula, usuario_usuario.email, incidencia_incidencia.*, incidencia_tipoindicencia.asunto FROM incidencia_incidenciaalumno '
+        'INNER JOIN incidencia_incidenciaalumno_incidencia ON incidencia_incidenciaalumno.id = incidencia_incidenciaalumno_incidencia.incidenciaalumno_id '
+        'INNER JOIN incidencia_incidenciaalumno_alumno on incidencia_incidenciaalumno_alumno.incidenciaalumno_id = incidencia_incidenciaalumno_incidencia.incidenciaalumno_id '
+        'INNER JOIN incidencia_incidencia on incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_incidencia.incidencia_id '
+        'INNER JOIN incidencia_tipoindicencia on incidencia_tipoindicencia.id_tipo = incidencia_incidencia.incidencia_id '
+        'INNER JOIN alumno_alumno on alumno_alumno.matricula = incidencia_incidenciaalumno_alumno.alumno_id '
+        'INNER JOIN usuario_padrealumno_alumno on usuario_padrealumno_alumno.alumno_id = alumno_alumno.matricula '
+        'INNER JOIN usuario_padrealumno_padre on usuario_padrealumno_padre.padrealumno_id = usuario_padrealumno_alumno.padrealumno_id '
+        'INNER JOIN usuario_padrefam ON usuario_padrefam.id=usuario_padrealumno_padre.padrefam_id '
+        'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_padrefam.padre_id '
+        'WHERE incidencia_incidenciaalumno_incidencia.incidencia_id = %s', [id_incidencia])
+    padres = Usuario.objects.raw(
+        'SELECT usuario_usuario.* FROM incidencia_incidenciaalumno '
+        'INNER JOIN incidencia_incidenciaalumno_incidencia ON incidencia_incidenciaalumno.id = incidencia_incidenciaalumno_incidencia.incidenciaalumno_id '
+        'INNER JOIN incidencia_incidenciaalumno_alumno on incidencia_incidenciaalumno_alumno.incidenciaalumno_id = incidencia_incidenciaalumno_incidencia.incidenciaalumno_id '
+        'INNER JOIN incidencia_incidencia on incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_incidencia.incidencia_id '
+        'INNER JOIN incidencia_tipoindicencia on incidencia_tipoindicencia.id_tipo = incidencia_incidencia.incidencia_id '
+        'INNER JOIN alumno_alumno on alumno_alumno.matricula = incidencia_incidenciaalumno_alumno.alumno_id '
+        'INNER JOIN usuario_padrealumno_alumno on usuario_padrealumno_alumno.alumno_id = alumno_alumno.matricula '
+        'INNER JOIN usuario_padrealumno_padre on usuario_padrealumno_padre.padrealumno_id = usuario_padrealumno_alumno.padrealumno_id '
+        'INNER JOIN usuario_padrefam ON usuario_padrefam.id=usuario_padrealumno_padre.padrefam_id '
+        'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_padrefam.padre_id '
+        'WHERE incidencia_incidenciaalumno_incidencia.incidencia_id = %s', [id_incidencia])
+    al = {}
+    al['alumnos'] = [o.nombre for o in alumnos]
+    num = len(al['alumnos'])
+    al['padres'] = [o.email for o in padres]
+    al['incidencias'] = [o.asunto for o in incidencia]
+    for x in range(num):
+        subject = 'Nueva incidencia' + al['incidencias'][x]
+        message = 'El alumno' + al['alumnos'][x] + ' cometió una falta, para más información ingrese a la aplicación o a la página web' + "https://secusoft.pythonanywhere.com/login/"
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [al['padres'][x], ]
+        send_mail(subject, message, email_from, recipient_list)
 
 
 class IncidenciaTipoCreateView(CreateView):  # Agregar nuevo incidencia
@@ -327,8 +426,11 @@ class CustomAuthToken(ObtainAuthToken):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
+        print(user)
         if user.tipo_persona is '3':
             queryset = PadreAlumno.objects.filter(padre__padre_id=user.pk)
+            tok = request.data['tok']
+            FCMDevice.objects.get_or_create(registration_id=tok,  user=user, type='android', active=True)
             alumnos = {}
             for a in queryset:
                 alumnos = a.alumno.values('matricula'), a.alumno.values('nombre'), a.alumno.values('grado'), a.alumno.values('grupo')
@@ -366,35 +468,14 @@ class IncidenciaView(viewsets.ModelViewSet):
             'WHERE alumno_alumno.matricula=%s', [user])
         for a in queryset:
             incidencia.append((a.asunto, a.incidencia_id, a.estatus, a.fecha_incidencia.date(), a.observaciones))
-        # if len(incidencia) != 0:
-        #     b = 0
-        #     for a in incidencia:
-        #         incidencias['id'] = a[1]
-        #         incidencias['estatus'] = a[2]
-        #         incidencias['fecha_incidencia'] = a[3]
-        #         incidencias['asunto'] = a[0]
-        #         incidencias['observaciones'] = a[4]
-        #         aaa = incidencias
-        #         for hola, hose in aaa.items():
-        #             # print(hola, hose)
-        #             bbb.append({hola: hose})
-        #         incidencia2[b] = list(bbb)
-        #         bbb.clear()
-        #         aaa.clear()
-        #         # print(aaa)
-        #         b += 1
-            # print(incidencia2)
-            # return Response({'output':['incidencia', str(incidencia2)]})
         if len(incidencia) != 0:
             b = len(incidencia)
             for a in incidencia:
-                # print(a)
                 incidencias['id'] = a[1]
                 incidencias['estatus'] = a[2]
                 incidencias['fecha_incidencia'] = a[3]
                 incidencias['asunto'] = a[0]
                 incidencias['observaciones'] = a[4]
-                # print(incidencia2)
                 b -= 1
             incidencia2['id'] = [a[1] for a in incidencia]
             incidencia2['estatus'] = [a[2] for a in incidencia]
@@ -422,6 +503,7 @@ class CitaView(viewsets.ModelViewSet):
         print(user)
         print(Incidencia.objects.filter(id_incidencia=user))
         queryset = Cita.objects.filter(citaincidencia__incidencia__id_incidencia=user)
+        print(queryset)
         for a in queryset.values():
             print(a)
         if queryset:

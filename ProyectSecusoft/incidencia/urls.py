@@ -1,10 +1,10 @@
 from django.urls import path, include
 from django.views.generic import RedirectView
+
 from incidencia.views import *
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register('tipo_incidencia', TipoIncidenciaView)
 router.register('incidencia', IncidenciaView)
 router.register('cita', CitaView)
 

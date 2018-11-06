@@ -2,9 +2,13 @@ from django.shortcuts import render
 from datetime import datetime
 from django.contrib.auth import logout
 from django.urls import reverse
+# from push_notifications.models import GCMDevice
+from fcm_django.models import FCMDevice
+from alumno.models import Alumno
 from dashboard.models import Aviso
+from incidencia.models import IncidenciaAlumno, TipoIndicencia
 from materia.models import MateriaDocente, Materia
-from usuario.models import Docente
+from usuario.models import Docente, Usuario, PadreAlumno
 from .forms import LoginForm, AvisoForm
 from django.http import HttpResponseRedirect
 from django.views.generic import (
@@ -12,19 +16,16 @@ from django.views.generic import (
     CreateView, ListView, UpdateView)
 
 
-<<<<<<< HEAD
-def index(request):
-    queryMike = Aviso.objects.all()
-    return render(request, 'dashboard/index.html', {'title': 'Inicio', 'year': datetime.now().year, 'object_list': queryMike})
-=======
 class Index(ListView):
     template_name = 'dashboard/index.html'
 
     def get(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
+            queryMike = Aviso.objects.all()
             if self.request.user.tipo_persona is '1':
                 context = {'title': 'Lista de avisos',
                            'year': datetime.now().year,
+                           'object_list': queryMike
                            }
                 return render(request, self.template_name, context)
 
@@ -44,18 +45,20 @@ class Index(ListView):
                                'year': datetime.now().year,
                                'materias': materias,
                                'grupotutor': docente,
+                               'object_list': queryMike
                                }
                     return render(request, self.template_name, context)
                 else:
-                    print("no es tutor")
                     context = {'title': 'Lista de avisos',
-                           'year': datetime.now().year,
-                           'materias': materias,
-                           }
+                               'year': datetime.now().year,
+                               'materias': materias,
+                               'object_list': queryMike
+                               }
                     return render(request, self.template_name, context)
             elif self.request.user.tipo_persona is '3':
                 context = {'title': 'Lista de avisos',
                            'year': datetime.now().year,
+                           'object_list': queryMike
                            }
                 return render(request, self.template_name, context)
         else:
@@ -63,7 +66,6 @@ class Index(ListView):
                        'year': datetime.now().year,
                        }
             return render(request, self.template_name, context)
->>>>>>> 9d3cc5a0b6345f29413a17b67196df89f01bea49
 
 
 class LoginView(FormView):

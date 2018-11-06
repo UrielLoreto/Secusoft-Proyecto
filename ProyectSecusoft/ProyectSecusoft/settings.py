@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'rest_framework',
     'rest_framework.authtoken',
+    'fcm_django',
     'usuario',
     'cita',
     'incidencia',
@@ -79,6 +80,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ProyectSecusoft.wsgi.application'
+
 
 # REST_FRAMEWORK = {
 #     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -192,9 +194,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 FILE_UPLOAD_HANDLERS = ("django_excel.ExcelMemoryFileUploadHandler",
                         "django_excel.TemporaryExcelFileUploadHandler")
-
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'secusoft8@gmail.com'
-EMAIL_HOST_PASSWORD = 'pruebas8888'
-EMAIL_PORT = 587
