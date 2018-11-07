@@ -22,31 +22,61 @@
         </div>
         <div class="x_content">
                     <h2>{{ user.get_type_str}}</h2>
-
- {% for aviso in object_list %}
-    <div class="table-responsive">
-       <table class="table mySlides">
-        <tr>
-            <td>Asunto</td>
-            <td>Dirigido a</td>
-            <td>Grado</td>
-            <td>Grupo</td>
-            <td>Fecha</td>
-        </tr>
-            {% if aviso.dirigido_a == user.get_type %}
-        <tr>
-              <!--<td>{{ aviso.id }}</td>-->
-              <td>{{ aviso.asunto}}</td>
-              <td>{{ aviso.get_dirigido_a_display }}</td>
-              <!--<td>{{ aviso.dirigido_a }}</td>-->
-              <td>{{ aviso.grado }}</td>
-              <td>{{ aviso.grupo}}</td>
-              <td>{{ aviso.fecha_creacion}}</td>
-        </tr>
-            {% endif %}
-        </table>
-    </div>
-      {% endfor %}
+        <hr>
+        <div>
+        <center><h2>Slider de Avisos</h2>
+        {% if user.get_type == '1' %}
+             {% for aviso in object_list %}
+                   <table class="table mySlides" style="width: auto;">
+                    <tr>
+                        <td>Asunto</td>
+                        <td>Dirigido a</td>
+                        <td>Grado</td>
+                        <td>Grupo</td>
+                        <td>Fecha</td>
+                    </tr>
+                    <tr>
+                          <!--<td>{{ aviso.id }}</td>-->
+                          <td>{{ aviso.asunto}}</td>
+                          <td>{{ aviso.get_dirigido_a_display }}</td>
+                          <!--<td>{{ aviso.dirigido_a }}</td>-->
+                          <td>{{ aviso.grado }}</td>
+                          <td>{{ aviso.grupo}}</td>
+                          <td>{{ aviso.fecha_creacion}}</td>
+                    </tr>
+                    </table>
+             {% empty %}
+                 <center><h2>No hay Avisos por el momento</h2></center>
+             {% endfor %}
+        {% else %}
+            {% for aviso in object_list %}
+                   <table class="table mySlides" style="width: auto;">
+                    <tr>
+                        <td>Asunto</td>
+                        <td>Dirigido a</td>
+                        <td>Grado</td>
+                        <td>Grupo</td>
+                        <td>Fecha</td>
+                    </tr>
+                        {% if aviso.dirigido_a == user.get_type %}
+                    <tr>
+                          <!--<td>{{ aviso.id }}</td>-->
+                          <td>{{ aviso.asunto}}</td>
+                          <td>{{ aviso.get_dirigido_a_display }}</td>
+                          <!--<td>{{ aviso.dirigido_a }}</td>-->
+                          <td>{{ aviso.grado }}</td>
+                          <td>{{ aviso.grupo}}</td>
+                          <td>{{ aviso.fecha_creacion}}</td>
+                    </tr>
+                        {% endif %}
+                    </table>
+            {% empty %}
+                 <center><h2>No hay Avisos por el momento</h2></center>
+            {% endfor %}
+        {% endif %}
+        </center>
+        </div>
+        <hr>
           <!--  <button class="w3-button w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
             <button class="w3-button w3-display-right" onclick="plusDivs(+1)">&#10095;</button> -->
             <script type="text/javascript">
@@ -76,6 +106,7 @@
         </div>
     </div>
 </div>
+
     {% block js %}
         <!-- pace -->
         <script src="{% static 'base/js/custom.min.js' %}"></script>

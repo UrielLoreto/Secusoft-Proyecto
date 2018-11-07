@@ -70,7 +70,59 @@ class AlumnoListView(ListView):  # Mostrar todos lo usuarios
 
     def get_queryset(self):
         if self.request.user.tipo_persona is '3':
-            print("Padre de femilia")
+            print("Padre de familia")
+            padreid = self.request.user.id
+            print(padreid)
+            queryset = Alumno.objects.raw('SELECT alumno_alumno.*, usuario_usuario.id, usuario_usuario.nombre as nombre2, usuario_usuario.apellido as apellido2 FROM alumno_alumno '
+                                          'INNER JOIN usuario_padrealumno_alumno ON usuario_padrealumno_alumno.alumno_id=alumno_alumno.matricula '
+                                          'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_padre.padrealumno_id=usuario_padrealumno_alumno.padrealumno_id '
+                                          'INNER JOIN usuario_padrefam ON usuario_padrefam.id=usuario_padrealumno_padre.padrefam_id '
+                                          'INNER JOIN usuario_usuario ON usuario_usuario.id=usuario_padrefam.padre_id WHERE usuario_padrefam.padre_id=%s', [padreid])
+            print(queryset)
+        else:
+            print("no es padre de familia")
+            queryset = Alumno.objects.raw('SELECT alumno_alumno.*, usuario_usuario.id, usuario_usuario.nombre as nombre2, usuario_usuario.apellido as apellido2 FROM alumno_alumno '
+                                          'INNER JOIN usuario_padrealumno_alumno ON usuario_padrealumno_alumno.alumno_id=alumno_alumno.matricula '
+                                          'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_padre.padrealumno_id=usuario_padrealumno_alumno.padrealumno_id '
+                                          'INNER JOIN usuario_padrefam ON usuario_padrefam.id=usuario_padrealumno_padre.padrefam_id '
+                                          'INNER JOIN usuario_usuario ON usuario_usuario.id=usuario_padrefam.padre_id')
+
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            if self.request.user.tipo_persona is '1':
+                queryset2 = Alumno.objects.exclude(matricula__in=[o.matricula for o in self.get_queryset()])
+                context = {'object_list': self.get_queryset(),
+                           'object_list2': queryset2,
+                           'title': 'Lista de alumnos',
+                           'year': datetime.now().year,
+                           'alumno': 'true',
+                           }
+            else:
+                id = self.request.user.id
+                materias = Materia.objects.raw(
+                    'SELECT DISTINCT materia_materia.* FROM usuario_docente '
+                    'LEFT JOIN materia_materiadocente_docente on materia_materiadocente_docente.docente_id = usuario_docente.id '
+                    'LEFT JOIN materia_materiadocente_materia on materia_materiadocente_materia.materiadocente_id = materia_materiadocente_docente.materiadocente_id '
+                    'LEFT JOIN materia_materia on materia_materia.id = materia_materiadocente_materia.materia_id '
+                    'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_docente.docente_id '
+                    'WHERE usuario_usuario.id = %s ORDER by materia_materia.id', [id])
+                context = {'object_list': self.get_queryset(),
+                           'title': 'Lista de alumnos',
+                           'year': datetime.now().year,
+                           'materias': materias,
+                           'alumno': 'true',
+                           }
+            return render(request, self.template_name, context)
+        return HttpResponseRedirect(reverse('dashboard:index'))
+
+class AlumnoDownloadView(ListView):  # Mostrar todos lo usuarios
+    template_name = 'alumno/alumno_descargas.html'
+
+    def get_queryset(self):
+        if self.request.user.tipo_persona is '3':
+            print("Padre de familia")
             padreid = self.request.user.id
             print(padreid)
             queryset = Alumno.objects.raw('SELECT alumno_alumno.*, usuario_usuario.id, usuario_usuario.nombre as nombre2, usuario_usuario.apellido as apellido2 FROM alumno_alumno '

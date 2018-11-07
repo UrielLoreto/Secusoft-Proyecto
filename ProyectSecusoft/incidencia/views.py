@@ -335,6 +335,54 @@ class IncidenciaListView(ListView):  # Mostrar todos lo usuarios
                 return render(request, self.template_name, context)
         return HttpResponseRedirect(reverse('dashboard:index'))
 
+class IncidenciaDownloadView(ListView):  # Mostrar todos lo usuarios
+    template_name = 'incidencia/incidencia_descargas.html'
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            if self.request.user.tipo_persona is '3':
+                padreid = self.request.user.id
+                queryset = Incidencia.objects.raw('Select cita_cita.id_cita, alumno_alumno.matricula, alumno_alumno.nombre, alumno_alumno.grado, alumno_alumno.grupo, incidencia_incidencia.*, incidencia_tipoindicencia.* '
+                                                  'FROM alumno_alumno INNER JOIN incidencia_incidenciaalumno_alumno on incidencia_incidenciaalumno_alumno.alumno_id = alumno_alumno.matricula '
+                                                  'INNER JOIN incidencia_incidenciaalumno_incidencia ON incidencia_incidenciaalumno_incidencia.incidenciaalumno_id=incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
+                                                  'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_incidencia.incidencia_id '
+                                                  'INNER JOIN incidencia_tipoindicencia ON incidencia_tipoindicencia.id_tipo = incidencia_incidencia.incidencia_id '
+                                                  'INNER JOIN usuario_padrealumno_alumno ON alumno_alumno.matricula=usuario_padrealumno_alumno.alumno_id '
+                                                  'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_alumno.padrealumno_id=usuario_padrealumno_padre.padrealumno_id '
+                                                  'INNER JOIN usuario_padrefam ON usuario_padrealumno_padre.padrefam_id=usuario_padrefam.id '
+                                                  'LEFT JOIN cita_citaincidencia_incidencia on cita_citaincidencia_incidencia.incidencia_id = incidencia_incidencia.id_incidencia '
+                                                  'LEFT JOIN cita_cita ON cita_cita.id_cita = cita_citaincidencia_incidencia.citaincidencia_id '
+                                                  'WHERE usuario_padrefam.padre_id =%s', [padreid])
+
+            else:
+                queryset = Incidencia.objects.raw('Select cita_cita.id_cita, alumno_alumno.matricula, alumno_alumno.grado, alumno_alumno.grupo, incidencia_incidencia.*, incidencia_tipoindicencia.* '
+                                                  'FROM alumno_alumno INNER JOIN incidencia_incidenciaalumno_alumno on incidencia_incidenciaalumno_alumno.alumno_id = alumno_alumno.matricula '
+                                                  'INNER JOIN incidencia_incidenciaalumno_incidencia ON incidencia_incidenciaalumno_incidencia.incidenciaalumno_id=incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
+                                                  'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_incidencia.incidencia_id '
+                                                  'INNER JOIN incidencia_tipoindicencia ON incidencia_tipoindicencia.id_tipo = incidencia_incidencia.incidencia_id '
+                                                  'LEFT JOIN cita_citaincidencia_incidencia on cita_citaincidencia_incidencia.incidencia_id = incidencia_incidencia.id_incidencia '
+                                              'LEFT JOIN cita_cita ON cita_cita.id_cita = cita_citaincidencia_incidencia.citaincidencia_id')
+            return queryset
+
+    def get(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            if self.request.user.tipo_persona is '3':
+                context = {'object_list': self.get_queryset(),
+                           'title': 'Lista de incidencias',
+                           'padre': True,
+                           'year': datetime.now().year,
+                           'alumno': 'true',
+                           }
+                return render(request, self.template_name, context)
+            else:
+                context = {'object_list': self.get_queryset(),
+                           'title': 'Lista de incidencias',
+                           'year': datetime.now().year,
+                           'alumno': 'true',
+                           }
+                return render(request, self.template_name, context)
+        return HttpResponseRedirect(reverse('dashboard:index'))
+
 
 class IncidenciaAlListView(ListView):  # Mostrar todos lo usuarios
     template_name = 'incidencia/incidencia_lista.html'

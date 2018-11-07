@@ -94,31 +94,6 @@ WSGI_APPLICATION = 'ProyectSecusoft.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'smacsoft_secusoft',
-#         'USER': 'RPSadmin',
-#         'PASSWORD': 'k0rak11100293',
-#         'HOST': 'mysql.s404.sureserver.com',
-#
-#     }
-# }
-#DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.mysql',
-#             'NAME': 'Secusoft$default',
-#             'USER': 'Secusoft',
-#             'PASSWORD': 'hola1234',
-#             'HOST': '127.0.0.1',
-#         }
-# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -130,21 +105,7 @@ DATABASES = {
         'COLLATION': 'utf8_general_ci',
     }
 }
-# DATABASES ={'default': {'ATOMIC_REQUESTS': False,
-#              'AUTOCOMMIT': True,
-#              'CONN_MAX_AGE': 0,
-#              'ENGINE': 'django.db.backends.mysql',
-#              'HOST': 'Secusoft.mysql.pythonanywhere-services.com',
-#              'NAME': 'Secusoft$default',
-#              'OPTIONS': {},
-#              'PASSWORD': 'hola1234',
-#              'PORT': '',
-#              'TEST': {'CHARSET': None,
-#                       'COLLATION': None,
-#                       'MIRROR': None,
-#                       'NAME': None},
-#              'TIME_ZONE': None,
-#              'USER': 'Secusoft'}}
+
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 DATABASES['default']['OPTIONS'] = {"init_command": "SET foreign_key_checks = 0;"}

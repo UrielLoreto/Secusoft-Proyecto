@@ -29,7 +29,7 @@
         <div class="x_content">
 
                   <div class="clearfix"></div>
-              <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap key" cellspacing="0" width="100%">
+              <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap key" cellspacing="0" width="100%">
                   <thead>
                         <tr>
                             {% if alumno %}
@@ -49,11 +49,6 @@
                             {% endif %}
                               <th scope="col">Sexo</th>
                               <th scope="col">Fecha de nacimiento</th>
-                            {% if user.get_type == '1' %}
-                              <th scope="col">Detalles</th>
-                              <th scope="col">Editar</th>
-                              <th scope="col">Eliminar</th>
-                            {% endif %}
 
                         </tr>
                   </thead>
@@ -71,12 +66,7 @@
                                   {% endif %}
                                   <td>{{ persona.get_sexo_display }}</td>
                                   <td>{{ persona.fecha_nacimiento }}</td>
-                                {% if user.get_type == '1' %}
-                                  <td class="td-btn"><a href='{% url 'alumnos:alumnos-detalle' persona.matricula %}'><i class="fa fa-info fa-2x text-info" ></i></a></td>
-                                  <td class="td-btn"><a href='{% url 'alumnos:alumnos-actualizar' persona.matricula %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
-                                  <td class="td-btn"><form action="" method="post" style="display: inline">{% csrf_token %}<a href="#/trash"><i class="fa fa-trash fa-2x text-danger"></i></a></form></td>
 
-                                {% endif %}
 
 
                                 {% endif %}
@@ -96,12 +86,7 @@
 
                                   <td>{{ persona.get_sexo_display }}</td>
                                   <td>{{ persona.fecha_nacimiento }}</td>
-                                {% if user.get_type == '1' %}
-                                  <td class="td-btn"><a href='{% url 'alumnos:alumnos-detalle' persona.matricula %}'><i class="fa fa-info fa-2x text-info" ></i></a></td>
-                                  <td class="td-btn"><a href='{% url 'alumnos:alumnos-actualizar' persona.matricula %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
-                                  <td class="td-btn"><form action="" method="post" style="display: inline">{% csrf_token %}<a href="#/trash"><i class="fa fa-trash fa-2x text-danger"></i></a></form></td>
 
-                                {% endif %}
 
 
                                 {% endif %}

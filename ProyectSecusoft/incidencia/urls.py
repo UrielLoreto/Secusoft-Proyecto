@@ -12,6 +12,7 @@ app_name = 'incidencias'
 urlpatterns = [
     path('', RedirectView.as_view(pattern_name='dashboard:index')),
     path('lista', IncidenciaListView.as_view(), name='incidencia-lista'),
+    path('descargas', IncidenciaDownloadView.as_view(), name='incidencia-descargas'),
     path('lista/<int:grado>/<str:grupo>', IncidenciaAlListView.as_view(), name='incidencia-lista-al'),
     path('importar', import_data, name='incidencia-importar'),
     path('agregar/<int:grado>/<str:grupo>', IncidenciaCreateView.as_view(), name="incidencia-nueva"),
