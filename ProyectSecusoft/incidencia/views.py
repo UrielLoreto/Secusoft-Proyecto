@@ -243,8 +243,8 @@ def correo_incidencia(id_incidencia):
     al['padres'] = [o.email for o in padres]
     al['incidencias'] = [o.asunto for o in incidencia]
     for x in range(num):
-        subject = 'Nueva incidencia' + al['incidencias'][x]
-        message = 'El alumno' + al['alumnos'][x] + ' cometió una falta, para más información ingrese a la aplicación o a la página web' + " https://secusoft.pythonanywhere.com/login/"
+        subject = 'Nueva incidencia: ' + al['incidencias'][x]
+        message = 'El alumno: ' + al['alumnos'][x] + ', cometió una falta, para más información ingrese a la aplicación o a la página web ' + " https://secusoft.pythonanywhere.com/login/"
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [al['padres'][x], ]
         send_mail(subject, message, email_from, recipient_list)
