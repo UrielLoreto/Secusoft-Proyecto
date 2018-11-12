@@ -38,7 +38,6 @@ class Incidencia(models.Model):
         ('1', 'Reportada'),
         ('2', 'En Proceso'),
         ('3', 'Atendida'),
-        ('4', 'Otro'),
     )
     id_incidencia = models.AutoField(max_length=20, primary_key=True)
     fecha_incidencia = models.DateTimeField()

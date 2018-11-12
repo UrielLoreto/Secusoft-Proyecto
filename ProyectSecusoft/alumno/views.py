@@ -70,7 +70,6 @@ class AlumnoListView(ListView):  # Mostrar todos lo usuarios
 
     def get_queryset(self):
         if self.request.user.tipo_persona is '3':
-            print("Padre de familia")
             padreid = self.request.user.id
             print(padreid)
             queryset = Alumno.objects.raw('SELECT alumno_alumno.*, usuario_usuario.id, usuario_usuario.nombre as nombre2, usuario_usuario.apellido as apellido2 FROM alumno_alumno '
@@ -80,7 +79,6 @@ class AlumnoListView(ListView):  # Mostrar todos lo usuarios
                                           'INNER JOIN usuario_usuario ON usuario_usuario.id=usuario_padrefam.padre_id WHERE usuario_padrefam.padre_id=%s', [padreid])
             print(queryset)
         else:
-            print("no es padre de familia")
             queryset = Alumno.objects.raw('SELECT alumno_alumno.*, usuario_usuario.id, usuario_usuario.nombre as nombre2, usuario_usuario.apellido as apellido2 FROM alumno_alumno '
                                           'INNER JOIN usuario_padrealumno_alumno ON usuario_padrealumno_alumno.alumno_id=alumno_alumno.matricula '
                                           'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_padre.padrealumno_id=usuario_padrealumno_alumno.padrealumno_id '

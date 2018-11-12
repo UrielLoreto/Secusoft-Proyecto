@@ -1,14 +1,13 @@
 from django.shortcuts import render
 from datetime import datetime
 from django.contrib.auth import logout
-from django.urls import reverse
-# from push_notifications.models import GCMDevice
+from django.urls import reverse, reverse_lazy
+from django.db.models import Q
 from fcm_django.models import FCMDevice
 from alumno.models import Alumno
 from dashboard.models import Aviso
-from incidencia.models import IncidenciaAlumno, TipoIndicencia
-from materia.models import MateriaDocente, Materia
-from usuario.models import Docente, Usuario, PadreAlumno
+from materia.models import Materia
+from usuario.models import Docente, Usuario
 from .forms import LoginForm, AvisoForm
 from django.http import HttpResponseRedirect
 from django.views.generic import (
@@ -21,11 +20,12 @@ class Index(ListView):
 
     def get(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
-            queryMike = Aviso.objects.all()
+            queryset = Aviso.objects.all()
             if self.request.user.tipo_persona is '1':
                 context = {'title': 'Lista de avisos',
                            'year': datetime.now().year,
-                           'object_list': queryMike
+                           'object_list': queryset,
+                           'total': range(len(queryset))
                            }
                 return render(request, self.template_name, context)
 
@@ -33,6 +33,7 @@ class Index(ListView):
                 id = self.request.user.id
                 docente = Docente.objects.filter(docente_id=id)
                 tutor = [b.tutor for b in docente]
+                queryset = Aviso.objects.filter(Q(dirigido_a='1') | Q(dirigido_a='2'))
                 materias = Materia.objects.raw(
                     'SELECT DISTINCT materia_materia.* FROM usuario_docente '
                     'INNER JOIN materia_materiadocente_docente on materia_materiadocente_docente.docente_id = usuario_docente.id '
@@ -41,25 +42,56 @@ class Index(ListView):
                     'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_docente.docente_id '
                     'WHERE usuario_usuario.id = %s ORDER by materia_materia.grado ASC ', [id])
                 if tutor == ['1']:
+                    print(range(len(queryset)))
                     context = {'title': 'Lista de avisos',
                                'year': datetime.now().year,
                                'materias': materias,
                                'grupotutor': docente,
-                               'object_list': queryMike
+                               'object_list': queryset,
+                               'total': range(len(queryset))
                                }
                     return render(request, self.template_name, context)
                 else:
                     context = {'title': 'Lista de avisos',
                                'year': datetime.now().year,
                                'materias': materias,
-                               'object_list': queryMike
+                               'object_list': queryset,
+                               'total': range(len(queryset))
                                }
                     return render(request, self.template_name, context)
             elif self.request.user.tipo_persona is '3':
-                context = {'title': 'Lista de avisos',
-                           'year': datetime.now().year,
-                           'object_list': queryMike
-                           }
+                padreid = self.request.user.id
+                queryset = Aviso.objects.filter(Q(dirigido_a='1') | Q(dirigido_a='3') &
+                                                Q(grupo__isnull=True) & Q(grado__isnull=True))
+                queryset2 = Aviso.objects.raw(
+                    'SELECT DISTINCT dashboard_aviso.* FROM alumno_alumno '
+                    'INNER JOIN usuario_padrealumno_alumno ON usuario_padrealumno_alumno.alumno_id=alumno_alumno.matricula '
+                    'INNER JOIN usuario_padrealumno_padre ON usuario_padrealumno_padre.padrealumno_id=usuario_padrealumno_alumno.padrealumno_id '
+                    'INNER JOIN usuario_padrefam ON usuario_padrefam.id=usuario_padrealumno_padre.padrefam_id '
+                    'INNER JOIN dashboard_aviso on dashboard_aviso.grupo = alumno_alumno.grupo '
+                    'INNER JOIN dashboard_aviso as a on a.grado = alumno_alumno.grado '
+                    'INNER JOIN usuario_usuario ON usuario_usuario.id=usuario_padrefam.padre_id WHERE usuario_padrefam.padre_id = %s',
+                    [padreid])
+                num = len(queryset)
+                print(num)
+                if queryset2:
+                    num2 = 0
+                    for a in queryset2:
+                        print(a)
+                        num2 += 1
+                    print(num2)
+                    context = {'title': 'Lista de avisos',
+                               'year': datetime.now().year,
+                               'object_list': queryset,
+                               'object_list2': queryset2,
+                               'total': range(num + num2)
+                               }
+                else:
+                    context = {'title': 'Lista de avisos',
+                               'year': datetime.now().year,
+                               'object_list': queryset,
+                               'total': range(num)
+                               }
                 return render(request, self.template_name, context)
         else:
             context = {'title': 'Lista de avisos',
@@ -116,6 +148,7 @@ class AvisoCreateView(CreateView):  # Agregar nuevo incidencia
             print("Formularios validos ")
             incidencia = form.save(commit=False)
             incidencia.save()
+            enviar_notificacion(incidencia.id)
             return HttpResponseRedirect('..')
         else:
             print(form.data)
@@ -123,6 +156,7 @@ class AvisoCreateView(CreateView):  # Agregar nuevo incidencia
 
     def form_valid(self, form):
         print(form.cleaned_data)
+        enviar_notificacion(self.kwargs.get("pk"))
         return super().form_valid(form)
 
 
@@ -168,3 +202,73 @@ class AlumnoListView(ListView):  # Mostrar todos lo usuarios
                    'year': datetime.now().year,
                    }
         return render(request, self.template_name, context)
+
+
+def enviar_notificacion(id_aviso):
+    aviso = Aviso.objects.filter(id=id_aviso)
+    print()
+    if aviso[0].dirigido_a == '1':
+        device = FCMDevice.objects.all()
+        device.send_message(title="Nuevo aviso", body=aviso[0].asunto)
+        print(device)
+    elif aviso[0].dirigido_a == '2':
+        print("Maestros")
+    else:
+        al = {}
+        print(aviso[0].grado, aviso[0].grupo)
+        if aviso[0].grupo is None and aviso[0].grado is None:
+            padres = Usuario.objects.filter(tipo_persona='3').all()
+            device = FCMDevice.objects.filter(user__in=padres)
+            device.send_message(title="Nuevo aviso", body=aviso[0].asunto)
+            print(device)
+        if aviso[0].grupo is not None and aviso[0].grado is None:
+            print("grupo")
+            padres = Usuario.objects.raw(
+                'SELECT DISTINCT usuario_usuario.* FROM alumno_alumno '
+                'INNER JOIN usuario_padrealumno_alumno on usuario_padrealumno_alumno.alumno_id = alumno_alumno.matricula '
+                'INNER JOIN usuario_padrealumno_padre on usuario_padrealumno_padre.padrealumno_id = usuario_padrealumno_alumno.padrealumno_id '
+                'INNER JOIN usuario_padrefam ON usuario_padrefam.id=usuario_padrealumno_padre.padrefam_id '
+                'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_padrefam.padre_id '
+                'INNER JOIN dashboard_aviso on dashboard_aviso.grupo = alumno_alumno.grupo '
+                'WHERE dashboard_aviso.id = %s', [id_aviso])
+            al['padres'] = [o.id for o in padres]
+            num = len(al['padres'])
+            for x in range(num):
+                device = FCMDevice.objects.filter(user=al['padres'][x])
+                print(device)
+                device.send_message(title="Nuevo aviso", body=aviso[0].asunto)
+
+        if aviso[0].grupo is None and aviso[0].grado is not None:
+            print("grado")
+            padres = Usuario.objects.raw(
+                'SELECT DISTINCT usuario_usuario.* FROM alumno_alumno '
+                'INNER JOIN usuario_padrealumno_alumno on usuario_padrealumno_alumno.alumno_id = alumno_alumno.matricula '
+                'INNER JOIN usuario_padrealumno_padre on usuario_padrealumno_padre.padrealumno_id = usuario_padrealumno_alumno.padrealumno_id '
+                'INNER JOIN usuario_padrefam ON usuario_padrefam.id=usuario_padrealumno_padre.padrefam_id '
+                'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_padrefam.padre_id '
+                'INNER JOIN dashboard_aviso on dashboard_aviso.grado = alumno_alumno.grado '
+                'WHERE dashboard_aviso.id = %s', [id_aviso])
+            al['padres'] = [o.id for o in padres]
+            num = len(al['padres'])
+            for x in range(num):
+                device = FCMDevice.objects.filter(user=al['padres'][x])
+                print(device)
+                device.send_message(title="Nuevo aviso", body=aviso[0].asunto)
+
+        if aviso[0].grupo is not None and aviso[0].grado is not None:
+            print("todosssss")
+            padres = Usuario.objects.raw(
+                'SELECT DISTINCT usuario_usuario.* FROM alumno_alumno '
+                'INNER JOIN usuario_padrealumno_alumno on usuario_padrealumno_alumno.alumno_id = alumno_alumno.matricula '
+                'INNER JOIN usuario_padrealumno_padre on usuario_padrealumno_padre.padrealumno_id = usuario_padrealumno_alumno.padrealumno_id '
+                'INNER JOIN usuario_padrefam ON usuario_padrefam.id=usuario_padrealumno_padre.padrefam_id '
+                'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_padrefam.padre_id '
+                'INNER JOIN dashboard_aviso on dashboard_aviso.grupo = alumno_alumno.grupo '
+                'INNER JOIN dashboard_aviso as a on a.grado = alumno_alumno.grado '
+                'WHERE dashboard_aviso.id = %s', [id_aviso])
+            al['padres'] = [o.id for o in padres]
+            num = len(al['padres'])
+            for x in range(num):
+                device = FCMDevice.objects.filter(user=al['padres'][x])
+                print(device)
+                device.send_message(title="Nuevo aviso", body=aviso[0].asunto)

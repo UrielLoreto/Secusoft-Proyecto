@@ -49,8 +49,16 @@
                                   <td>{{ aviso.id }}</td>
                                   <td>{{ aviso.asunto}}</td>
                                   <td>{{ aviso.get_dirigido_a_display }}</td>
-                                  <td>{{ aviso.grado }}</td>
+                                 {% if aviso.grado == None %}
+                                     <td>Todos</td>
+                                     {% else %}
+                                  <td>{{ aviso.get_grado_display }}</td>
+                                {% endif %}
+                                    {% if aviso.grupo == None %}
+                                     <td>Todos</td>
+                                     {% else %}
                                   <td>{{ aviso.grupo}}</td>
+                                {% endif %}
                                   <td>{{ aviso.fecha_creacion}}</td>
                                   <td class="td-btn"><a href='{% url 'dashboard:aviso-detalle' aviso.id %}'><i class="fa fa-info fa-2x text-info" ></i></a></td>
                                   <td class="td-btn"><a href='{% url 'dashboard:aviso-actualizar' aviso.id %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>

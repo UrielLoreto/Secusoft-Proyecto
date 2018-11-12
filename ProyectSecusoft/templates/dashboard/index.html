@@ -9,8 +9,15 @@
   <link href="{% static 'base/css/animate.min.css' %}" rel="stylesheet">
 
   <!-- Custom styling plus plugins -->
-  <link href="{% static 'base/css/custom.css' %}"rel="stylesheet">
-  <link href="{% static 'base/css/icheck/flat/green.css' %}"rel="stylesheet">
+  <link href="{% static 'base/css/custom.css' %}" rel="stylesheet">
+  <link href="{% static 'base/css/icheck/flat/green.css' %}" rel="stylesheet">
+  <style>
+  /* Make the image fully responsive */
+  .carousel-inner img {
+      width: 100%;
+      height: 100%;
+  }
+  </style>
 
 {% endblock %}
 {% block content %}
@@ -23,93 +30,99 @@
         <div class="x_content">
                     <h2>{{ user.get_type_str}}</h2>
         <hr>
-        <div>
-        <center><h2>Slider de Avisos</h2>
-        {% if user.get_type == '1' %}
-             {% for aviso in object_list %}
-                   <table class="table mySlides" style="width: auto;">
-                    <tr>
-                        <td>Asunto</td>
-                        <td>Dirigido a</td>
-                        <td>Grado</td>
-                        <td>Grupo</td>
-                        <td>Fecha</td>
-                    </tr>
-                    <tr>
-                          <!--<td>{{ aviso.id }}</td>-->
-                          <td>{{ aviso.asunto}}</td>
-                          <td>{{ aviso.get_dirigido_a_display }}</td>
-                          <!--<td>{{ aviso.dirigido_a }}</td>-->
-                          <td>{{ aviso.grado }}</td>
-                          <td>{{ aviso.grupo}}</td>
-                          <td>{{ aviso.fecha_creacion}}</td>
-                    </tr>
-                    </table>
-             {% empty %}
-                 <center><h2>No hay Avisos por el momento</h2></center>
-             {% endfor %}
-        {% else %}
-            {% for aviso in object_list %}
-                   <table class="table mySlides" style="width: auto;">
-                    <tr>
-                        <td>Asunto</td>
-                        <td>Dirigido a</td>
-                        <td>Grado</td>
-                        <td>Grupo</td>
-                        <td>Fecha</td>
-                    </tr>
-                        {% if aviso.dirigido_a == user.get_type %}
-                    <tr>
-                          <!--<td>{{ aviso.id }}</td>-->
-                          <td>{{ aviso.asunto}}</td>
-                          <td>{{ aviso.get_dirigido_a_display }}</td>
-                          <!--<td>{{ aviso.dirigido_a }}</td>-->
-                          <td>{{ aviso.grado }}</td>
-                          <td>{{ aviso.grupo}}</td>
-                          <td>{{ aviso.fecha_creacion}}</td>
-                    </tr>
-                        {% endif %}
-                    </table>
-            {% empty %}
-                 <center><h2>No hay Avisos por el momento</h2></center>
-            {% endfor %}
-        {% endif %}
-        </center>
+        <div class="col-md-3 col-sm-3 col-xs-3">
         </div>
-        <hr>
-          <!--  <button class="w3-button w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
-            <button class="w3-button w3-display-right" onclick="plusDivs(+1)">&#10095;</button> -->
-            <script type="text/javascript">
-             var slideIndex = 1;
-            var myVar = setInterval(myTimer, 5000);
-             showDivs(slideIndex);
-            function myTimer() {
-                showDivs(slideIndex);
-                slideIndex+=1;
-                console.log(slideIndex);
-            }
+        <div class="col-md-6 col-sm-6 col-xs-6">
 
-                function plusDivs(n) {
-                    showDivs(slideIndex += n);
-                }
-                function showDivs(n) {
-                    var i;
-                    var x = document.getElementsByClassName("mySlides");
-                    if (n > x.length) {slideIndex = 1}
-                    if (n < 1) {slideIndex = x.length} ;
-                    for (i = 0; i < x.length; i++) {
-                        x[i].style.display = "none";
-                    }
-                    x[slideIndex-1].style.display = "block";
-                }
-            </script>
+            <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
+              <ul class="carousel-indicators">
+                  {% for b in total %}
+                      {% if forloop.first %}
+                          <li data-target="#recommended-item-carousel" data-slide-to="{{ b }}" class="active"></li>
+                      {% else %}
+                          <li data-target="#recommended-item-carousel" data-slide-to="{{ b }}"></li>
+                      {% endif %}
+                    {% empty %}
+                      </ul>
+                      <div class="carousel-inner">
+                        <div class="item active">
+                           <div class="col-md-12 col-sm-12 col-xs-12">
+                        <img src="{% static 'base/images/fondo0.jpg' %}" alt=""  />
+                          <div class="carousel-caption">
+                            <h1>Sin avisos</h1><br>
+                          </div>
+                    </div>
+                </div>
+                      </div>
+                  {% endfor %}
+              </ul>
+                <div class="carousel-inner">
+                {% for prod in object_list %}
+                   {% if forloop.first %}
+                        <div class="item active">
+                           <div class="col-md-12 col-sm-12 col-xs-12">
+                        <img src="{% static 'base/images/fondo0.jpg' %}" alt=""  />
+                          <div class="carousel-caption">
+                            <h1>{{prod.asunto}}</h1><br>
+                            <p>{{prod.descripcion}}</p>
+                          </div>
+                    </div>
+                </div>
+                   {% else %}
+                        <div class="item">
+                           <div class="col-md-12 col-sm-12 col-xs-12">
+                        <img src="{% static 'base/images/fondo0.jpg' %}" alt=""  />
+                          <div class="carousel-caption">
+                            <h1>{{prod.asunto}}</h1><br>
+                            <p>{{prod.descripcion}}</p>
+                          </div>
+                    </div>
+                </div>
+                   {% endif %}
+                {% endfor %}
+                {% if object_list2 %}
+                    {% for prod in object_list2 %}
+                        <div class="item">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <img src="{% static 'base/images/fondo0.jpg' %}" alt=""  />
+                          <div class="carousel-caption">
+                            <h1>{{prod.asunto}}</h1><br>
+                            <p>{{prod.descripcion}}</p>
+                          </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% if total == 'range(0, 0)' %}
+                <div class="item active">
+                           <div class="col-md-12 col-sm-12 col-xs-12">
+                        <img src="{% static 'base/images/fondo0.jpg' %}" alt=""  />
+                          <div class="carousel-caption">
+                            <h1>Sin avisos</h1><br>
+                          </div>
+                    </div>
+                </div>
+                {% endif %}
+                </div>
+
+            <a class="carousel-control-prev" href="#recommended-item-carousel" data-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </a>
+            <a class="carousel-control-next" href="#recommended-item-carousel" data-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </a>
+
+            </div>
+
         </div>
     </div>
+        </div>
 </div>
 
+{% endblock %}
     {% block js %}
         <!-- pace -->
         <script src="{% static 'base/js/custom.min.js' %}"></script>
     {% endblock %}
-{% endblock %}
+
 
