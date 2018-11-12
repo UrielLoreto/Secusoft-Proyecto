@@ -51,6 +51,8 @@ class CitaIncidenciaCreateView(CreateView):  # Agregar nuevo incidencia
             citaincidencia.cita.add(cita)
             citaincidencia.incidencia.add(request.POST['incidencia'])
             Incidencia.objects.filter(id_incidencia=request.POST['incidencia']).update(estatus='2')
+            enviar_notificacion(cita.id_cita)
+            correo_incidencia(cita.id_cita)
             return HttpResponseRedirect('..')
         else:
             return self.render_to_response(self.get_context_data(form=form, form2=form2))
@@ -82,6 +84,8 @@ class CitaIncidenciaAlCreateView(CreateView):  # Agregar nuevo incidencia
 
     def get_success_url(self, **kwargs):
         if kwargs != None:
+            enviar_notificacion(self.kwargs.get("pk"))
+            correo_incidencia(self.kwargs.get("pk"))
             return reverse_lazy('citas:cita-incidencia-nueva-al-cit', kwargs={'pk': self.object.pk,
                                                                               'grado': self.kwargs.get("grado"),
                                                                               'grupo': self.kwargs.get("grupo")})
