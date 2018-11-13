@@ -34,5 +34,7 @@ class CitaIncidenciaAlForm(forms.ModelForm):
         pk = kwargs.pop('pk')
         super(CitaIncidenciaAlForm, self).__init__(*args, **kwargs)
         print(grado)
-        self.fields['incidencia'].queryset = Incidencia.objects.filter(incidenciaalumno__alumno__grado=grado, incidenciaalumno__alumno__grupo=grupo)
+        self.fields['incidencia'].queryset = Incidencia.objects.filter(incidenciaalumno__alumno__grado=grado,
+                                                                       incidenciaalumno__alumno__grupo=grupo,
+                                                                       estatus='1')
         self.fields['cita'].queryset = Cita.objects.filter(id_cita=pk)

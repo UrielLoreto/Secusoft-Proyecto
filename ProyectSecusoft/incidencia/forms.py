@@ -26,7 +26,6 @@ class IncidenciaAlForm(forms.ModelForm):
         grupo = kwargs.pop('grupo')
         pk = kwargs.pop('pk')
         super(IncidenciaAlForm, self).__init__(*args, **kwargs)
-        print(grado)
         self.fields['alumno'].queryset = Alumno.objects.filter(grado=grado, grupo=grupo)
         self.fields['incidencia'].queryset = Incidencia.objects.filter(id_incidencia=pk)
 
