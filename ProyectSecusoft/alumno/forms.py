@@ -17,6 +17,7 @@ class AlumnoForm(forms.ModelForm):
         label='Matricula:')
 
 
+
 class AlumnoActForm(forms.ModelForm):
     class Meta:
         model = Alumno
