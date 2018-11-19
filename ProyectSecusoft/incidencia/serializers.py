@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers, exceptions
 
 from cita.models import Cita
+from dashboard.models import Aviso
 from .models import TipoIndicencia, Incidencia
 
 
@@ -28,3 +29,9 @@ class CitaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Cita
         fields = '__all__'
+
+
+class AvisoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Aviso
+        fields = ('id', 'fecha_creacion', 'asunto', 'descripcion')
