@@ -589,7 +589,7 @@ class CustomAuthToken(ObtainAuthToken):
 class IncidenciaView(viewsets.ModelViewSet):
     queryset = Incidencia.objects.all()
     serializer_class = IncidenciaSerializer
-    permission_classes = (IsAuthenticated, )
+    # permission_classes = (IsAuthenticated, )
 
     def post(self, request, *args, **kwargs):
         user = self.kwargs.get("pk")
@@ -643,7 +643,7 @@ class TipoIncidenciaView(viewsets.ModelViewSet):
 class CitaView(viewsets.ModelViewSet):
     queryset = Cita.objects.all()
     serializer_class = CitaSerializer
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def post(self, request, *args, **kwargs):
         user = self.kwargs.get("pk")
@@ -672,7 +672,7 @@ class Logout(APIView):
 class AvisoView(viewsets.ModelViewSet):
     queryset = Aviso.objects.all()
     serializer_class = AvisoSerializer
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def post(self, request, *args, **kwargs):
         user = self.kwargs.get('pk')
