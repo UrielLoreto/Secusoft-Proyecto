@@ -42,7 +42,7 @@
             </table>
             <div class="col-md-5 col-sm-12 col-xs-12 form-group"></div>
             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                <td scope="row" class="align-right form-group"><br><label> Editar datos de la Incidencia</label><br>
+                <td scope="row" class="align-right form-group"><br><label> Editar datos de la Materia</label><br>
                        <a href='{% url 'materias:materia-actualizar' incidencia.id%}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a>
                 </td>
             </div>
@@ -69,22 +69,25 @@
                             </tr>
                         {% empty %}
                         <tr>
-                          <td scope="row" colspan="6">No hay alumnos asociados a este padre de familia.</td>
+                          <td scope="row" colspan="6">No hay docentes asociados a esta materia.</td>
                         </tr>
                         {% endfor %}
                   </tbody>
               </table>
             <div class="col-md-5 col-sm-12 col-xs-12 form-group"></div>
             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                <td scope="row" class="align-right form-group"><br><label> Editar datos de la Incidencia</label><br>
+                <td scope="row" class="align-right form-group"><br><label> Editar Docentes asociados</label><br>
                     {% for materia in padre %}
-
+                        {% if forloop.first %}
                        <a href='{% url 'materias:materia-docente-actualizar' materia.khe%}'><div class="col-md-2 col-sm-12 col-xs-12 form-group"></div><i class="fa fa-edit fa-2x text-primary" ></i></a>
-                                            {% endfor %}
+                     {% endif %}
+                    {% endfor %}
 
                 </td>
             </div>
-
+            <div class="col-md-5 col-sm-12 col-xs-12 form-group">
+                <div><a href="{% url 'materias:materia-lista' %}" class="btn btn-primary" role="button">Regresar</a> </div>
+            </div>
 
     </div>
 </div>

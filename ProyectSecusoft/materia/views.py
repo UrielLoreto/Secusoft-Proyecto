@@ -81,16 +81,10 @@ class MateriaCreateView(CreateView):  # Mostrar todos lo usuarios
         self.object = self.get_object
         form = self.form_class(request.POST)
         form2 = self.segundo_form_class(request.POST)
-        if form.is_valid():
-            print("Form valido")
-        if form2.is_valid():
-            print("form2 valido")
         if form.is_valid() and form2.is_valid():
             print("Formularios validos ")
             materia = form.save(commit=False)
             docente = form2.save(commit=False)
-            print(form.cleaned_data)
-            print(form2.cleaned_data)
             materia.save()
             docente.save()
             docente.materia.add(materia)
@@ -98,12 +92,9 @@ class MateriaCreateView(CreateView):  # Mostrar todos lo usuarios
             docente.save()
             return HttpResponseRedirect('..')
         else:
-            print("MAL")
-            print(form.data)
             return self.render_to_response(self.get_context_data(form=form, form2=form2))
 
     def form_valid(self, form):
-        print(form.cleaned_data)
         return super().form_valid(form)
 
 
@@ -116,16 +107,16 @@ class MateriaDetailView(DetailView):  # Detalle de un alumno por su id
         _id = self.kwargs.get("pk")
         queryset = Materia.objects.filter(id=_id)
         queryset2 = Materia.objects.raw(
-            'SELECT materia_materia.id as khe ,materia_materia.*, usuario_docente.*, usuario_usuario.id as idd, usuario_usuario.nombre as nombre2, usuario_usuario.apellido as apellido2 FROM usuario_docente '
+            'SELECT DISTINCT materia_materiadocente.id as khe , usuario_docente.*, usuario_usuario.id as idd, usuario_usuario.nombre as nombre2, usuario_usuario.apellido as apellido2 FROM usuario_docente '
             'INNER JOIN materia_materiadocente_docente on materia_materiadocente_docente.docente_id = usuario_docente.id '
             'INNER JOIN materia_materiadocente_materia on materia_materiadocente_materia.materiadocente_id = materia_materiadocente_docente.materiadocente_id '
             'INNER JOIN materia_materia on materia_materia.id = materia_materiadocente_materia.materia_id '
             'INNER JOIN usuario_usuario on usuario_usuario.id = usuario_docente.docente_id '
+            'INNER JOIN materia_materiadocente on materia_materiadocente.id = materia_materiadocente_docente.materiadocente_id '
             'WHERE materia_materia.id = %s ORDER by materia_materia.id', [_id])
         context["object"] = queryset
         context["padre"] = queryset2
         context['year'] = datetime.now().year
-        context['Alumno'] = True
         context['title'] = 'Detalles de la materia'
         return context
 
@@ -160,6 +151,3 @@ class MateriaDocenteUpdateView(UpdateView):  # Mofificar un usuario por su id
         context['year'] = datetime.now().year
         context['title'] = 'Actualizar materia-docente'
         return context
-
-    def get_success_url(self):
-        return HttpResponseRedirect(reverse('materias:materia-lista'))

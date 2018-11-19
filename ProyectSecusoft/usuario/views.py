@@ -2,6 +2,7 @@ import django_excel as excel
 from datetime import datetime
 from django.shortcuts import reverse, get_object_or_404, get_list_or_404, render
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.urls import reverse_lazy
 
 from materia.models import Materia
 from .forms import *
@@ -92,12 +93,6 @@ class UsuarioPadreCreateView(CreateView):  # Agregar nuevo padre
         form = self.form_class(request.POST)
         form2 = self.segundo_form_class(request.POST)
         form3 = self.tercer_form_class(request.POST)
-        if form.is_valid():
-            print("Form valido")
-        if form2.is_valid():
-            print("form2 valido")
-        if form3.is_valid():
-            print("Form3 valido")
         if form.is_valid() and form3.is_valid():
             print("Formularios validos ")
             persona = form.save(commit=False)
@@ -109,11 +104,9 @@ class UsuarioPadreCreateView(CreateView):  # Agregar nuevo padre
             padrefam.save()
             padrealumno = form2.save(commit=False)
             padrealumno.save()
-            for a in request.POST['alumno']:
-                print(a)
             padrealumno.alumno.add(request.POST['alumno'])
             padrealumno.padre.add(padrefam)
-            return HttpResponseRedirect('..')
+            return HttpResponseRedirect(reverse_lazy('usuarios:usuario-lista-padre'))
         else:
             print(form.data)
             return self.render_to_response(self.get_context_data(form=form, form2=form2, form3=form3))
@@ -143,10 +136,6 @@ class UsuarioDocenteCreateView(CreateView):  # Agregar nuevo padre
         self.object = self.get_object
         form = self.form_class(request.POST)
         form2 = self.segundo_form_class(request.POST)
-        if form.is_valid():
-            print("Form valido")
-        if form2.is_valid():
-            print("form2 valido")
         if form.is_valid() and form2.is_valid():
             print("Formularios validos ")
             persona = form.save(commit=False)
@@ -155,14 +144,15 @@ class UsuarioDocenteCreateView(CreateView):  # Agregar nuevo padre
             persona.save()
             docente.docente = persona
             docente.save()
-            return HttpResponseRedirect('..')
+            return HttpResponseRedirect(reverse_lazy('usuarios:usuario-lista-docentes'))
         else:
-            print(form.data)
             return self.render_to_response(self.get_context_data(form=form, form2=form2))
 
     def form_valid(self, form):
-        print(form.cleaned_data)
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('usuarios:usuario-lista-docentes')
 
 
 class UsuarioDetailView(DetailView):  # Detalle de un usuario por su id
@@ -179,12 +169,10 @@ class UsuarioDetailView(DetailView):  # Detalle de un usuario por su id
             print("admin")
         elif tipo['tipo_persona'] == '2':
             docente = Docente.objects.filter(docente_id=_id)
-            print(docente.values('tutor'))
             tutor = docente.values('tutor')
             if tutor[0]['tutor'] == '1':
                 grupo = docente.values('grupo')
                 grupotutorado = Alumno.objects.filter(grupo=grupo[0]['grupo'])
-                print(grupo[0]['grupo'])
 
             queryset1 = Materia.objects.raw(
                 'SELECT materia_materia.*, materia_materiadocente_docente.*, usuario_docente.* '

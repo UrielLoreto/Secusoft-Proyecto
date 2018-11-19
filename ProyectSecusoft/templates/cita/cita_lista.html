@@ -38,7 +38,8 @@
                           <th scope="col">Asunto</th>
                           <th scope="col">Estatus</th>
                           <th scope="col">Observaciones</th>
-                          <th scope="col">Descripcion</th>
+                          <th scope="col">Alumno</th>
+                          <th scope="col">Matricula</th>
                           <th scope="col">Detalles</th>
                         </tr>
                   </thead>
@@ -60,7 +61,8 @@
                                 <td>{{cita.get_estatus_display}}</td>
                             {% endif %}
                             <td>{{cita.observaciones}}</td>
-                            <td>{{cita.descripcion}}</td>
+                            <td>{{cita.nombre}}</td>
+                            <td>{{cita.matricula}}</td>
                           <td class="td-btn"><a href='{% url 'citas:cita-incidencia-detalle' cita.id_cita%}'><i class="fa fa-info fa-2x text-info" ></i></a></td>
                         </tr>
                         {% empty %}

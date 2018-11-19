@@ -15,7 +15,6 @@ class Cita(models.Model):
     asunto = models.CharField(max_length=200)
     observaciones = models.TextField(blank=True)
     estatus = models.CharField(max_length=2, choices=estatus_tipo, default='1')
-    descripcion = models.TextField(blank=True)
 
 
 class CitaIncidencia(models.Model):

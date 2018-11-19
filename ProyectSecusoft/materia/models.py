@@ -1,5 +1,4 @@
-from audioop import reverse
-
+from django.urls import reverse
 from django.db import models
 from usuario.models import Docente
 # Create your models here.
@@ -24,7 +23,13 @@ class Materia(models.Model):
     def __str__(self):
         return '%s: %s' % (self.nombre, self.get_grado_display())
 
+    def get_absolute_url(self):
+        return reverse('materias:materia-detalle', kwargs={'pk': self.id})
+
 
 class MateriaDocente(models.Model):
     materia = models.ManyToManyField(Materia)
     docente = models.ManyToManyField(Docente)
+
+    def get_absolute_url(self):
+        return reverse('materias:materia-detalle', kwargs={'pk': self.id})

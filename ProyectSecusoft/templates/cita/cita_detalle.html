@@ -44,7 +44,6 @@
                                 {% else %}
                                <tr><td>Estatus:</td> <td>{{cita.get_estatus_display}}</td>
                             </tr>{% endif %}
-                        <tr><td>Descripcion:</td><td>{{ cita.descripcion }}</td></tr>
                         <tr><td>Observaciones:</td><td>{{ cita.observaciones }}</td></tr>
                         <tr><td>Incidencia relacionada:</td><td><a class="tile_count green" href='{% url 'incidencias:incidencia-detalle' cita.idincidencia%}'>{{ cita.asunto2 }}</a></td></tr>
                         <tr><td>Fecha de la cita:</td><td>{{ cita.fecha_cita }}</td></tr>

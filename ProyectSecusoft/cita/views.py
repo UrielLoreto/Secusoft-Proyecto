@@ -106,12 +106,12 @@ class IncidenciaAlCreateView(CreateView):  # Agregar nuevo incidencia
 
     def get_success_url(self):
         if self.request.user.tipo_persona is '1':
-            # Incidencia.objects.filter(id_incidencia=self.kwargs.get('pk')).update(estatus='2')
+            Incidencia.objects.filter(id_incidencia=self.kwargs.get('pk')).update(estatus='2')
             enviar_notificacion(self.kwargs.get("pk"))
             correo_incidencia(self.kwargs.get("pk"))
             return reverse_lazy('incidencias:incidencia-lista')
         else:
-            # Incidencia.objects.filter(id_incidencia=self.kwargs.get('pk')).update(estatus='2')
+            Incidencia.objects.filter(id_incidencia=self.kwargs.get('pk')).update(estatus='2')
             enviar_notificacion(self.kwargs.get("pk"))
             correo_incidencia(self.kwargs.get("pk"))
             return reverse_lazy('dashboard:index')
@@ -283,7 +283,7 @@ class CitaIncidenciaListView(ListView):  # Mostrar todos lo usuarios
     def get_queryset(self):
         if self.request.user.tipo_persona is '3':
             padreid = self.request.user.id
-            queryset = Cita.objects.raw('Select cita_cita.*, incidencia_incidencia.id_incidencia '
+            queryset = Cita.objects.raw('Select cita_cita.*, incidencia_incidencia.id_incidencia, alumno_alumno.matricula, alumno_alumno.nombre '
                                         'FROM alumno_alumno INNER JOIN incidencia_incidenciaalumno_alumno on incidencia_incidenciaalumno_alumno.alumno_id = alumno_alumno.matricula '
                                         'INNER JOIN incidencia_incidenciaalumno_incidencia ON incidencia_incidenciaalumno_incidencia.incidenciaalumno_id=incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
                                         'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_incidencia.incidencia_id '
@@ -297,7 +297,7 @@ class CitaIncidenciaListView(ListView):  # Mostrar todos lo usuarios
                                         'WHERE usuario_padrefam.padre_id =%s', [padreid])
             return queryset
         if self.request.user.tipo_persona is '1':
-            queryset = Cita.objects.raw('Select cita_cita.*, incidencia_incidencia.id_incidencia '
+            queryset = Cita.objects.raw('Select cita_cita.*, incidencia_incidencia.id_incidencia, alumno_alumno.matricula as matricula, alumno_alumno.nombre as nombre '
                                         'FROM alumno_alumno INNER JOIN incidencia_incidenciaalumno_alumno on incidencia_incidenciaalumno_alumno.alumno_id = alumno_alumno.matricula '
                                         'INNER JOIN incidencia_incidenciaalumno_incidencia ON incidencia_incidenciaalumno_incidencia.incidenciaalumno_id=incidencia_incidenciaalumno_alumno.incidenciaalumno_id '
                                         'INNER JOIN incidencia_incidencia ON incidencia_incidencia.id_incidencia = incidencia_incidenciaalumno_incidencia.incidencia_id '

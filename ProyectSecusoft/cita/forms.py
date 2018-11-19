@@ -21,6 +21,10 @@ class IncidenciaForm(forms.ModelForm):
         model = CitaIncidencia
         fields = ['incidencia']
 
+    def __init__(self, *args, **kwargs):
+        super(IncidenciaForm, self).__init__(*args, **kwargs)
+        self.fields['incidencia'].queryset = Incidencia.objects.filter(estatus__in='1')
+
 
 class CitaIncidenciaAlForm(forms.ModelForm):
     class Meta:
@@ -36,5 +40,5 @@ class CitaIncidenciaAlForm(forms.ModelForm):
         print(grado)
         self.fields['incidencia'].queryset = Incidencia.objects.filter(incidenciaalumno__alumno__grado=grado,
                                                                        incidenciaalumno__alumno__grupo=grupo,
-                                                                       estatus='1')
+                                                                       estatus__in='1')
         self.fields['cita'].queryset = Cita.objects.filter(id_cita=pk)
