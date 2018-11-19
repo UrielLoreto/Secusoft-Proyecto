@@ -88,6 +88,11 @@
   <script src="{% static 'base/js/autocomplete/jquery.autocomplete.js' %}"></script>
   <script src="{% static 'base/js/validator/validator.js' %}"></script>
     <script>
+    /*window.onload = function() {
+       var x = document.getElementById("id_fecha_cita");
+        x.setAttribute("type", "datetime-local");
+        x.setAttribute("class", "form-control");
+    };*/
     $(function() {
       $('#id_fecha_cita').daterangepicker({
         format: 'YYYY-MM-DD',
