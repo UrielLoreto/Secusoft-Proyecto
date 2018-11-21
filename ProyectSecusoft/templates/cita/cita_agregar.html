@@ -35,6 +35,33 @@
 <meta http-equiv="REFRESH" content="0;url={% url 'dashboard:index' %}">
 {% endif %}
 
+<link rel="stylesheet" type="text/css" href="/static/admin/css/base.css">
+<link rel="stylesheet" type="text/css" href="/static/admin/css/forms.css">
+
+<script type="text/javascript" src="/admin/jsi18n/"></script>
+<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
+<script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+<script type="text/javascript" src="/static/admin/js/core.js"></script>
+<script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+<script type="text/javascript" src="/static/admin/js/actions.js"></script>
+<script type="text/javascript" src="/static/admin/js/urlify.js"></script>
+<script type="text/javascript" src="/static/admin/js/prepopulate.js"></script>
+<script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
+<script type="text/javascript" src="/static/admin/js/calendar.js"></script>
+<script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
+
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<link rel="stylesheet" type="text/css" href="/static/admin/css/responsive.css">
+
+<script>
+    function pegar(fecha, tiempo){
+        document.getElementById('id_fecha_cita').value = fecha + ' ' + tiempo;
+        return false;
+    }
+</script>
+
+<meta name="robots" content="NONE,NOARCHIVE">
+
 <form method="POST"  class="form-horizontal form-label-left">
 
    {% csrf_token %}
@@ -50,7 +77,18 @@
                </div>
                <div class="x_content center">
                   <table id="datatable-responsive" class="dt-responsive" cellspacing="0" width="100%">
+
                         <div class="x_content">
+                        <div class="form-row field-fecha_cita">
+                        <div>
+                            <label class="required" for="id_fecha_cita_0">Fecha cita:</label>
+                            <p class="datetime">
+                                Fecha: <input type="text" name="fecha_cita_0" size="10" id="id_fecha_cita_0" required="" class="vDateField"><span class="datetimeshortcuts"></span>
+                            <br>
+                                Hora: <input  type="text" onchange="pegar(id_fecha_cita_0.value,id_fecha_cita_1.value)" name="fecha_cita_1" size="8" id="id_fecha_cita_1" required="" class="vTimeField"><span class="datetimeshortcuts"></span>
+                            </p>
+                        </div>
+                      </div>
                          {% if incidencia %}
                          <!-- Docente -->
                       {{ form|crispy }}
@@ -64,7 +102,7 @@
                         </div>
                      </tbody>
                   </table>
-                  <button class="btn btn-success" type="submit">Seleciconar Incidencia</button>
+                  <button class="btn btn-success" onsubmit="pegar(id_fecha_cita_0.value,id_fecha_cita_1.value)" type="submit">Agregar Cita</button>
                    <div class="col-md-5 col-sm-12 col-xs-12 form-group"><a href="{% url 'dashboard:index' %}" class="btn btn-primary" role="button">Regresar</a>
                </div>
             </div>
@@ -88,11 +126,12 @@
   <script src="{% static 'base/js/autocomplete/jquery.autocomplete.js' %}"></script>
   <script src="{% static 'base/js/validator/validator.js' %}"></script>
     <script>
-    /*window.onload = function() {
-       var x = document.getElementById("id_fecha_cita");
+    window.onload = function() {
+      /* var x = document.getElementById("id_fecha_cita");
         x.setAttribute("type", "datetime-local");
-        x.setAttribute("class", "form-control");
-    };*/
+        x.setAttribute("class", "form-control");*/
+      document.getElementById("id_fecha_cita").value = '2018-05-22';
+    };
     $(function() {
       $('#id_fecha_cita').daterangepicker({
         format: 'YYYY-MM-DD',
