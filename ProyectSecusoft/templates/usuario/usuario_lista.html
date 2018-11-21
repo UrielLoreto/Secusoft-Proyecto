@@ -59,7 +59,7 @@
                                         {% if padref %}
                                         <!--<td class="td-btn"><a href='{% url 'usuarios:usuario-padre-actualizar' persona.id %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>-->
                                         {% else %}
-                                        <td class="td-btn"><a href='{% url 'usuarios:usuario-actualizar' persona.id %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>
+{#                                        <td class="td-btn"><a href='{% url 'usuarios:usuario-actualizar' persona.id %}'><i class="fa fa-edit fa-2x text-primary" ></i></a></td>#}
                                       {% endif %}
 
                                             <td class="td-btn"><form action="" method="post" style="display: inline">{% csrf_token %}<a href="#/trash"><i class="fa fa-trash fa-2x text-danger"></i></a></form></td>

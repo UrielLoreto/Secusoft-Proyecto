@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'va+7ib=)o!0@8bc)cff+opxam*5tz2+9j4=ig0bz#9fdbmsly('
+
 
 DEBUG = True
 
@@ -81,75 +81,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ProyectSecusoft.wsgi.application'
 
-FCM_DJANGO_SETTINGS = {
-        "FCM_SERVER_KEY": "AAAA_lSd86I:APA91bEoyKsCv9deYH2YuK_zP6TjcalZlG7Q_tP1BUuVByodAUQMPwJj7Dv2EGqBGlhfPLUkeyD17iwvWctfqTwp7K2TSeMqzlJj5548K1s5CRZE6lwqTqM0ISzK0eCQwj542YBRxQum",
-        "ONE_DEVICE_PER_USER": False,
-        "DELETE_INACTIVE_DEVICES": False,
-}
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework.authentication.TokenAuthentication',
-#     ),
-#     'DEFAULT_PERMISSION_CLASSES': (
-#         'rest_framework.permissions.IsAuthenticated',
-#     ),
-# }
-
-# Database
-# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'smacsoft_secusoft',
-#         'USER': 'RPSadmin',
-#         'PASSWORD': 'k0rak11100293',
-#         'HOST': 'mysql.s404.sureserver.com',
-#
-#     }
-# }
-#DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.mysql',
-#             'NAME': 'Secusoft$default',
-#             'USER': 'Secusoft',
-#             'PASSWORD': 'hola1234',
-#             'HOST': '127.0.0.1',
-#         }
-# }
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'secusoft2',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'CHARSET': 'utf8',
-        'COLLATION': 'utf8_general_ci',
-    }
-}
-# DATABASES ={'default': {'ATOMIC_REQUESTS': False,
-#              'AUTOCOMMIT': True,
-#              'CONN_MAX_AGE': 0,
-#              'ENGINE': 'django.db.backends.mysql',
-#              'HOST': 'Secusoft.mysql.pythonanywhere-services.com',
-#              'NAME': 'Secusoft$default',
-#              'OPTIONS': {},
-#              'PASSWORD': 'hola1234',
-#              'PORT': '',
-#              'TEST': {'CHARSET': None,
-#                       'COLLATION': None,
-#                       'MIRROR': None,
-#                       'NAME': None},
-#              'TIME_ZONE': None,
-#              'USER': 'Secusoft'}}
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 DATABASES['default']['OPTIONS'] = {"init_command": "SET foreign_key_checks = 0;"}
@@ -200,8 +132,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 FILE_UPLOAD_HANDLERS = ("django_excel.ExcelMemoryFileUploadHandler",
                         "django_excel.TemporaryExcelFileUploadHandler")
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'secusoft.no.reply@gmail.com'
-EMAIL_HOST_PASSWORD = 'L0R3TO19'
-EMAIL_PORT = 587

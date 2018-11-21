@@ -132,6 +132,7 @@
                 <h3>General</h3>
                 <ul class="nav side-menu">
                   <li><a href="{% url 'dashboard:index' %}" class="active"><i class="fa fa-home"></i>Inicio</a></li>
+                {% if grupotutor %}
                   <li><a><i class="fa fa-bookmark"></i> Grupo Tutorado<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         {% for a in grupotutor %}
@@ -139,6 +140,7 @@
                         {% endfor %}
                     </ul>
                   </li>
+                    {% endif %}
                   <li><a><i class="fa fa-briefcase"></i> Materias Asignadas <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{% url 'materias:materia-lista' %}">Listado</a></li>
