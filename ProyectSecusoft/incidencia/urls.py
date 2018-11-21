@@ -7,6 +7,7 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register('incidencia', IncidenciaView)
 router.register('cita', CitaView)
+router.register('avisos', AvisoView)
 
 app_name = 'incidencias'
 urlpatterns = [
@@ -16,7 +17,8 @@ urlpatterns = [
     path('lista/<int:grado>/<str:grupo>', IncidenciaAlListView.as_view(), name='incidencia-lista-al'),
     path('importar', import_data, name='incidencia-importar'),
     path('agregar/<int:grado>/<str:grupo>', IncidenciaCreateView.as_view(), name="incidencia-nueva"),
-    path('agregar/alumnos/<int:pk>/<int:grado>/<str:grupo>', IncidenciaAlCreateView.as_view(), name="incidencia-nueva-al"),
+    path('agregar/alumnos/<int:pk>/<int:grado>/<str:grupo>', IncidenciaAlCreateView.as_view(),
+         name="incidencia-nueva-al"),
     path('<int:pk>/', IncidenciaDetailView.as_view(), name="incidencia-detalle"),
     path('agregar/tipo', IncidenciaTipoCreateView.as_view(), name="incidenciatipo-nueva"),
     path('tipo/<int:pk>/', IncidenciaTipoDetailView.as_view(), name="incidenciatipo-detalle"),

@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.core.mail import send_mail
+from django.db.models import Q
 from django.shortcuts import redirect, get_object_or_404, get_list_or_404, render
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse_lazy
@@ -7,9 +8,11 @@ from fcm_django.models import FCMDevice
 from rest_framework import viewsets, status
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+import alumno
 from ProyectSecusoft import settings
 from incidencia.serializers import *
 from materia.models import Materia
@@ -586,6 +589,7 @@ class CustomAuthToken(ObtainAuthToken):
 class IncidenciaView(viewsets.ModelViewSet):
     queryset = Incidencia.objects.all()
     serializer_class = IncidenciaSerializer
+    # permission_classes = (IsAuthenticated, )
 
     def post(self, request, *args, **kwargs):
         user = self.kwargs.get("pk")
@@ -639,6 +643,7 @@ class TipoIncidenciaView(viewsets.ModelViewSet):
 class CitaView(viewsets.ModelViewSet):
     queryset = Cita.objects.all()
     serializer_class = CitaSerializer
+    # permission_classes = (IsAuthenticated,)
 
     def post(self, request, *args, **kwargs):
         user = self.kwargs.get("pk")
@@ -662,3 +667,72 @@ class Logout(APIView):
         # simply delete the token to force a login
         request.user.auth_token.delete()
         return Response(status=status.HTTP_200_OK)
+
+
+class AvisoView(viewsets.ModelViewSet):
+    queryset = Aviso.objects.all()
+    serializer_class = AvisoSerializer
+    # permission_classes = (IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        user = self.kwargs.get('pk')
+        queryset = Aviso.objects.filter(Q(dirigido_a='1') | Q(dirigido_a='3') &
+                                        Q(grupo__isnull=True) & Q(grado__isnull=True))
+        queryset2 = Aviso.objects.exclude(id__in=queryset.values('id'))
+        if queryset2 or queryset:
+            alumnos = PadreAlumno.objects.filter(padre__padre_id=user)
+            av = []
+            avs = {}
+            incidencia2 ={}
+            for a in queryset:
+                av.append((a.asunto, a.id, a.descripcion, a.fecha_creacion.date()))
+                if len(av) != 0:
+                    b = len(av)
+                    for a in av:
+                        avs['id'] = a[1]
+                        avs['asunto'] = a[0]
+                        avs['fecha_creacion'] = a[3]
+                        avs['descripcion'] = a[2]
+                        b -= 1
+                    incidencia2['id'] = [a[1] for a in av]
+                    incidencia2['asunto'] = [a[0] for a in av]
+                    incidencia2['fecha_creacion'] = [a[3] for a in av]
+                    incidencia2['descripcion'] = [a[2] for a in av]
+            for a in queryset2:
+                if a.grupo is not None and a.grado is not None and a.dirigido_a == '3':
+                    for i in alumnos:
+                        l = 0
+                        if i.alumno.values('grado')[l]['grado'] == a.grado \
+                                and i.alumno.values('grupo')[l]['grupo'] == a.grupo:
+                            av.append((a.asunto, a.id, a.descripcion, a.fecha_creacion.date()))
+                        l += 1
+                elif a.grupo is not None and a.grado is None and a.dirigido_a == '3':
+                    for i in alumnos:
+                        l = 0
+                        if i.alumno.values('grupo')[l]['grupo'] == a.grupo:
+                            av.append((a.asunto, a.id, a.descripcion, a.fecha_creacion.date()))
+                        l += 1
+                elif a.grupo is None and a.grado is not None and a.dirigido_a == '3':
+                    for i in alumnos:
+                        l = 0
+                        if i.alumno.values('grado')[l]['grado'] == a.grado:
+                            av.append((a.asunto, a.id, a.descripcion, a.fecha_creacion.date()))
+                        l += 1
+                if len(av) != 0:
+                    b = len(av)
+                    for f in av:
+                        avs['id'] = f[1]
+                        avs['asunto'] = f[0]
+                        avs['fecha_creacion'] = f[3]
+                        avs['descripcion'] = f[2]
+                        b -= 1
+                    incidencia2['id'] = [o[1] for o in av]
+                    incidencia2['asunto'] = [o[0] for o in av]
+                    incidencia2['fecha_creacion'] = [o[3] for o in av]
+                    incidencia2['descripcion'] = [o[2] for o in av]
+            return Response({'output': incidencia2})
+
+        else:
+            return Response({
+                'avisos': 'ninguno',
+            })
